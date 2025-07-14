@@ -629,31 +629,57 @@ $sqldata="UPDATE `tbl_ac_company` SET `comp_balance`= '$total_remain' WHERE  `tr
 	}
 
 
-	public function employee(){
-		$this->load->model('queries');
-		$comp_id = $this->session->userdata('comp_id');
-	
-		$blanch = $this->queries->get_blanch($comp_id);
-		$position = $this->queries->get_position();
-		$employee = $this->queries->get_employee($comp_id);
-	
-		// Let all links
-		$system_links = $this->queries->get_all_links();
-	
-		// Group system_links by group_name
-		$grouped_links = [];
-		foreach ($system_links as $link) {
-			$group = $link->group_name ?? 'Mengine';
-			$grouped_links[$group][] = $link;
-		}
-	
-		$this->load->view('admin/employee', [
-			'blanch' => $blanch,
-			'position' => $position,
-			'employee' => $employee,
-			'grouped_links' => $grouped_links
-		]);
-	}
+public function employee()
+{
+    $this->load->model('queries');
+    $comp_id = $this->session->userdata('comp_id');
+
+    $blanch = $this->queries->get_blanch($comp_id);
+    $position = $this->queries->get_position();
+    $employee = $this->queries->get_employee($comp_id);
+
+    // Get management_id
+    $management_id = null;
+    $loan_officer_id = null;
+    $branch_manager_id = null;
+
+    foreach ($position as $pos) {
+        $name = strtolower(trim($pos->position));
+        
+        if ($name === 'management') {
+            $management_id = $pos->position_id;
+        }
+
+        if ($name === 'loan officer') {
+            $loan_officer_id = $pos->position_id;
+        }
+
+        if ($name === 'branch manager') {
+            $branch_manager_id = $pos->position_id;
+        }
+    }
+
+    $system_links = $this->queries->get_all_links();
+
+    // Group system_links by group_name
+    $grouped_links = [];
+    foreach ($system_links as $link) {
+        $group = $link->group_name ?? 'Mengine';
+        $grouped_links[$group][] = $link;
+    }
+
+    $this->load->view('admin/employee', [
+        'blanch' => $blanch,
+        'position' => $position,
+        'employee' => $employee,
+        'management_id' => $management_id,
+        'loan_officer_id' => $loan_officer_id,
+        'branch_manager_id' => $branch_manager_id, // ✅ send to view
+        'grouped_links' => $grouped_links
+    ]);
+}
+
+
 	
 
 	
@@ -716,13 +742,13 @@ $sqldata="UPDATE `tbl_ac_company` SET `comp_balance`= '$total_remain' WHERE  `tr
 	// 	$this->employee();
 	// }
 
-	public function create_employee()
+public function create_employee()
 {
     $this->load->model('queries');
     $this->load->library('form_validation');
 
     // ── validation ─────────────────────────────
-    $this->form_validation->set_rules('password', 'Password', 'required|min_length[8]');
+    $this->form_validation->set_rules('password', 'Password', 'required|min_length[6]');
     $this->form_validation->set_rules('passconf', 'Confirm Password', 'required|matches[password]');
 
     if ($this->form_validation->run() === FALSE) {
@@ -736,7 +762,7 @@ $sqldata="UPDATE `tbl_ac_company` SET `comp_balance`= '$total_remain' WHERE  `tr
         'empl_email'   => $this->input->post('empl_email', TRUE),
         'comp_id'      => $this->input->post('comp_id', TRUE),
         'ac_status'    => 'empl',
-		'must_update' => 0,
+        'must_update'  => 0,
         'blanch_id'    => $this->input->post('blanch_id', TRUE),
         'position_id'  => $this->input->post('position_id', TRUE),
         'username'     => $this->input->post('username', TRUE),
@@ -745,31 +771,60 @@ $sqldata="UPDATE `tbl_ac_company` SET `comp_balance`= '$total_remain' WHERE  `tr
         'bank_account' => $this->input->post('bank_account', TRUE),
         'account_no'   => $this->input->post('account_no', TRUE),
         'password'     => password_hash($this->input->post('password', TRUE), PASSWORD_BCRYPT),
-			 
     ];
 
-    // ── permissions ────────────────────────────
-	$permissions = $this->input->post('permissions'); 
-
-		//   echo "<pre>";
-		//  print_r($permissions);
-		//  echo "</pre>";
-		//    exit();
+    $permissions = $this->input->post('permissions');
+    $loan_officer_id = $this->input->post('loan_officer_id', TRUE);
+    $branch_manager_id = $this->input->post('branch_manager_id', TRUE);
+    $position_id = $empData['position_id'];
 
     $this->db->trans_start();
 
+    // ── INSERT employee ────────────────────────
     $employee_id = $this->queries->insert_employee($empData);
 
-	//   echo "<pre>";
-	// 	 print_r($employee_id);
-	// 	 echo "</pre>";
-	// 	   exit();
+    // ── INSERT permissions ─────────────────────
+    if ($permissions && is_array($permissions)) {
+        foreach ($permissions as $link_id) {
+            $this->queries->insert_permission([
+                'employee_id' => $employee_id,
+                'link_id'     => $link_id,
+            ]);
+        }
+    }
 
-    foreach ($permissions as $link_id) {
-        $this->queries->insert_permission([
-            'employee_id' => $employee_id,
-            'link_id'     => $link_id,
+    // ── LOAN OFFICER: payment privilege ────────
+    $can_make_payment = $this->input->post('can_make_payment');
+    if ($position_id == $loan_officer_id && $can_make_payment === 'on') {
+        $this->db->insert('tbl_privellage', [
+            'empl_id'     => $employee_id,
+            'position_id' => $position_id,
+            'comp_id'     => $empData['comp_id'],
         ]);
+    }
+
+    // ── BRANCH MANAGER: special privileges ─────
+    if ($position_id == $branch_manager_id) {
+        $privileges = [];
+
+        if ($this->input->post('can_approve_loan') === 'on') {
+            $privileges[] = 'can_approve_loan';
+        }
+        if ($this->input->post('can_disburse_loan') === 'on') {
+            $privileges[] = 'can_disburse_loan';
+        }
+        if ($this->input->post('can_approve_expenses') === 'on') {
+            $privileges[] = 'can_approve_expenses';
+        }
+
+        foreach ($privileges as $key) {
+            $this->db->insert('tbl_privellage', [
+                'empl_id'       => $employee_id,
+                'position_id'   => $position_id,
+                'comp_id'       => $empData['comp_id'],
+                'privilege_key' => $key
+            ]);
+        }
     }
 
     $this->db->trans_complete();
@@ -779,8 +834,10 @@ $sqldata="UPDATE `tbl_ac_company` SET `comp_balance`= '$total_remain' WHERE  `tr
     } else {
         $this->session->set_flashdata('error', 'Failed to save employee.');
     }
+
     redirect('admin/employee');
 }
+
 
 
 public function create_link()

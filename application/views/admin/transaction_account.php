@@ -55,7 +55,7 @@ include_once APPPATH . "views/partials/header.php";
                         <div class="sm:col-span-8">
                             <label for="account_name" class="block text-sm font-medium mb-2 dark:text-gray-300">* Account Name:</label>
                             <input type="text" id="account_name" name="account_name" placeholder="e.g., NMB Bank, Cash, M-Pesa" autocomplete="off" required
-                                   class="py-2.5 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-cyan-500 focus:ring-cyan-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 dark:placeholder-gray-500 dark:focus:ring-gray-600" value="<?php echo set_value('account_name'); ?>">
+                                   class=" uppercase py-2.5 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-cyan-500 focus:ring-cyan-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 dark:placeholder-gray-500 dark:focus:ring-gray-600" value="<?php echo set_value('account_name'); ?>">
                             <?php echo form_error("account_name", '<p class="text-xs text-red-600 mt-2">', '</p>'); ?>
                         </div>
                         <div class="sm:col-span-2"></div> <?php // Spacer ?>
@@ -106,7 +106,7 @@ include_once APPPATH . "views/partials/header.php";
                                     <?php if (isset($account) && is_array($account) && !empty($account)): ?>
                                         <?php foreach ($account as $acc_item): ?>
                                         <tr>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-200"><?php echo htmlspecialchars($acc_item->account_name, ENT_QUOTES, 'UTF-8'); ?></td>
+                                            <td class="uppercase px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-200"><?php echo htmlspecialchars($acc_item->account_name, ENT_QUOTES, 'UTF-8'); ?></td>
                                             <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
                                                 <a href="<?php echo base_url("admin/Delete_account/{$acc_item->trans_id}"); ?>" onclick="return confirm('Are you sure you want to delete this account?');" class="inline-flex items-center gap-x-1.5 text-sm font-semibold rounded-lg border border-transparent text-red-600 hover:text-red-800 disabled:opacity-50 disabled:pointer-events-none dark:text-red-500 dark:hover:text-red-400">
                                                     <svg class="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>

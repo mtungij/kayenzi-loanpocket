@@ -175,88 +175,104 @@ include_once APPPATH . "views/partials/header.php";
                 <div class="overflow-x-auto">
                     <div class="min-w-full inline-block align-middle">
                         <div class="border rounded-lg overflow-hidden dark:border-gray-700">
-                        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700" >
+     
+<table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
     <thead class="bg-gray-50 dark:bg-gray-700">
         <tr>
-            <th class="py-3 px-6 text-start">
-                <div class="inline-flex items-center gap-x-2">
-                    <span class="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400">S/No.</span>
-                </div>
-            </th>
-            <th class="py-3 px-6 text-start">
-                <div class="inline-flex items-center gap-x-2">
-                    <span class="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400">Jina La Dhamana</span>
-                    <!-- Sorting icon -->
-                    <svg class="size-3.5 text-gray-400 dark:text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path d="m7 15 5 5 5-5" />
-                        <path d="m7 9 5-5 5 5" />
-                    </svg>
-                </div>
-            </th>
-            <th class="py-3 px-6 text-start">
-                <div class="inline-flex items-center gap-x-2">
-                    <span class="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400">Hali ya Dhamana</span>
-                    <svg class="size-3.5 text-gray-400 dark:text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path d="m7 15 5 5 5-5" />
-                        <path d="m7 9 5-5 5 5" />
-                    </svg>
-                </div>
-            </th>
-            <th class="py-3 px-6 text-start">
-                <div class="inline-flex items-center gap-x-2">
-                    <span class="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400">Thamani ya Dhamana</span>
-                    <svg class="size-3.5 text-gray-400 dark:text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path d="m7 15 5 5 5-5" />
-                        <path d="m7 9 5-5 5 5" />
-                    </svg>
-                </div>
-            </th>
+            <th class="py-3 px-6 text-start">S/No.</th>
+            <th class="py-3 px-6 text-start">Jina La Dhamana</th>
+            <th class="py-3 px-6 text-start">Hali ya Dhamana</th>
+            <th class="py-3 px-6 text-start">Thamani ya Dhamana</th>
+            <th class="py-3 px-6 text-start">Angalia Dhamana</th>
         </tr>
     </thead>
     <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-    <?php if (!empty($collateral) && is_array($collateral)): ?>
-        <?php 
-            $no = 1; 
-            $total_value = 0;
-        ?>
-        <?php foreach ($collateral as $item): ?>
-            <?php $total_value += $item->value; ?>
+        <?php if (!empty($collateral) && is_array($collateral)): ?>
+            <?php 
+                $no = 1; 
+                $total_value = 0;
+            ?>
+            <?php foreach ($collateral as $item): ?>
+                <?php $total_value += $item->value; ?>
+                <tr>
+                    <td class="px-6 py-4 text-sm font-medium text-gray-800 dark:text-gray-200"><?= $no++; ?>.</td>
+                    <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200"><?= htmlspecialchars($item->description); ?></td>
+                    <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200"><?= htmlspecialchars($item->co_condition); ?></td>
+                    <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200"><?= number_format($item->value, 2); ?></td>
+                    <td class="px-6 py-4">
+                        <?php if (!empty($item->file_name)): ?>
+                            <button 
+                                type="button"
+                                data-modal-target="default-modal"
+                                data-modal-toggle="default-modal"
+                                data-file="<?= base_url('assets/dhamana/' . $item->file_name); ?>"
+                                onclick="loadDhamana(this)"
+                                class="text-blue-600 hover:text-blue-800 focus:outline-none"
+                                title="Tazama Dhamana"
+                            >
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5s8.268 2.943 9.542 7c-1.274 4.057-5.065 7-9.542 7s-8.268-2.943-9.542-7z" />
+                                </svg>
+                            </button>
+                        <?php else: ?>
+                            <span class="text-gray-400">Hakuna dhamana</span>
+                        <?php endif; ?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        <?php else: ?>
             <tr>
-                <td class="px-6 py-4 text-sm font-medium text-gray-800 dark:text-gray-200">
-                    <?= $no++; ?>.
-                </td>
-                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200">
-                    <?= htmlspecialchars($item->description, ENT_QUOTES, 'UTF-8'); ?>
-                </td>
-                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200">
-                    <?= htmlspecialchars($item->co_condition, ENT_QUOTES, 'UTF-8'); ?>
-                </td>
-                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200">
-                    <?= number_format($item->value, 2); ?>
+                <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500 dark:text-gray-400">
+                    Taarifa za dhamana hazijajazwa.
                 </td>
             </tr>
-        <?php endforeach; ?>
-    <?php else: ?>
+        <?php endif; ?>
+    </tbody>
+    <?php if (!empty($collateral) && is_array($collateral)): ?>
+    <tfoot class="bg-gray-50 dark:bg-gray-800">
         <tr>
-            <td colspan="4" class="px-6 py-4 text-center text-sm text-gray-500 dark:text-gray-400">
-                Taarifa za dhamana hazijajazwa.
-            </td>
+            <td colspan="3" class="px-6 py-4 text-sm font-semibold text-right text-gray-700 dark:text-gray-200">Jumla:</td>
+            <td class="px-6 py-4 text-sm font-bold text-gray-800 dark:text-white"><?= number_format($total_value, 2); ?></td>
+            <td></td>
         </tr>
+    </tfoot>
     <?php endif; ?>
-</tbody>
-
-<?php if (!empty($collateral) && is_array($collateral)): ?>
-<tfoot class="bg-gray-50 dark:bg-gray-800">
-    <tr>
-        <td colspan="3" class="px-6 py-4 text-sm font-semibold text-right text-gray-700 dark:text-gray-200">Jumla:</td>
-        <td class="px-6 py-4 text-sm font-bold text-gray-800 dark:text-white"><?= number_format($total_value, 2); ?></td>
-    </tr>
-</tfoot>
-<?php endif; ?>
-
 </table>
 
-                        </div>
+<!-- Modal -->
+<div id="default-modal" tabindex="-1" aria-hidden="true"
+     class="hidden fixed top-0 left-0 z-50 flex items-center justify-center w-full h-full bg-black bg-opacity-50">
+    
+    <div class="relative bg-white rounded-lg shadow dark:bg-gray-700" style="width: 1200px; height: 500px;">
+        <!-- Header -->
+        <div class="flex items-center justify-between p-4 border-b rounded-t dark:border-gray-600">
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Tazama Dhamana</h3>
+            <button type="button" data-modal-hide="default-modal"
+                class="text-gray-400 hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 14 14">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M1 1l6 6m0 0l6 6M7 7l6-6M7 7l-6 6" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Body -->
+        
+
+        <div class="h-[700px] overflow-auto modal-body-content p-0 flex items-center justify-center bg-gray-100">
+            <!-- Content will be injected here -->
+        </div>
+
+        <!-- Footer -->
+        <div class="flex items-center justify-end p-4 border-t border-gray-200 rounded-b dark:border-gray-600">
+            <button data-modal-hide="default-modal" type="button"
+                class="px-5 py-2.5 text-sm font-medium text-white bg-blue-700 hover:bg-blue-800 rounded-lg">Funga</button>
+        </div>
+    </div>
+</div>
+
+                  </div>
                     </div>
                 </div>
 
@@ -388,4 +404,24 @@ include_once APPPATH . "views/partials/footer.php";
 
 
 
+
+
+
+<script>
+    function loadDhamana(button) {
+        const fileUrl = button.getAttribute('data-file');
+        const modalBody = document.querySelector('#default-modal .modal-body-content');
+
+        // Check file type and decide how to render it
+        if (/\.(jpg|jpeg|png|gif|webp)$/i.test(fileUrl)) {
+            modalBody.innerHTML = `
+                <img src="${fileUrl}" alt="Dhamana" class="w-full h-full object-contain rounded" />
+            `;
+        } else {
+            modalBody.innerHTML = `
+                <iframe src="${fileUrl}" width="100%" height="100%" frameborder="0" class="rounded"></iframe>
+            `;
+        }
+    }
+</script>
 

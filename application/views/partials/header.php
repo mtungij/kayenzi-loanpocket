@@ -44,6 +44,48 @@
     
   </style>
 
+  <style>
+/* Hide the default checkbox */
+input[type="checkbox"] {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: 2px solid #555;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+/* When checked, show the normal checkmark */
+input[type="checkbox"]:checked {
+  background-color: #3b82f6; /* blue */
+  border-color: #3b82f6;
+}
+
+input[type="checkbox"]:checked::after {
+  content: "✔";
+  position: absolute;
+  top: 0;
+  left: 4px;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* When unchecked, show an X */
+input[type="checkbox"]:not(:checked)::after {
+  content: "✗";
+  position: absolute;
+  top: 0;
+  left: 4px;
+  color: red;
+  font-size: 18px;
+  font-weight: bold;
+}
+</style>
+
   <link rel="stylesheet" href="<?php echo base_url('public/css/output.css') ?>">
 </head>
 

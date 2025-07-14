@@ -99,7 +99,8 @@ include_once APPPATH . "views/partials/header.php";
 
                         <div class="sm:col-span-6 md:col-span-3">
                             <label for="blanch_amount" class="label-sm-dt">* Amount:</label>
-                            <input type="number" id="blanch_amount" name="blanch_amount" placeholder="Amount" required class="input-text-preline" value="<?php echo set_value('blanch_amount'); ?>">
+
+                            <input type="text" id="blanch_amount" name="blanch_amount" placeholder="Amount" required class="input-text-preline" value="<?php echo set_value('blanch_amount'); ?>" inputmode="decimal">
                             <?php echo form_error("blanch_amount", '<p class="text-xs text-red-600 mt-2">', '</p>'); ?>
                         </div>
                         
@@ -131,7 +132,8 @@ include_once APPPATH . "views/partials/header.php";
                         
                         <div class="sm:col-span-12 md:col-span-2">
                             <label for="charger" class="label-sm-dt">* Withdrawal Chargers:</label>
-                            <input type="number" id="charger" name="charger" placeholder="Chargers" required class="input-text-preline" value="<?php echo set_value('charger'); ?>">
+                           <input type="text" id="charger" name="charger" placeholder="Chargers" required class="input-text-preline" value="<?php echo set_value('charger', '0'); ?>" inputmode="decimal">
+
                             <?php echo form_error("charger", '<p class="text-xs text-red-600 mt-2">', '</p>'); ?>
                         </div>
                     </div>
@@ -304,5 +306,39 @@ window.addEventListener('load', () => {
     // If Preline selects need explicit init:
     // HSStaticMethods.autoInit(['select']);
   }, 500);
+});
+</script>
+
+<script>
+function formatNumberInput(input) {
+    input.addEventListener('input', function (e) {
+        // Remove non-digit characters except dot
+        let rawValue = input.value.replace(/,/g, '').replace(/[^\d.]/g, '');
+
+        // Handle decimal parts safely
+        const parts = rawValue.split('.');
+        const integerPart = parts[0];
+        const decimalPart = parts[1] ? '.' + parts[1].slice(0, 2) : '';
+
+        // Format with commas
+        const formatted = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",") + decimalPart;
+
+        // Update the input display
+        input.value = formatted;
+    });
+
+    // On form submit: clean value
+    input.form?.addEventListener('submit', function () {
+        input.value = input.value.replace(/,/g, '');
+    });
+}
+
+// Apply to your inputs
+document.addEventListener("DOMContentLoaded", function () {
+    const amountInput = document.getElementById('blanch_amount');
+    const chargerInput = document.getElementById('charger');
+
+    if (amountInput) formatNumberInput(amountInput);
+    if (chargerInput) formatNumberInput(chargerInput);
 });
 </script>

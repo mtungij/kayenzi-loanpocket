@@ -1,10 +1,10 @@
 docker run -it -d \
-  --label traefik.http.routers.cdcmicrofinance.rule=Host\(\`cdcmicrofinance.com\`\) \
-  --label traefik.http.routers.cdcmicrofinance.tls.certresolver=lets-encrypt \
-  --label traefik.http.routers.cdcmicrofinance.tls=true \
-  --label traefik.http.routers.cdcmicrofinance.service=cdcmicrofinance-credit-http \
-  --label traefik.http.services.cdcmicrofinance-credit-http.loadbalancer.server.port=80 \
-  --name cdcmicrofinance \
+  --label traefik.http.routers.kayenzimicrofinance.rule=Host\(\`kayenzimicrofinance.com\`\) \
+  --label traefik.http.routers.kayenzimicrofinance.tls.certresolver=lets-encrypt \
+  --label traefik.http.routers.kayenzimicrofinance.tls=true \
+  --label traefik.http.routers.kayenzimicrofinance.service=kayenzimicrofinance-credit-http \
+  --label traefik.http.services.kayenzimicrofinance-credit-http.loadbalancer.server.port=80 \
+  --name kayenzimicrofinance \
   --network web \
   --restart always \
   --expose 80 \

@@ -68,14 +68,14 @@ include_once APPPATH . "views/partials/header.php";
 
                         <div class="sm:col-span-3">
                             <label for="loan_price" class="block text-sm font-medium mb-2 dark:text-gray-300">* From (Min Amount):</label>
-                            <input type="number" id="loan_price" name="loan_price" placeholder="e.g., 1000" autocomplete="off" required
+                            <input type="text" id="loan_price" name="loan_price" placeholder="e.g., 1000" autocomplete="off" required
                                    class="py-2.5 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-cyan-500 focus:ring-cyan-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 dark:placeholder-gray-500 dark:focus:ring-gray-600" value="<?php echo set_value('loan_price'); ?>">
                             <?php echo form_error("loan_price", '<p class="text-xs text-red-600 mt-2">', '</p>'); ?>
                         </div>
 
                         <div class="sm:col-span-3">
                             <label for="loan_perday" class="block text-sm font-medium mb-2 dark:text-gray-300">* To (Max Amount):</label>
-                            <input type="number" id="loan_perday" name="loan_perday" placeholder="e.g., 10000" autocomplete="off" required
+                            <input type="text" id="loan_perday" name="loan_perday" placeholder="e.g., 10000" autocomplete="off" required
                                    class="py-2.5 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-cyan-500 focus:ring-cyan-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 dark:placeholder-gray-500 dark:focus:ring-gray-600" value="<?php echo set_value('loan_perday'); ?>">
                             <?php echo form_error("loan_perday", '<p class="text-xs text-red-600 mt-2">', '</p>'); ?>
                         </div>
@@ -235,5 +235,32 @@ window.addEventListener('load', () => {
       });
     });
   }, 500);
+});
+</script>
+
+<script>
+function formatNumberWithCommas(value) {
+    const numeric = value.replace(/[^0-9]/g, '');
+    return numeric.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    const loanPrice = document.getElementById('loan_price');
+    const loanPerDay = document.getElementById('loan_perday');
+
+    [loanPrice, loanPerDay].forEach(input => {
+        input.addEventListener('input', function (e) {
+            const caretPos = this.selectionStart;
+            const rawValue = this.value.replace(/,/g, '');
+            this.value = formatNumberWithCommas(rawValue);
+            this.setSelectionRange(caretPos, caretPos);
+        });
+    });
+
+    // Unformat before submitting
+    document.querySelector('form').addEventListener('submit', function () {
+        loanPrice.value = loanPrice.value.replace(/,/g, '');
+        loanPerDay.value = loanPerDay.value.replace(/,/g, '');
+    });
 });
 </script>

@@ -30,15 +30,39 @@ include_once APPPATH . "views/partials/officerheader.php";
         <!-- End Page Title / Subheader -->
 
         <?php // Flash Messages ?>
-        <?php if ($das = $this->session->flashdata('massage')): ?>
-        <div class="bg-teal-100 border border-teal-200 text-sm text-teal-800 rounded-lg p-4 dark:bg-teal-800/10 dark:border-teal-900 dark:text-teal-500" role="alert">
-            <div class="flex">
-                <div class="flex-shrink-0"><span class="inline-flex justify-center items-center size-8 rounded-full border-4 border-teal-100 bg-teal-200 text-teal-800 dark:border-teal-900 dark:bg-teal-800 dark:text-teal-500"><svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path><path d="m9 12 2 2 4-4"></path></svg></span></div>
-                <div class="ms-3"><h3 class="text-gray-800 font-semibold dark:text-white">Success</h3><p class="mt-2 text-sm text-gray-700 dark:text-gray-400"><?php echo $das;?></p></div>
-                <div class="ps-3 ms-auto"><div class="-mx-1.5 -my-1.5"><button type="button" class="inline-flex bg-teal-50 rounded-lg p-1.5 text-teal-500 hover:bg-teal-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-teal-50 focus:ring-teal-600 dark:bg-transparent dark:hover:bg-teal-800/50 dark:text-teal-600" data-hs-remove-element="[role=alert]"><span class="sr-only">Dismiss</span><svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button></div></div>
+       <?php if ($das = $this->session->flashdata('massage')): ?>
+    <!-- Success Message -->
+    <div class="bg-teal-100 border border-teal-200 text-sm text-teal-800 rounded-lg p-4 dark:bg-teal-800/10 dark:border-teal-900 dark:text-teal-500" role="alert">
+        <div class="flex">
+            <div class="flex-shrink-0">
+                <span class="inline-flex justify-center items-center size-8 rounded-full border-4 border-teal-100 bg-teal-200 text-teal-800 dark:border-teal-900 dark:bg-teal-800 dark:text-teal-500">
+                    <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path><path d="m9 12 2 2 4-4"></path></svg>
+                </span>
+            </div>
+            <div class="ms-3">
+                <h3 class="text-gray-800 font-semibold dark:text-white">Success</h3>
+                <p class="mt-2 text-sm text-gray-700 dark:text-gray-400"><?php echo $das; ?></p>
             </div>
         </div>
-        <?php endif; ?>
+    </div>
+
+<?php elseif ($err = $this->session->flashdata('error')): ?>
+    <!-- Error Message -->
+    <div class="bg-red-100 border border-red-200 text-sm text-red-800 rounded-lg p-4 dark:bg-red-800/10 dark:border-red-900 dark:text-red-500" role="alert">
+        <div class="flex">
+            <div class="flex-shrink-0">
+                <span class="inline-flex justify-center items-center size-8 rounded-full border-4 border-red-100 bg-red-200 text-red-800 dark:border-red-900 dark:bg-red-800 dark:text-red-500">
+                    <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path><path d="M12 8v4m0 4h.01"></path></svg>
+                </span>
+            </div>
+            <div class="ms-3">
+                <h3 class="text-gray-800 font-semibold dark:text-white">Error</h3>
+                <p class="mt-2 text-sm text-gray-700 dark:text-gray-400"><?php echo $err; ?></p>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>
+
 
         <!-- Card: Register Share Holder Form -->
         <div class="flex flex-col bg-white border shadow-sm rounded-xl dark:bg-gray-800 dark:border-gray-700">
@@ -46,7 +70,9 @@ include_once APPPATH . "views/partials/officerheader.php";
                 <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-6">
                     Sajili dhamana za mkopo
                 </h3>
-                <?php echo form_open("oficer/create_colateral/{$loan_attach->loan_id}", ['novalidate' => true]); ?>
+
+                <?php echo form_open("oficer/create_colateral/{$loan_attach->loan_id}", ['enctype' => 'multipart/form-data']); ?>
+
                     <div class="grid sm:grid-cols-12 gap-4 sm:gap-6">
                         <div class="sm:col-span-4">
                             <label for="description" class="block text-sm font-medium mb-2 dark:text-gray-300">* Jina La dhamana:</label>
@@ -79,6 +105,7 @@ include_once APPPATH . "views/partials/officerheader.php";
     <?php echo form_error("co_condition", '<p class="text-xs text-red-600 mt-2">', '</p>'); ?>
 </div>
 <input type="hidden" name="loan_id"  id="loan_id" value="<?php echo $loan_attach->loan_id; ?>">
+<input type="hidden" name="cropped_image" id="cropped_image">
 
 
 
@@ -90,6 +117,28 @@ include_once APPPATH . "views/partials/officerheader.php";
     <?php echo form_error("value", '<p class="text-xs text-red-600 mt-2">', '</p>'); ?>
 </div>
   </div>
+
+ <div class="sm:col-span-6">
+  <label for="file_name" class="block text-sm font-medium mb-2 dark:text-gray-300">Picha ya Dhamana</label>
+   <input type="file" id="file_input" accept="image/*"
+         class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer dark:text-gray-400 dark:bg-gray-700 dark:border-gray-600" required>
+
+  <!-- Image crop preview -->
+  <div class="mt-4">
+    <img id="preview" class="hidden rounded border border-gray-300" style="max-width: 100%; max-height: 300px;">
+    
+  </div>
+
+  <!-- Hidden cropped image blob -->
+  
+</div>
+
+
+
+  
+
+
+
 
 
 
@@ -235,4 +284,49 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 </script>
+
+
+<script>
+let cropper;
+
+document.getElementById('file_input').addEventListener('change', function (e) {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function () {
+    const img = document.getElementById('preview');
+    img.src = reader.result;
+    img.style.display = 'block';
+
+    if (cropper) cropper.destroy();
+
+    cropper = new Cropper(img, {
+      aspectRatio: 4 / 3,
+      viewMode: 1,
+      autoCropArea: 1,
+    });
+  };
+  reader.readAsDataURL(file);
+});
+
+// On form submit
+document.querySelector('form').addEventListener('submit', function (e) {
+  e.preventDefault();
+
+  if (cropper) {
+    const canvas = cropper.getCroppedCanvas({ width: 800, height: 600 });
+    const base64 = canvas.toDataURL('image/jpeg');
+
+    // Put into hidden input
+    document.getElementById('cropped_image').value = base64;
+
+    // Submit the form
+    e.target.submit();
+  }
+});
+</script>
+
+
+
 

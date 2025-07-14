@@ -162,7 +162,7 @@ include_once APPPATH . "views/partials/header.php";
                             <select id="account_no" name="account_no" required
                                     data-hs-select='{
 									"hasSearch": true,
-                                        "placeholder": "Select gender",
+                                        "placeholder": "Select Bank Account",
                                         "toggleTag": "<button type=\"button\" aria-expanded=\"false\"><span class=\"me-2\" data-icon></span><span class=\"text-gray-800 dark:text-gray-200\" data-title></span></button>",
                                         "toggleClasses": "hs-select-disabled:pointer-events-none hs-select-disabled:opacity-50 relative py-2.5 px-4 pe-9 flex text-nowrap w-full cursor-pointer bg-white border border-gray-200 rounded-lg text-start text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 dark:focus:ring-gray-600",
                                         "dropdownClasses": "mt-2 max-h-72 pb-1 px-1 space-y-0.5 z-50 w-full bg-white border border-gray-200 rounded-lg overflow-hidden overflow-y-auto dark:bg-gray-800 dark:border-gray-700",
@@ -216,7 +216,7 @@ include_once APPPATH . "views/partials/header.php";
 
 			
 <!-- Table Section -->
-<div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
+<div id="management-access" style="display:none;" class="w-full px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
   <!-- Card -->
   <div class="flex flex-col">
     <div class="-m-1.5 overflow-x-auto">
@@ -245,20 +245,7 @@ include_once APPPATH . "views/partials/header.php";
               </div>
             </div>
           </div>
-          <!-- End Header -->
-
-          <!-- Table -->
-        
-          <!-- End Footer -->
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- End Card -->
-</div>
-<!-- End Table Section -->
-
-<?php foreach ($grouped_links as $group => $links): ?>
+       <?php foreach ($grouped_links as $group => $links): ?>
     <h2 class="text-lg font-semibold mt-6 mb-2 text-gray-800 dark:text-gray-200">
         <?= htmlspecialchars($group) ?>
     </h2>
@@ -280,13 +267,53 @@ include_once APPPATH . "views/partials/header.php";
         <?php endforeach; ?>
     </div>
 <?php endforeach; ?>
-                    <div class="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
+                    
+              
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Card -->
+</div>
+<!-- End Table Section -->
+
+ <!-- Hidden field with Loan Officer ID -->
+<input type="hidden" name="loan_officer_id" value="<?= $loan_officer_id ?>">
+
+<!-- The conditional checkbox -->
+<div id="loan-officer-privilege" style="display: none;" class="mt-4">
+  <label class="inline-flex items-center">
+    <input type="checkbox" id="can-make-payment" name="can_make_payment" class="form-checkbox text-blue-600" checked>
+    <span class="ml-2 text-gray-700 dark:text-gray-300">Loan Officer have payment privilege</span>
+  </label>
+</div>
+
+
+<div id="branch-manager-privilege" style="display: none;" class="mt-4 space-y-2">
+  <label class="inline-flex items-center">
+    <input type="checkbox" name="can_approve_loan" class="form-checkbox text-blue-600">
+    <span class="ml-2 text-gray-700 dark:text-gray-300">Can Approve Loan</span>
+  </label><br>
+  <label class="inline-flex items-center">
+    <input type="checkbox" name="can_disburse_loan" class="form-checkbox text-blue-600">
+    <span class="ml-2 text-gray-700 dark:text-gray-300">Can Disburse Loan</span>
+  </label><br>
+  <label class="inline-flex items-center">
+    <input type="checkbox" name="can_approve_expenses" class="form-checkbox text-blue-600">
+    <span class="ml-2 text-gray-700 dark:text-gray-300">Can Approve Expenses</span>
+  </label>
+</div>
+
+
+
+
+<div class="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
                         <div class="flex justify-center gap-x-2">
                             <button type="submit" class="py-2 px-4 btn-primary-sm bg-cyan-600 hover:bg-cyan-700 text-white">Save</button>
                             <button type="reset" class="py-2 px-4 btn-secondary-sm">Cancel</button>
                         </div>
                     </div>
-                <?php echo form_close(); ?>
+  <?php echo form_close(); ?>
             </div>
         </div>
         <!-- End Card: Register Share Holder Form -->
@@ -503,6 +530,7 @@ if ($status === 'open') { ?>
 
 						
 
+<input type="hidden" id="branch_manager_id" value="<?= $branch_manager_id ?>">
 
 
 						<div class="sm:col-span-4">
@@ -581,6 +609,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const confirmInput = document.getElementById('passconf');
     const message = document.getElementById('password-match-msg');
 
+    // Message for min length
+    const minLengthMsg = document.createElement('p');
+    minLengthMsg.classList.add('text-xs', 'mt-2');
+    passwordInput.parentNode.appendChild(minLengthMsg);
+
     function validatePasswords() {
         if (confirmInput.value.length === 0) {
             message.textContent = '';
@@ -588,20 +621,37 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         if (passwordInput.value === confirmInput.value) {
-            message.textContent = 'Nywila zimefanana ✅';
+            message.textContent = 'Password zimefanana ✅';
             message.classList.remove('text-red-600');
             message.classList.add('text-green-600');
         } else {
-            message.textContent = 'Nywila hazijafanana ❌';
+            message.textContent = 'Password hazijafanana ❌';
             message.classList.remove('text-green-600');
             message.classList.add('text-red-600');
         }
     }
 
+    passwordInput.addEventListener('input', function () {
+        const length = passwordInput.value.length;
+
+        if (length > 0 && length < 6) {
+            minLengthMsg.textContent = 'Password lazima iwe na angalau kwanzia herufi 6 kuendelea ❌';
+            minLengthMsg.classList.remove('text-green-600');
+            minLengthMsg.classList.add('text-red-600');
+        } else if (length >= 6) {
+            minLengthMsg.textContent = 'Urefu wa password umekubalika ✅';
+            minLengthMsg.classList.remove('text-red-600');
+            minLengthMsg.classList.add('text-green-600');
+        } else {
+            minLengthMsg.textContent = '';
+        }
+    });
+
     passwordInput.addEventListener('input', validatePasswords);
     confirmInput.addEventListener('input', validatePasswords);
 });
 </script>
+
 
 
 
@@ -631,3 +681,89 @@ function toggleCheckboxes(button) {
     button.textContent = allChecked ? 'Chagua Zote' : 'Ondoa Zote';
 }
 </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const fullNameInput = document.getElementById('share_name');
+    const usernameInput = document.getElementById('username');
+
+    // Flag kuonyesha kama username bado inahifadhiwa ki-automatic
+    let isUsernameEdited = false;
+
+    // Kama mtumiaji anabadilisha username, tunaweka flag ili isiwe auto-updated tena
+    usernameInput.addEventListener('input', function() {
+        isUsernameEdited = true;
+    });
+
+    // Kila wakati mtumiaji anaandika full name, kama username haijahaririwa, update username
+    fullNameInput.addEventListener('input', function () {
+        if (!isUsernameEdited) {
+            usernameInput.value = fullNameInput.value;
+        }
+    });
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const positionSelect = document.getElementById('position_id');
+    const managementAccessDiv = document.getElementById('management-access');
+
+    // Hii itakuja kutoka controller yako - id ya "management"
+    const managementId = '<?php echo $management_id; ?>';
+
+    function toggleManagementAccess() {
+        if (positionSelect.value === managementId) {
+            managementAccessDiv.style.display = 'block';  // Onyesha
+        } else {
+            managementAccessDiv.style.display = 'none';   // Ficha
+        }
+    }
+
+    // Pima mara moja page inapopakia (in case kuna value tayari)
+    toggleManagementAccess();
+
+    // Sikiliza mabadiliko kwenye dropdown
+    positionSelect.addEventListener('change', toggleManagementAccess);
+});
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const positionSelect = document.getElementById('position_id');
+    const loanOfficerDiv = document.getElementById('loan-officer-privilege');
+    const loanOfficerId = "<?= $loan_officer_id ?>";
+
+    function toggleLoanOfficerPrivilege() {
+        loanOfficerDiv.style.display = (positionSelect.value === loanOfficerId) ? 'block' : 'none';
+    }
+
+    toggleLoanOfficerPrivilege();
+    positionSelect.addEventListener('change', toggleLoanOfficerPrivilege);
+});
+
+    </script>
+
+ <script>
+document.addEventListener('DOMContentLoaded', function () {
+    const positionSelect = document.getElementById('position_id');
+    const branchManagerId = document.getElementById('branch_manager_id')?.value;
+    const privilegeDiv = document.getElementById('branch-manager-privilege');
+
+    function toggleBranchManagerPrivileges() {
+        if (positionSelect.value === branchManagerId) {
+            privilegeDiv.style.display = 'block';
+        } else {
+            privilegeDiv.style.display = 'none';
+        }
+    }
+
+    // Listen for changes
+    positionSelect.addEventListener('change', toggleBranchManagerPrivileges);
+
+    // Run once on page load
+    toggleBranchManagerPrivileges();
+});
+</script>
+
+

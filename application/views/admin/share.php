@@ -50,7 +50,7 @@ include_once APPPATH . "views/partials/header.php";
                         <div class="sm:col-span-4">
                             <label for="share_name" class="block text-sm font-medium mb-2 dark:text-gray-300">* Full name:</label>
                             <input type="text" id="share_name" name="share_name" placeholder="Full name" autocomplete="off" required
-                                   class="py-2.5 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-cyan-500 focus:ring-cyan-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 dark:placeholder-gray-500 dark:focus:ring-gray-600" value="<?php echo set_value('share_name'); ?>">
+                                   class="uppercase py-2.5 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-cyan-500 focus:ring-cyan-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 dark:placeholder-gray-500 dark:focus:ring-gray-600" value="<?php echo set_value('share_name'); ?>">
                             <?php echo form_error("share_name", '<p class="text-xs text-red-600 mt-2">', '</p>'); ?>
                         </div>
 
@@ -148,7 +148,7 @@ include_once APPPATH . "views/partials/header.php";
                                         <?php foreach ($share as $sh_item): ?>
                                         <tr>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-200"><?php echo $no++; ?>.</td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200"><?php echo htmlspecialchars($sh_item->share_name, ENT_QUOTES, 'UTF-8'); ?></td>
+                                            <td class="uppercase px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200"><?php echo htmlspecialchars($sh_item->share_name, ENT_QUOTES, 'UTF-8'); ?></td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200"><?php echo htmlspecialchars($sh_item->share_mobile, ENT_QUOTES, 'UTF-8'); ?></td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200"><?php echo htmlspecialchars($sh_item->share_email, ENT_QUOTES, 'UTF-8'); ?></td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200"><?php echo ucfirst(htmlspecialchars($sh_item->share_sex, ENT_QUOTES, 'UTF-8')); ?></td>

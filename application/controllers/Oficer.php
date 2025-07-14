@@ -2480,10 +2480,9 @@ public function create_sponser($customer_id, $comp_id) {
   
       // Phone numbers to notify
       $phone_numbers = [
-          '255763727272',
-          '255627548192',
-          '255626573025',
-          '255619679334',
+          '255629364847',
+          '255748470181',
+         
       ];
   
       foreach ($phone_numbers as $phone) {
@@ -2562,53 +2561,49 @@ public function create_sponser($customer_id, $comp_id) {
               //      exit();
             $this->load->view('officer/collelateral',['loan_attach'=>$loan_attach,'privillage'=>$privillage,'collateral'=>$collateral,'manager'=>$manager]);
         }
+public function create_colateral($loan_id)
+{
+    $file_name = '';
 
-    public function create_colateral($loan_id){
-            if(!empty($_FILES['file_name']['name'])){
-                $config['upload_path'] = 'assets/i/';
-                $config['allowed_types'] = 'jpg|jpeg|png|gif|pdf';
-                $config['file_name'] = $_FILES['file_name']['name'];
-                $config['max_size']      = '8192'; 
-                $config['remove_spaces']=TRUE;  //it will remove all spaces
-                $config['encrypt_name']=TRUE;   //it wil encrypte the original file name
-                    //die($config);
-                //Load upload library and initialize configuration
-                $this->load->library('upload',$config);
-                $this->upload->initialize($config);
-                
-                if($this->upload->do_upload('file_name')){
-                    $uploadData = $this->upload->data();
-                    $file_name = $uploadData['file_name'];
-                }else{
-                    $file_name = '';
-                }
-            }else{
-                $file_name = '';
-            }
-            
-            //Prepare array of user data
-            $data = array(
-            'description' =>$this->input->post('description'),
-            'loan_id' =>$this->input->post('loan_id'),
-            'co_condition' =>$this->input->post('co_condition'),
-            'value' =>$this->input->post('value'),
-            'file_name' => $file_name,
-            );
-            //   echo "<pre>";
-            // print_r($data);
-            //  echo "</pre>";
-            //   exit();
-           $this->load->model('queries'); 
-            //Storing insertion status message.
-            if($data){
-                $this->queries->queries->insert($data);
-                $this->session->set_flashdata('massage','Colateral Uploaded  Successfully');
-               }else{
-                $this->session->set_flashdata('error','Data failed!!');
-            }
-            return redirect('oficer/collelateral_session/'.$loan_id);
+    // Handle base64 cropped image
+    if (!empty($this->input->post('cropped_image'))) {
+        $data_uri = $this->input->post('cropped_image');
+        $parts = explode(',', $data_uri);
 
+        if (count($parts) === 2) {
+            $encoded_image = $parts[1];
+            $decoded_image = base64_decode($encoded_image);
+
+            if ($decoded_image !== false) {
+                $file_name = uniqid('collateral_') . '.jpg';
+                $save_path = FCPATH . 'assets/dhamana/' . $file_name;
+                file_put_contents($save_path, $decoded_image);
+            }
+        }
     }
+
+    // Prepare data
+    $data = [
+        'description'  => $this->input->post('description'),
+        'loan_id'      => $loan_id,
+        'co_condition' => $this->input->post('co_condition'),
+        'value'        => $this->input->post('value'),
+        'file_name'    => $file_name
+    ];
+
+    // Load model
+    $this->load->model('queries');
+
+    // Insert into database
+    if ($this->queries->insert($data)) {
+        $this->session->set_flashdata('massage', 'Dhamana imehifadhiwa vizuri.');
+    } else {
+        $this->session->set_flashdata('error', 'Imeshindikana kuhifadhi dhamana.');
+    }
+
+    return redirect('oficer/collelateral_session/' . $loan_id);
+}
+
 
 
     public function modify_colateral($loan_id,$col_id){
