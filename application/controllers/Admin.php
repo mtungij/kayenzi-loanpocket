@@ -1759,7 +1759,7 @@ public function create_sponser($customer_id, $comp_id) {
         $customer_name = $customer->f_name . ' ' . $customer->m_name . ' ' . $customer->l_name;
 
         $massage = "Habari $sp_fullname, umetajwa kama mdhamini wa $customer_name katika taasisi ya kifedha $comp_name. "
-                 . "Iwapo hukubaliani kuwa mdhamini wake, tafadhali wasiliana nasi kupitia 0654443190. Tunathamini ushirikiano wako.";
+                 . "Iwapo hukubaliani kuwa mdhamini wake, tafadhali wasiliana nasi kupitia 0712345678. Tunathamini ushirikiano wako.";
 
         $this->sendsms($phone, $massage);
         redirect("admin/loan_applicationForm/$customer_id");
