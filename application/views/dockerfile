@@ -1,14 +1,15 @@
 docker run -it -d \
-  --label traefik.http.routers.mwandetelefinance.rule=Host\(\`https://mwandetele.loan-pocket.com/\`\) \
-  --label traefik.http.routers.mwandetelefinance.tls.certresolver=lets-encrypt \
-  --label traefik.http.routers.mwandetelefinance.tls=true \
-  --label traefik.http.routers.mwandetelefinance.service=mwandetelefinance-credit-http \
-  --label traefik.http.services.mwandetelefinance-credit-http.loadbalancer.server.port=80 \
-  --name mwandetelefinance \
+  --label traefik.http.routers.mwandetele.rule=Host\(\`mwandetele.loan-pocket.com\`\) \
+  --label traefik.http.routers.mwandetele.tls.certresolver=lets-encrypt \
+  --label traefik.http.routers.mwandetele.tls=true \
+  --label traefik.http.routers.mwandetele.service=mwandetele-credit-http \
+  --label traefik.http.services.mwandetele-credit-http.loadbalancer.server.port=80 \
+  --name mwandetele \
   --network web \
   --restart always \
   --expose 80 \
-mikoposoft/loan-pocket:mwande2025
+ mikoposoft/loan-pocket:version2 
+
 
 
 
