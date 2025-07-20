@@ -831,6 +831,12 @@ public function get_monthly_received_loan($comp_id)
 	}
 
 
+	 public function get_aggrement($customer_id,$comp_id){
+       	$loan = $this->db->query("SELECT * FROM tbl_loans l LEFT JOIN tbl_customer c ON c.customer_id = l.customer_id LEFT JOIN tbl_loan_category lt ON lt.category_id = l.category_id LEFT JOIN tbl_blanch b ON b.blanch_id = l.blanch_id LEFT JOIN tbl_sub_customer s ON s.customer_id = l.customer_id  LEFT JOIN tbl_region r ON r.region_id = c.region_id LEFT JOIN tbl_account_type at ON at.account_id = s.account_id LEFT JOIN tbl_employee e ON e.empl_id = c.empl_id  WHERE l.customer_id = '$customer_id' AND l.comp_id = '$comp_id' ORDER BY l.loan_id DESC LIMIT 1");
+       	   return $loan->row();
+       }
+
+
 
 
         public function get_loanCustomer($customer_id,$comp_id){

@@ -2496,7 +2496,7 @@ public function create_sponser($customer_id, $comp_id)
         $comp_id = $manager_data->comp_id;
         $compdata = $this->queries->get_comp_data($comp_id);
        
-        $customer = $this->queries->get_loanData($customer_id, $comp_id);
+        $customer = $this->queries->get_aggrement($customer_id, $comp_id);
         $mdhamini = $this->queries->get_guarator_data($customer_id, $comp_id);
         $loan_form = $this->queries->get_formloanData($customer_id, $comp_id);
 
