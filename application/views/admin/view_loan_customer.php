@@ -28,84 +28,134 @@ include_once APPPATH . "views/partials/header.php";
     </div>
 </div>
 
+<div class="flex flex-col md:flex-row gap-6 items-stretch">
+    <!-- Left: Customer Info -->
+    <div class="w-full md:w-3/12">
+        <div class="bg-white shadow rounded-lg p-4 border-t-4 border-green-500 h-full">
+            <?php foreach ($customer_data as $customer_profiles): ?>
+                <div class="text-center">
+                   
+                         <?php if (!empty($customer_profiles->passport)): ?>
+  <img class="w-32 h-32 mx-auto rounded-full object-cover mb-4 border-2 border-green-400"
+       src="<?= base_url($customer_profiles->passport) ?>" alt="Customer Passport">
+<?php else: ?>
+  <img class="w-32 h-32 mx-auto rounded-full object-cover mb-4 border-2 border-green-400"
+       src="<?= base_url('assets/img/customer21.png') ?>" alt="Default Image">
+<?php endif; ?>
 
-    <div class="container mx-auto my-3 p-4">
-        <div class="md:flex no-wrap md:-mx-2">
-            <!-- Left Side -->
-			<div class="w-full md:w-3/12 md:mx-2">
-    <div class="bg-white p-3 border-t-4 border-green-400">
-        <?php foreach ($customer_data as $customer_profiles): ?>
-            <div class="image overflow-hidden">
-                <img class="h-auto w-full mx-auto" src="<?= base_url('assets/img/customer21.png') ?>" alt="Customer Image">
 
-                <h1 class="text-green-500 font-bold text-xl leading-8 my-1 dark:text-gray-900 text-center">
-                    <?= strtoupper($customer_profiles->f_name) . " " . strtoupper(substr($customer_profiles->m_name, 0, 1)) . " " . strtoupper($customer_profiles->l_name) ?>
-                </h1>
-                
-                <h1 class="text-center font-semibold">
-                    <?= $customer_profiles->phone_no; ?>
-                </h1>
+                    <h1 class="text-xl font-bold text-green-600 uppercase">
+                        <?= strtoupper($customer_profiles->f_name) . " " . strtoupper(substr($customer_profiles->m_name, 0, 1)) . " " . strtoupper($customer_profiles->l_name) ?>
+                    </h1>
 
-                <ul class="bg-gray-100 text-gray-600 hover:text-gray-700 hover:shadow py-2 px-3 mt-3 divide-y rounded shadow-sm">
-                    <li class="flex items-center py-3">
+                    <p class="text-sm text-gray-600"><?= $customer_profiles->phone_no; ?></p>
+                </div>
+
+                <ul class="mt-4 text-sm text-gray-700 divide-y divide-gray-200">
+                    <li class="py-2 flex justify-between">
                         <span>Status</span>
-                        <span class="ml-auto">
-                            <span class="bg-green-500 py-1 px-2 rounded text-white text-sm">Active</span>
+                        <span class="bg-green-500 text-white text-xs px-2 py-1 rounded">
+                            <?= (count($customer_data) === 1) ? 'New Customer' : 'Existing Customer'; ?>
                         </span>
                     </li>
-                    <li class="flex items-center py-3">
-                        <span>Member since</span>
-                        <span class="ml-auto">
-                            <?= date('Y-m-d', strtotime($customer_profiles->customer_day)); ?>
-                        </span>
+                    <li class="py-2 flex justify-between">
+                        <span>Member Since</span>
+                        <span><?= date('Y-m-d', strtotime($customer_profiles->customer_day)); ?></span>
                     </li>
                 </ul>
+
+                <!-- Documents -->
+                <div class="mt-4">
+                    <h3 class="text-sm font-semibold text-gray-800 mb-2">📎 Customer Documents:</h3>
+                    <div class="flex flex-col gap-2 text-sm">
+                        <a href="<?= base_url('assets/documents/barua_' . $customer_profiles->customer_id . '.pdf') ?>"
+                           target="_blank"
+                           class="text-cyan-600 hover:underline hover:text-cyan-800 transition-all">
+                            📄 Barua ya Utambulisho
+                        </a>
+                        <a href="<?= base_url('assets/documents/kitambulisho_' . $customer_profiles->customer_id . '.pdf') ?>"
+                           target="_blank"
+                           class="text-cyan-600 hover:underline hover:text-cyan-800 transition-all">
+                            📄 Kitambulisho
+                        </a>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+
+    <!-- Optional Middle Column -->
+    <div class="w-full md:w-6/12">
+        <!-- You can leave this empty or insert approval form etc. -->
+    </div>
+
+    <!-- Right: Sponsor Info -->
+<div class="w-full md:w-3/12">
+    
+        <div class="bg-white shadow rounded-lg p-4 border-t-4 border-orange-500 h-full">
+        <?php foreach ($sponser_detail as $sponser): ?>
+            <div class="text-center">
+                
+              <?php if (!empty($sponser->passport_path)): ?>
+  <img class="w-32 h-32 mx-auto rounded-full object-cover mb-4 border-2 border-green-400"
+       src="<?= base_url($sponser->passport_path) ?>" alt="Sponsor Passport">
+<?php else: ?>
+  <img class="w-32 h-32 mx-auto rounded-full object-cover mb-4 border-2 border-green-400"
+       src="<?= base_url('assets/img/customer21.png') ?>" alt="Default Image">
+<?php endif; ?>
+
+                <h1 class="text-xl font-bold text-indigo-600 uppercase">
+                    <?= strtoupper($sponser->sp_name . ' ' . $sponser->sp_mname . ' ' . $sponser->sp_lname); ?>
+                </h1>
+
+                <p class="text-sm text-gray-600"><?= $sponser->sp_phone_no; ?></p>
+            </div>
+
+            <ul class="mt-4 text-sm text-gray-700 divide-y divide-gray-200">
+                <li class="py-2 flex justify-between">
+                    <span>Uhusiano</span>
+                    <span class="font-medium"><?= ucfirst($sponser->sp_relation); ?></span>
+                </li>
+                <li class="py-2 flex justify-between">
+                    <span>Kazi / Biashara</span>
+                    <span><?= ucfirst($sponser->nature); ?></span>
+                </li>
+            </ul>
+
+            <!-- Sponsor Documents -->
+            <div class="mt-6">
+                <h3 class="text-sm font-semibold text-gray-800 mb-2">📎 Sponsor Documents:</h3>
+                <div class="flex flex-col gap-2 text-sm">
+                    <?php if (!empty($sponser->barua_path)): ?>
+                        <a href="<?= base_url('assets/sponser_documents/' . basename($sponser->barua_path)); ?>" 
+                           target="_blank"
+                           class="text-cyan-600 hover:underline hover:text-cyan-800 transition-all">
+                            📄 Barua ya Utambulisho
+                        </a>
+                    <?php endif; ?>
+
+                    <?php if (!empty($sponser->kitambulisho_path)): ?>
+                        <a href="<?= base_url('assets/sponser_documents/' . basename($sponser->kitambulisho_path)); ?>" 
+                           target="_blank"
+                           class="text-cyan-600 hover:underline hover:text-cyan-800 transition-all">
+                            📄 Kitambulisho
+                        </a>
+                    <?php endif; ?>
+                </div>
             </div>
         <?php endforeach; ?>
     </div>
 </div>
 
 
-            <!-- Right Side -->
-            <div class="w-full md:w-9/12   md:mx-2 mt-4 md:mt-0">
-                <h2 class="text-xl font-semibold bg-cyan-600 uppercase rounded-sm text-white dark:text-gray-300 mb-4">Historia Ya Mikopo</h2>
 
-                <div class="overflow-x-auto">
-                    <table class="min-w-full bg-white border border-gray-200">
-                        <thead class="bg-gray-100 text-gray-600 uppercase text-sm leading-normal">
-                            <tr>
-                                <th class="py-3 px-6 text-left">#</th>
-                                <th class="py-3 px-6 text-left">Full Name</th>
-                                <th class="py-3 px-6 text-left">Mobile</th>
-                                <th class="py-3 px-6 text-left">Email</th>
-                                <th class="py-3 px-6 text-left">Sex</th>
-                                <th class="py-3 px-6 text-left">DOB</th>
-                            </tr>
-                        </thead>
-                        <tbody class="text-gray-700 text-sm">
-					
-							
-                           
-                                    <tr class="border-b border-gray-200 hover:bg-gray-100">
-                                        <td class="py-3 px-6">1</td>
-                                        <td class="py-3 px-6">jju</td>
-                                        <td class="py-3 px-6">jju</td>
-                                        <td class="py-3 px-6">jjuuuik</td>
-                                        <td class="py-3 px-6">llkk</td>
-                                        <td class="py-3 px-6">890000</td>
-                                    </tr>
-                              
-                        </tbody>
-                    </table>
-                </div>
-
-            </div>
-        </div>
-    </div>
 </div>
 
 
-<div class="flex flex-col bg-white border shadow-sm rounded-xl dark:bg-gray-800 dark:border-gray-700">
+</div>
+
+
+<!-- <div class="flex flex-col bg-white border shadow-sm rounded-xl dark:bg-gray-800 dark:border-gray-700">
 			<div class="bg-gray-100">
     <div class="w-full bg-cyan-600 text-white">
         <div class="flex flex-col max-w-screen-xl px-4 mx-auto md:flex-row md:justify-between md:px-6 lg:px-8">
@@ -157,7 +207,7 @@ include_once APPPATH . "views/partials/header.php";
 				
             </div>
 			
-        </div>
+        </div> -->
 		<div class="flex flex-col bg-white border shadow-sm rounded-xl dark:bg-gray-800 dark:border-gray-700">
 		<div class="w-full bg-cyan-600 text-white">
         <div class="flex flex-col max-w-screen-xl px-4 mx-auto md:flex-row md:justify-between md:px-6 lg:px-8">

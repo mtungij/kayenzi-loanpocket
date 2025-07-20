@@ -21,7 +21,7 @@ include_once APPPATH . "views/partials/officerheader.php";
         <!-- Page Title / Subheader -->
         <div class="mb-6">
             <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-gray-200">
-               Target Ya Mikopo
+               Loan Pending Approve
             </h2>
             <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
                 Omba upitishiwe ili uwahudumie.

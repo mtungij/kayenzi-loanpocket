@@ -164,7 +164,9 @@ include_once APPPATH . "views/partials/officerheader.php";
                
 
 
-                <?php echo form_open("oficer/create_sponser/{$customer->customer_id}/{$customer->comp_id}"); ?>
+               
+                <?php echo form_open_multipart("oficer/create_sponser/{$customer->customer_id}/{$customer->comp_id}"); ?>
+
 
 <div class="grid sm:grid-cols-12 gap-4 sm:gap-6">
     <div class="sm:col-span-4">
@@ -208,6 +210,32 @@ include_once APPPATH . "views/partials/officerheader.php";
                class="uppercase py-2.5 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-cyan-500 focus:ring-cyan-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300">
         <?php echo form_error("nature", '<p class="text-xs text-red-600 mt-2">', '</p>'); ?>
     </div>
+
+    <div class="sm:col-span-4">
+   <label for="barua_utambulisho" class="block text-sm font-medium mb-2 dark:text-gray-300">Barua ya Utambulisho (PDF) <span class="text-gray-400">(optional)</span>:</label>
+
+    <input type="file" id="barua_utambulisho" name="barua_utambulisho" accept="application/pdf"
+        class="block w-full text-sm text-gray-700 file:mr-4 file:py-2.5 file:px-4 file:rounded-md file:border-0 file:font-semibold file:bg-cyan-50 file:text-cyan-700 hover:file:bg-cyan-100 dark:file:bg-gray-700 dark:file:text-gray-300">
+    <?php echo form_error("barua_utambulisho", '<p class="text-xs text-red-600 mt-2">', '</p>'); ?>
+</div>
+
+<div class="sm:col-span-4">
+    <label for="kitambulisho" class="block text-sm font-medium mb-2 dark:text-gray-300">* Kitambulisho (PDF):</label>
+    <input type="file" id="kitambulisho" name="kitambulisho" accept="application/pdf"
+        class="block w-full text-sm text-gray-700 file:mr-4 file:py-2.5 file:px-4 file:rounded-md file:border-0 file:font-semibold file:bg-cyan-50 file:text-cyan-700 hover:file:bg-cyan-100 dark:file:bg-gray-700 dark:file:text-gray-300">
+    <?php echo form_error("kitambulisho", '<p class="text-xs text-red-600 mt-2">', '</p>'); ?>
+</div>
+
+<div class="sm:col-span-4">
+    <label class="block text-sm font-medium mb-2 dark:text-gray-300">* Passport Size Photo:</label>
+    <input type="file" id="passportInput" accept="image/*"
+           class="block w-full text-sm text-gray-700 file:mr-4 file:py-2.5 file:px-4 file:rounded-md file:border-0 file:font-semibold file:bg-cyan-50 file:text-cyan-700 hover:file:bg-cyan-100 dark:file:bg-gray-700 dark:file:text-gray-300">
+    <input type="hidden" name="passport_cropped" id="passportCropped">
+    <div class="mt-3">
+        <img id="previewImage" class="rounded border shadow w-32 h-32 object-cover" src="<?= base_url('assets/img/customer21.png') ?>" alt="Preview">
+    </div>
+</div>
+
 </div>
 
 
@@ -229,6 +257,18 @@ include_once APPPATH . "views/partials/officerheader.php";
             </div>
         </div>
 
+        <div id="cropperModal" class="hidden fixed z-50 inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+    <div class="bg-white p-4 rounded shadow-lg max-w-md w-full">
+        <h2 class="text-lg font-bold mb-2">Crop Passport</h2>
+        <div>
+            <img id="cropperImage" class="max-w-full">
+        </div>
+        <div class="mt-4 flex justify-end space-x-2">
+            <button id="cancelCrop" type="button" class="bg-gray-300 px-3 py-1 rounded">Cancel</button>
+            <button id="cropImage" type="button" class="bg-blue-600 text-white px-3 py-1 rounded">Crop & Use</button>
+        </div>
+    </div>
+</div>
 </div>
 </div>
 <!-- ========== END MAIN CONTENT BODY ========== -->
@@ -259,3 +299,53 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 </script>
+
+
+<script>
+let cropper;
+const passportInput = document.getElementById('passportInput');
+const cropperModal = document.getElementById('cropperModal');
+const cropperImage = document.getElementById('cropperImage');
+const previewImage = document.getElementById('previewImage');
+const passportCropped = document.getElementById('passportCropped');
+
+passportInput.addEventListener('change', function (e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function (event) {
+        cropperImage.src = event.target.result;
+        cropperModal.classList.remove('hidden');
+        if (cropper) cropper.destroy();
+        cropper = new Cropper(cropperImage, {
+            aspectRatio: 3 / 4,
+            viewMode: 1,
+        });
+    };
+    reader.readAsDataURL(file);
+});
+
+document.getElementById('cancelCrop').addEventListener('click', () => {
+    cropperModal.classList.add('hidden');
+    passportInput.value = ''; // reset input
+    if (cropper) cropper.destroy();
+});
+
+document.getElementById('cropImage').addEventListener('click', () => {
+    const canvas = cropper.getCroppedCanvas({
+        width: 300,
+        height: 400,
+    });
+
+    // Show cropped preview
+    previewImage.src = canvas.toDataURL('image/jpeg');
+
+    // Set hidden input for form
+    passportCropped.value = canvas.toDataURL('image/jpeg');
+
+    cropperModal.classList.add('hidden');
+    if (cropper) cropper.destroy();
+});
+</script>
+

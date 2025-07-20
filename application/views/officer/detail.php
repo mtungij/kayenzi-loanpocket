@@ -55,43 +55,66 @@ include_once APPPATH . "views/partials/officerheader.php";
 
 
 
+<?php echo form_open_multipart("oficer/create_lastDetail/{$customer->customer_id}", ['novalidate' => true]); ?>
 
-<?php echo form_open("oficer/create_lastDetail/{$customer->customer_id}", ['novalidate' => true]); ?>
-
-                
-
-				<div class="grid grid-cols-2 gap-4">
-    <div class="sm:col-span-1">
+<!-- Grid: Nickname and Place of Business -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+    <!-- Nickname -->
+    <div>
         <label for="famous_area" class="block text-sm font-medium mb-2 dark:text-gray-300">* Nick Name:</label>
-        <input type="text" step="0.01" id="famous_area" name="famous_area" placeholder="andika jina maarufu la mteja" required autocomplete="off"
-               class="uppercase py-2.5 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-cyan-500 focus:ring-cyan-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 dark:placeholder-gray-500 dark:focus:ring-gray-600"
-               value="<?php echo set_value('famous_area', ($customer && isset($customer->famous_area) ? htmlspecialchars($customer->famous_area, ENT_QUOTES, 'UTF-8') : '')); ?>">
-        <p class="text-xs text-gray-500 mt-1 dark:text-gray-400">Enter a number (e.g., mama jonson, baba james).</p>
+        <input type="text" id="famous_area" name="famous_area" placeholder="andika jina maarufu la mteja" autocomplete="off" required
+            class="uppercase py-2.5 px-4 w-full border border-gray-300 rounded-md shadow-sm text-sm focus:border-cyan-500 focus:ring-cyan-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
+            value="<?php echo set_value('famous_area', ($customer && isset($customer->famous_area) ? htmlspecialchars($customer->famous_area, ENT_QUOTES, 'UTF-8') : '')); ?>">
+        <p class="text-xs text-gray-500 mt-1 dark:text-gray-400">e.g., mama jonson, baba james</p>
         <?php echo form_error("famous_area", '<p class="text-xs text-red-600 mt-2">', '</p>'); ?>
     </div>
 
-    <div class="sm:col-span-1">
+    <!-- Place of Business -->
+    <div>
         <label for="place_imployment" class="block text-sm font-medium mb-2 dark:text-gray-300">* Place of Business:</label>
-        <input type="text" id="place_imployment" name="place_imployment" placeholder="Enter place of business" required autocomplete="off"
-               class=" uppercase py-2.5 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-cyan-500 focus:ring-cyan-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 dark:placeholder-gray-500 dark:focus:ring-gray-600"
-               value="<?php echo set_value('place_imployment', ($customer && isset($customer->place_imployment) ? htmlspecialchars($customer->place_imployment, ENT_QUOTES, 'UTF-8') : '')); ?>">
-        <p class="text-xs text-gray-500 mt-1 dark:text-gray-400">Enter the place of business (e.g., market, shop).</p>
+        <input type="text" id="place_imployment" name="place_imployment" placeholder="Enter place of business" autocomplete="off" required
+            class="uppercase py-2.5 px-4 w-full border border-gray-300 rounded-md shadow-sm text-sm focus:border-cyan-500 focus:ring-cyan-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
+            value="<?php echo set_value('place_imployment', ($customer && isset($customer->place_imployment) ? htmlspecialchars($customer->place_imployment, ENT_QUOTES, 'UTF-8') : '')); ?>">
+        <p class="text-xs text-gray-500 mt-1 dark:text-gray-400">e.g., sokoni, duka, ofisi</p>
         <?php echo form_error("place_imployment", '<p class="text-xs text-red-600 mt-2">', '</p>'); ?>
     </div>
 </div>
 
-                    <input type="hidden" name="account_id" value="1">
-					<input type="hidden" name="code" value="C<?php echo substr($customer->customer_day ,0, 4)?><?php echo substr($customer->customer_day ,5, 2)?><?php echo $customer->customer_id; ?>">
-                     <input type="hidden" name="customer_id" value="<?php echo $customer->customer_id; ?>">
+<!-- Grid: File Uploads -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6">
+    <!-- Barua ya Utambulisho -->
+    <div>
+        <label for="barua_utambulisho" class="block text-sm font-medium mb-2 dark:text-gray-300">* Barua ya Utambulisho (PDF):</label>
+        <input type="file" id="barua_utambulisho" name="barua_utambulisho" accept="application/pdf" 
+            class="block w-full text-sm text-gray-700 file:mr-4 file:py-2.5 file:px-4 file:rounded-md file:border-0 file:font-semibold file:bg-cyan-50 file:text-cyan-700 hover:file:bg-cyan-100 dark:file:bg-gray-700 dark:file:text-gray-300">
+        <?php echo form_error("barua_utambulisho", '<p class="text-xs text-red-600 mt-2">', '</p>'); ?>
+    </div>
 
-                    <div class="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
-                        <div class="flex justify-center gap-x-2">
-                            <button type="submit" class="py-2 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-cyan-600 text-white hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500">
-                               Next
-                            </button>
-                        </div>
-                    </div>
-                <?php echo form_close(); ?>
+    <!-- Kitambulisho -->
+    <div>
+        <label for="kitambulisho" class="block text-sm font-medium mb-2 dark:text-gray-300">* Kitambulisho (PDF):</label>
+        <input type="file" id="kitambulisho" name="kitambulisho" accept="application/pdf" 
+            class="block w-full text-sm text-gray-700 file:mr-4 file:py-2.5 file:px-4 file:rounded-md file:border-0 file:font-semibold file:bg-cyan-50 file:text-cyan-700 hover:file:bg-cyan-100 dark:file:bg-gray-700 dark:file:text-gray-300">
+        <?php echo form_error("kitambulisho", '<p class="text-xs text-red-600 mt-2">', '</p>'); ?>
+    </div>
+</div>
+
+<!-- Hidden Fields (required where meaningful) -->
+<input type="hidden" name="account_id" value="1" required>
+<input type="hidden" name="code" value="C<?php echo substr($customer->customer_day ,0, 4)?><?php echo substr($customer->customer_day ,5, 2)?><?php echo $customer->customer_id; ?>" required>
+<input type="hidden" name="customer_id" value="<?php echo $customer->customer_id; ?>" required>
+
+<!-- Submit Button -->
+<div class="mt-8 border-t pt-6 border-gray-200 dark:border-gray-700">
+    <div class="flex justify-center">
+        <button type="submit" class="py-2.5 px-6 text-sm font-semibold rounded-lg bg-cyan-600 text-white hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500">
+            Next
+        </button>
+    </div>
+</div>
+
+<?php echo form_close(); ?>
+
             </div>
         </>
         <!-- End Card: Penalty Setting Form -->
@@ -107,11 +130,3 @@ include_once APPPATH . "views/partials/officerheader.php";
 <?php
 include_once APPPATH . "views/partials/footer.php";
 ?>
-
-<script>
-window.addEventListener('load', () => {
-  // Preline components are usually auto-initialized.
-  // If HSSelect needs manual init for dynamically added content or specific cases:
-  // HSStaticMethods.autoInit(['select']);
-});
-</script>

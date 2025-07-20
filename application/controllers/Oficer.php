@@ -1841,38 +1841,114 @@ public function customer(){
 
 
 
-        public function create_lastDetail($customer_id)
-        {
-            // Prepare array of user data
-          
+public function create_lastDetail($customer_id)
+{
+    $this->load->library('form_validation');
 
-            $data = array(
-                'customer_id'       => $this->input->post('customer_id'),
-                'famous_area'       => $this->input->post('famous_area'),
-                'place_imployment'  => $this->input->post('place_imployment'),
-                'code'              => $this->input->post('code'),
-                'account_id'        => $this->input->post('account_id'),
-                // 'natinal_identity' => $this->input->post('natinal_identity'), // Remove if not needed
-            );
-        
-            $customer_code = $data['code'];
-            $customer_id = $data['customer_id'];
-        
-            $this->load->model('queries'); 
-        
-            // Skip national ID check
-            $result = $this->queries->insert_customerData($data);
-        
-            if ($result) {
-                $this->update_code($customer_id, $customer_code);
-                $this->update_customer_pendData($customer_id);
-                $this->session->set_flashdata('success', 'Customer details saved successfully.');
-            } else {
-                $this->session->set_flashdata('error', 'Data failed to save!');
-            }
-        
-            return redirect('oficer/viw_ID_sig/' . $customer_id);
-        }
+    // Validate required text fields
+    $this->form_validation->set_rules('famous_area', 'Nick Name', 'required');
+    $this->form_validation->set_rules('place_imployment', 'Place of Business', 'required');
+    $this->form_validation->set_rules('code', 'Code', 'required');
+    $this->form_validation->set_rules('account_id', 'Account ID', 'required');
+
+    // Conditionally validate file fields if uploaded
+    if (!empty($_FILES['barua_utambulisho']['name'])) {
+        $this->form_validation->set_rules(
+            'barua_utambulisho',
+            'Barua ya Utambulisho',
+            'callback_validate_pdf_upload[barua_utambulisho]'
+        );
+    }
+
+    if (!empty($_FILES['kitambulisho']['name'])) {
+        $this->form_validation->set_rules(
+            'kitambulisho',
+            'Kitambulisho',
+            'callback_validate_pdf_upload[kitambulisho]'
+        );
+    }
+
+    // If validation fails, reload the form
+    if ($this->form_validation->run() === FALSE) {
+        return $this->customer_details($customer_id);
+    }
+
+    // Upload the files only if they are present
+    if (!empty($_FILES['barua_utambulisho']['name'])) {
+        $this->upload_file_as('barua_utambulisho', 'barua_' . $customer_id);
+    }
+
+    if (!empty($_FILES['kitambulisho']['name'])) {
+        $this->upload_file_as('kitambulisho', 'kitambulisho_' . $customer_id);
+    }
+
+    // Prepare data for database insert
+    $data = array(
+        'customer_id'       => $this->input->post('customer_id'),
+        'famous_area'       => $this->input->post('famous_area'),
+        'place_imployment'  => $this->input->post('place_imployment'),
+        'code'              => $this->input->post('code'),
+        'account_id'        => $this->input->post('account_id'),
+    );
+
+    // Insert data using model
+    $this->load->model('queries');
+    $result = $this->queries->insert_customerData($data);
+
+    // Handle result
+    if ($result) {
+        $this->update_code($customer_id, $data['code']);
+        $this->update_customer_pendData($customer_id);
+        $this->session->set_flashdata('success', 'Customer details saved successfully.');
+    } else {
+        $this->session->set_flashdata('error', 'Failed to save data.');
+    }
+
+    // Redirect to signature view
+    return redirect('oficer/viw_ID_sig/' . $customer_id);
+}
+
+
+private function upload_file_as($field_name, $file_name)
+{
+    $config['upload_path']   = './assets/documents/';
+    $config['allowed_types'] = 'pdf';
+    $config['max_size']      = 2048; // 2MB
+    $config['file_name']     = $file_name . '.pdf';
+    $config['overwrite']     = true;
+
+    $this->load->library('upload', $config);
+    $this->upload->initialize($config);
+
+   if (!$this->upload->do_upload($field_name)) {
+    echo $this->upload->display_errors(); // show error message directly
+    exit;
+}
+
+
+    return true;
+}
+
+
+
+public function validate_pdf_upload($str, $field_name)
+{
+    if (empty($_FILES[$field_name]['name'])) {
+        $this->form_validation->set_message('validate_pdf_upload', 'The {field} field is required.');
+        return false;
+    }
+
+    $allowed_mime = ['application/pdf'];
+    $file_mime = mime_content_type($_FILES[$field_name]['tmp_name']);
+    if (!in_array($file_mime, $allowed_mime)) {
+        $this->form_validation->set_message('validate_pdf_upload', 'The {field} must be a valid PDF.');
+        return false;
+    }
+
+    return true;
+}
+
+
         
 
     public function update_customer_pendData($customer_id){
@@ -2299,72 +2375,221 @@ public function search_customer() {
 //     }
 
 
-public function create_sponser($customer_id, $comp_id) {
-  $this->load->model('queries');
-  $customer = $this->queries->search_CustomerID($customer_id, $comp_id);
-  $customerdata = $customer->customer_id;
+public function create_sponser($customer_id, $comp_id)
+{
+    $this->load->model('queries');
+    $this->load->library('form_validation');
 
-  $this->load->library('form_validation');
+    $customer = $this->queries->search_CustomerID($customer_id, $comp_id);
+    $customerdata = $customer->customer_id;
 
-  $this->form_validation->set_rules('sp_name', 'First Name', 'required');
-  $this->form_validation->set_rules('sp_mname', 'Middle Name', 'required');
-  $this->form_validation->set_rules('sp_lname', 'Last Name', 'required');
-  $this->form_validation->set_rules(
-      'sp_phone_no', 
-      'Phone Number', 
-      'required|numeric|exact_length[10]',
-      [
-          'required'     => 'Please enter the %s.',
-          'numeric'      => 'The %s must contain only numbers.',
-          'exact_length' => 'The %s must be exactly 10 digits.',
-      ]
-  );
-  $this->form_validation->set_rules('sp_relation', 'Relationship With Customer', 'required');
-  $this->form_validation->set_rules('nature', 'Guarantor Business', 'required');
+    // Set form validation rules
+    $this->form_validation->set_rules('sp_name', 'First Name', 'required');
+    $this->form_validation->set_rules('sp_mname', 'Middle Name', 'required');
+    $this->form_validation->set_rules('sp_lname', 'Last Name', 'required');
+    $this->form_validation->set_rules(
+        'sp_phone_no',
+        'Phone Number',
+        'required|numeric|exact_length[10]',
+        [
+            'required' => 'Please enter the %s.',
+            'numeric' => 'The %s must contain only numbers.',
+            'exact_length' => 'The %s must be exactly 10 digits.',
+        ]
+    );
+    $this->form_validation->set_rules('sp_relation', 'Relationship With Customer', 'required');
+    $this->form_validation->set_rules('nature', 'Guarantor Business', 'required');
 
-  if ($this->form_validation->run() == FALSE) {
-      $sponser = (object) $this->input->post();
-      $this->load->view('officer/search_customer', [
-          'customer' => $customer,
-          'sponser' => $sponser
-      ]);
-  } else {
-      $data = [
-          'sp_name' => $this->input->post('sp_name'),
-          'sp_mname' => $this->input->post('sp_mname'),
-          'sp_lname' => $this->input->post('sp_lname'),
-          'sp_phone_no' => $this->input->post('sp_phone_no'),
-          'sp_relation' => $this->input->post('sp_relation'),
-          'nature' => $this->input->post('nature'),
-          'comp_id' => $comp_id,
-          'customer_id' => $customerdata,
-      ];
+    // Optional file validations
+    if (!empty($_FILES['barua_utambulisho']['name'])) {
+        $this->form_validation->set_rules('barua_utambulisho', 'Barua ya Utambulisho', 'callback_validate_pdf_upload[barua_utambulisho]');
+    }
 
-      $this->db->insert('tbl_sponser', $data);
+    if (!empty($_FILES['kitambulisho']['name'])) {
+        $this->form_validation->set_rules('kitambulisho', 'Kitambulisho', 'callback_validate_pdf_upload[kitambulisho]');
+    }
 
-      $this->session->set_flashdata('massage', 'Taarifa za mdhamini zimepokelewa');
+    if ($this->form_validation->run() == FALSE) {
+        $sponser = (object)$this->input->post();
+        $this->load->view('officer/search_customer', [
+            'customer' => $customer,
+            'sponser' => $sponser
+        ]);
+    } else {
+        // Upload files only if provided
+        $barua_name = '';
+        $kitambulisho_name = '';
 
-      $compdata = $this->queries->get_companyData($comp_id);
-      $comp_name = $compdata->comp_name;
+        if (!empty($_FILES['barua_utambulisho']['name'])) {
+            $barua_name = $this->upload_file('barua_utambulisho', 'barua_' . $customer_id);
+        }
 
-      // Sponsor fullname and phone for SMS
-      $sp_fullname = $data['sp_name'] . ' ' . $data['sp_mname'] . ' ' . $data['sp_lname'];
-      $phone = $data['sp_phone_no'];
+        if (!empty($_FILES['kitambulisho']['name'])) {
+            $kitambulisho_name = $this->upload_file('kitambulisho', 'kitambulisho_' . $customer_id);
+        }
 
-      // Customer full name
-      $customer_name = $customer->f_name . ' ' . $customer->m_name . ' ' . $customer->l_name;
+        // Handle Cropped Passport Image
+        $passportData = $this->input->post('passport_cropped');
+        $passportPath = '';
 
-      // SMS message
-      $massage = "Habari $sp_fullname, umetajwa kama mdhamini wa $customer_name katika taasisi ya kifedha $comp_name. "
-                . "Iwapo hukubaliani kuwa mdhamini wake, tafadhali wasiliana nasi kupitia 0626573025/0627548192. Tunathamini ushirikiano wako.";
+        if (!empty($passportData)) {
+            $passportBase64 = preg_replace('#^data:image/\w+;base64,#i', '', $passportData);
+            $passportDecoded = base64_decode($passportBase64);
 
-      // Send SMS
-      $this->sendsms($phone, $massage);
+            $passportFileName = 'passport_' . $customer_id . '_' . time() . '.jpg';
+            $passportUploadPath = 'assets/sponser_passport/' . $passportFileName;
 
-      // Redirect
-      redirect("oficer/loan_applicationForm/" . $customerdata);
-  }
+            // Create directory if it doesn't exist
+            if (!file_exists(FCPATH . 'assets/sponser_passport/')) {
+                mkdir(FCPATH . 'assets/sponser_passport/', 0755, true);
+            }
+
+            // Save image
+            file_put_contents(FCPATH . $passportUploadPath, $passportDecoded);
+            $passportPath = $passportUploadPath;
+        }
+
+        // Prepare sponsor data
+        $data = [
+            'sp_name'           => $this->input->post('sp_name'),
+            'sp_mname'          => $this->input->post('sp_mname'),
+            'sp_lname'          => $this->input->post('sp_lname'),
+            'sp_phone_no'       => $this->input->post('sp_phone_no'),
+            'sp_relation'       => $this->input->post('sp_relation'),
+            'nature'            => $this->input->post('nature'),
+            'comp_id'           => $comp_id,
+            'customer_id'       => $customerdata,
+            'barua_path'        => $barua_name,
+            'kitambulisho_path' => $kitambulisho_name,
+            'passport_path'     => $passportPath
+        ];
+
+        $this->db->insert('tbl_sponser', $data);
+
+        $this->session->set_flashdata('massage', 'Taarifa za mdhamini zimepokelewa');
+
+        // Send SMS
+        $compdata = $this->queries->get_companyData($comp_id);
+        $comp_name = $compdata->comp_name;
+
+        $sp_fullname = $data['sp_name'] . ' ' . $data['sp_mname'] . ' ' . $data['sp_lname'];
+        $phone = $data['sp_phone_no'];
+        $customer_name = $customer->f_name . ' ' . $customer->m_name . ' ' . $customer->l_name;
+
+        $massage = "Habari $sp_fullname, umetajwa kama mdhamini wa $customer_name katika taasisi ya kifedha $comp_name. "
+            . "Iwapo hukubaliani kuwa mdhamini wake, tafadhali wasiliana nasi kupitia 0762062271. Tunathamini ushirikiano wako.";
+
+        $this->sendsms($phone, $massage);
+
+        redirect("oficer/loan_applicationForm/" . $customerdata);
+    }
 }
+
+
+    public function view_aggrement($customer_id)
+    {
+  
+        $this->load->model('queries');
+        $blanch_id = $this->session->userdata('blanch_id');
+        $empl_id = $this->session->userdata('empl_id');
+        $manager_data = $this->queries->get_manager_data($empl_id);
+        $comp_id = $manager_data->comp_id;
+        $compdata = $this->queries->get_comp_data($comp_id);
+       
+        $customer = $this->queries->get_loanData($customer_id, $comp_id);
+        $mdhamini = $this->queries->get_guarator_data($customer_id, $comp_id);
+        $loan_form = $this->queries->get_formloanData($customer_id, $comp_id);
+
+          //  echo "<pre>";
+          //   print_r(    $mdhamini );
+          //   echo "</pre>";
+          //       exit();
+    
+        // Ensure $loan_form is not null before accessing loan_id
+        $loan_id = $loan_form ? $loan_form->loan_id : null;
+    
+        if (!$loan_id) {
+            die("Loan ID not found. Please check the loan data.");
+        }
+      
+        $collateral = $this->queries->get_colateral_data($loan_id);
+        $local_officer = $this->queries->get_loacagovment_data($loan_id);
+        $inc_history = $this->queries->get_loanIncomeHistory($customer_id);
+        // echo "<pre>";
+        // print_r( $comp_name );
+        //     echo "<pre>";
+        //         exit();
+        // Generate PDF
+        $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => 'A4', 'orientation' => 'P']);
+    
+        // Load the agreement view as HTML
+        $html = $this->load->view('officer/loan_aggrement', [
+            "customer" => $customer,
+            "mdhamini" => $mdhamini,
+            "compdata" => $compdata,
+            "collateral" => $collateral,
+            "local_officer" => $local_officer,
+            "inc_history" => $inc_history,
+            "compdata" => $compdata
+        ], true);
+    
+        // Set PDF Footer
+        $mpdf->SetFooter('Generated By James Developers');
+    
+        // Write HTML content to PDF
+        $mpdf->WriteHTML($html);
+    
+        // Output the PDF to Browser
+        $mpdf->Output('mkataba_wa_maombi.pdf', 'I'); // 'I' means inline view in browser
+    }
+
+
+
+
+public function validate_sponser_pdf($field)
+
+{
+    if (isset($_FILES[$field]) && $_FILES[$field]['error'] === UPLOAD_ERR_OK) {
+        $ext = strtolower(pathinfo($_FILES[$field]['name'], PATHINFO_EXTENSION));
+        if ($ext === 'pdf') {
+            return true;
+        } else {
+            $this->form_validation->set_message('validate_pdf_upload', 'The {field} must be a PDF file.');
+            return false;
+        }
+    } else {
+        $this->form_validation->set_message('validate_pdf_upload', 'The {field} is required.');
+        return false;
+    }
+}
+
+
+private function upload_file($field_name, $new_name_prefix)
+{
+  $upload_path = './assets/sponser_documents/';
+
+    
+    // Create the directory if it doesn't exist
+    if (!file_exists($upload_path)) {
+        mkdir($upload_path, 0755, true);
+    }
+
+    // Get the extension
+    $ext = pathinfo($_FILES[$field_name]['name'], PATHINFO_EXTENSION);
+
+    // Create a new unique filename
+    $new_name = $new_name_prefix . '_' . time() . '.' . $ext;
+    $full_path = $upload_path . $new_name;
+
+    // Move the uploaded file
+    if (move_uploaded_file($_FILES[$field_name]['tmp_name'], $full_path)) {
+        return 'uploads/sponser_documents/' . $new_name; // return relative path to save in DB
+    }
+
+    return null;
+}
+
+
 
   
 
@@ -2561,40 +2786,21 @@ public function create_sponser($customer_id, $comp_id) {
               //      exit();
             $this->load->view('officer/collelateral',['loan_attach'=>$loan_attach,'privillage'=>$privillage,'collateral'=>$collateral,'manager'=>$manager]);
         }
-public function create_colateral($loan_id)
+
+       public function create_colateral($loan_id)
 {
-    $file_name = '';
-
-    // Handle base64 cropped image
-    if (!empty($this->input->post('cropped_image'))) {
-        $data_uri = $this->input->post('cropped_image');
-        $parts = explode(',', $data_uri);
-
-        if (count($parts) === 2) {
-            $encoded_image = $parts[1];
-            $decoded_image = base64_decode($encoded_image);
-
-            if ($decoded_image !== false) {
-                $file_name = uniqid('collateral_') . '.jpg';
-                $save_path = FCPATH . 'assets/dhamana/' . $file_name;
-                file_put_contents($save_path, $decoded_image);
-            }
-        }
-    }
-
-    // Prepare data
+ 
+    // Prepare data array for database if you want to save info
     $data = [
-        'description'  => $this->input->post('description'),
+        'description'  => $this->input->post('description', true),
         'loan_id'      => $loan_id,
-        'co_condition' => $this->input->post('co_condition'),
-        'value'        => $this->input->post('value'),
-        'file_name'    => $file_name
+        'co_condition' => $this->input->post('co_condition', true),
+        'value'        => str_replace(',', '', $this->input->post('value', true)),
+    
     ];
 
-    // Load model
+    // Save in DB or do whatever you want with $data
     $this->load->model('queries');
-
-    // Insert into database
     if ($this->queries->insert($data)) {
         $this->session->set_flashdata('massage', 'Dhamana imehifadhiwa vizuri.');
     } else {
@@ -2603,6 +2809,8 @@ public function create_colateral($loan_id)
 
     return redirect('oficer/collelateral_session/' . $loan_id);
 }
+
+
 
 
 
@@ -3014,7 +3222,7 @@ $this->loan_application();
          $local_oficer = $this->queries->get_loacagovment_data($loan_id);
          $privillage = $this->queries->get_position_empl($empl_id);
             //    echo "<pre>";
-            // print_r($local_oficer);
+            // print_r(  $sponser_detail);
             //    echo "</pre>";
             //        exit();
         $this->load->view('officer/view_loan_customer',['customer_data'=>$customer_data,'sponser_detail'=>$sponser_detail,'loan_form'=>$loan_form,'collateral'=>$collateral,'local_oficer'=>$local_oficer,'empl_data'=>$empl_data,'privillage'=>$privillage]);
@@ -3765,7 +3973,7 @@ public function disburse($loan_id){
       
 
             // echo "<pre>";
-            // print_r($total_interest_loan);
+            // print_r( $disburse);
             // echo "</pre>";
             //     exit();
         $this->load->view('officer/disburse_loan',['disburse'=>$disburse,'total_loanDis'=>$total_loanDis,'total_interest_loan'=>$total_interest_loan,'empl_data'=>$empl_data,'privillage'=>$privillage]);

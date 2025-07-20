@@ -2157,7 +2157,7 @@ public function create_sponser($customer_id, $comp_id) {
          $inc_history = $this->queries->get_loanIncomeHistory($loan_id);
  
     	    // echo "<pre>";
-    	    // print_r(  $loan_form);
+    	    // print_r(   $customer_data);
     	    // echo "</pre>";
     	    // exit();
     	$this->load->view('admin/view_loan_customer',['customer_data'=>$customer_data,'sponser_detail'=>$sponser_detail,'loan_form'=>$loan_form,'collateral'=>$collateral,'local_oficer'=>$local_oficer,'inc_history'=>$inc_history]);
@@ -2242,42 +2242,43 @@ public function create_sponser($customer_id, $comp_id) {
   
 
 
-	public function aprove_loan($loan_id){
-		$this->load->helper('string');
-		$this->load->model('queries');
-	
-		// Delete existing records for the loan_id from tbl_outstand
-		$this->db->where('loan_id', $loan_id);
-		$this->db->delete('tbl_outstand');
-	
-		// Get current datetime
-		$day = date('Y-m-d H:i');
-	
-		// Get current approver's name from session
-		$approved_by = isset($_SESSION['empl_name']) ? $_SESSION['empl_name'] : 'Unknown';
-	
-		// Prepare data for update
-		$data = array(
-			'loan_aprove'   => $this->input->post('loan_aprove'),
-			'penat_status'  => $this->input->post('penat_status'),
-			'loan_status'   => 'aproved',
-			'loan_day'      => $day,
-			'code'          => random_string('numeric',4),
-			'approved_by'   => $approved_by, // <== NEW LINE
-		);
-	
-		// Update loan record
-		$updated = $this->queries->update_status($loan_id, $data);
-	
-		if ($updated) {
-			$this->session->set_flashdata('massage', 'Loan Approved successfully');
-		} else {
-			$this->session->set_flashdata('error', 'Data failed!!');
-		}
-	
-		return redirect('admin/loan_pending');
-	}
-	
+public function aprove_loan($loan_id)
+{
+    $this->load->helper('string');
+    $this->load->model('queries');
+
+    // Delete existing records for the loan_id from tbl_outstand
+    $this->db->where('loan_id', $loan_id);
+    $this->db->delete('tbl_outstand');
+
+    // Get current datetime
+    $day = date('Y-m-d H:i');
+
+    // Get current approver's name from session
+    $approved_by = isset($_SESSION['empl_name']) ? $_SESSION['empl_name'] : 'Unknown';
+
+    // Prepare data for update
+    $data = array(
+        'loan_aprove'   => $this->input->post('loan_aprove'),
+        'penat_status'  => $this->input->post('penat_status'),
+        'loan_status'   => 'aproved',
+        'loan_day'      => $day,
+        'code'          => random_string('numeric', 4),
+        'approved_by'   => $approved_by,
+    );
+
+    // Update loan record
+    $updated = $this->queries->update_status($loan_id, $data);
+
+    if ($updated) {
+        $this->session->set_flashdata('massage', 'Loan Approved successfully');
+        return redirect("admin/disburse/$loan_id");
+    } else {
+        $this->session->set_flashdata('error', 'Data failed!!');
+        return redirect('admin/loan_pending');
+    }
+}
+
 	
 
 	

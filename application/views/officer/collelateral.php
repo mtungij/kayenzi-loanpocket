@@ -71,85 +71,72 @@ include_once APPPATH . "views/partials/officerheader.php";
                     Sajili dhamana za mkopo
                 </h3>
 
-                <?php echo form_open("oficer/create_colateral/{$loan_attach->loan_id}", ['enctype' => 'multipart/form-data']); ?>
+              <?php echo form_open("oficer/create_colateral/{$loan_attach->loan_id}", ['enctype' => 'multipart/form-data']); ?>
 
-                    <div class="grid sm:grid-cols-12 gap-4 sm:gap-6">
-                        <div class="sm:col-span-4">
-                            <label for="description" class="block text-sm font-medium mb-2 dark:text-gray-300">* Jina La dhamana:</label>
-                            <input type="text" id="description" name="description" placeholder="Jaza Jina la dhamana" autocomplete="off" required
-                                   class="py-2.5 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-cyan-500 focus:ring-cyan-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 dark:placeholder-gray-500 dark:focus:ring-gray-600" value="<?php echo set_value('description'); ?>">
-                            <?php echo form_error("description", '<p class="text-xs text-red-600 mt-2">', '</p>'); ?>
-                        </div>
+<div class="grid sm:grid-cols-12 gap-4 sm:gap-6">
+    <!-- Jina La Dhamana -->
+    <div class="sm:col-span-4">
+        <label for="description" class="block text-sm font-medium mb-2 dark:text-gray-300">* Jina La dhamana:</label>
+        <input type="text" id="description" name="description" placeholder="Jaza Jina la dhamana" autocomplete="off" required
+            class="py-2.5 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-cyan-500 focus:ring-cyan-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
+            value="<?php echo set_value('description'); ?>">
+        <?php echo form_error("description", '<p class="text-xs text-red-600 mt-2">', '</p>'); ?>
+    </div>
 
-                        <div class="sm:col-span-4">
-    <label for="co_condition" class="block text-sm font-medium mb-2 dark:text-gray-300">* Hali ya Dhamana:</label>
-    <select id="co_condition" name="co_condition" required
-        data-hs-select='{
-            "placeholder": "Chagua hali ya dhamana",
-            "toggleTag": "<button type=\"button\" aria-expanded=\"false\"><span class=\"me-2\" data-icon></span><span class=\"text-gray-800 dark:text-gray-200\" data-title></span></button>",
-            "toggleClasses": "hs-select-disabled:pointer-events-none hs-select-disabled:opacity-50 relative py-2.5 px-4 pe-9 flex text-nowrap w-full cursor-pointer bg-white border border-gray-200 rounded-lg text-start text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 dark:focus:ring-gray-600",
-            "dropdownClasses": "mt-2 max-h-72 pb-1 px-1 space-y-0.5 z-50 w-full bg-white border border-gray-200 rounded-lg overflow-hidden overflow-y-auto dark:bg-gray-800 dark:border-gray-700",
-            "optionClasses": "py-2 px-4 w-full text-sm text-gray-800 cursor-pointer hover:bg-gray-100 rounded-lg focus:outline-none focus:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-200 dark:focus:bg-gray-700",
-            "optionTemplate": "<div><div class=\"flex items-center\"><div class=\"me-2\" data-icon></div><div class=\"text-gray-800 dark:text-gray-200\" data-title></div></div></div>",
-            "extraMarkup": "<div class=\"absolute top-1/2 end-3 -translate-y-1/2\"><svg class=\"shrink-0 size-3.5 text-gray-500 dark:text-gray-500\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m7 15 5 5 5-5\"/><path d=\"m7 9 5-5 5 5\"/></svg></div>"
-        }'>
-        <option value="">Chagua hali ya dhamana</option>
-        <option value="mpya" <?php echo set_select('co_condition', 'mpya'); ?>>Mpya</option>
-        <option value="inalipa mkopo" <?php echo set_select('co_condition', 'inalipa mkopo'); ?>>Inalipa mkopo</option>
-        <option value="nzuri" <?php echo set_select('co_condition', 'nzuri'); ?>>Inafanya kazi vizuri</option>
-        <option value="imetumika" <?php echo set_select('co_condition', 'imetumika'); ?>>Imetumika lakini bado nzuri</option>
-        <option value="hitilafu kidogo" <?php echo set_select('co_condition', 'hitilafu kidogo'); ?>>Imeharibika kidogo</option>
-        <option value="hitilafu kubwa" <?php echo set_select('co_condition', 'hitilafu kubwa'); ?>>Imeharibika sana</option>
-        <option value="haifanyi kazi" <?php echo set_select('co_condition', 'haifanyi kazi'); ?>>Haifanyi kazi</option>
-    </select>
-    <?php echo form_error("co_condition", '<p class="text-xs text-red-600 mt-2">', '</p>'); ?>
-</div>
-<input type="hidden" name="loan_id"  id="loan_id" value="<?php echo $loan_attach->loan_id; ?>">
-<input type="hidden" name="cropped_image" id="cropped_image">
+    <!-- Hali ya Dhamana -->
+    <div class="sm:col-span-4">
+        <label for="co_condition" class="block text-sm font-medium mb-2 dark:text-gray-300">* Hali ya Dhamana:</label>
+        <select id="co_condition" name="co_condition" required
+            class="py-2.5 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-cyan-500 focus:ring-cyan-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300">
+            <option value="">Chagua hali ya dhamana</option>
+            <option value="mpya" <?php echo set_select('co_condition', 'mpya'); ?>>Mpya</option>
+            <option value="inalipa mkopo" <?php echo set_select('co_condition', 'inalipa mkopo'); ?>>Inalipa mkopo</option>
+            <option value="nzuri" <?php echo set_select('co_condition', 'nzuri'); ?>>Inafanya kazi vizuri</option>
+            <option value="imetumika" <?php echo set_select('co_condition', 'imetumika'); ?>>Imetumika lakini bado nzuri</option>
+            <option value="hitilafu kidogo" <?php echo set_select('co_condition', 'hitilafu kidogo'); ?>>Imeharibika kidogo</option>
+            <option value="hitilafu kubwa" <?php echo set_select('co_condition', 'hitilafu kubwa'); ?>>Imeharibika sana</option>
+            <option value="haifanyi kazi" <?php echo set_select('co_condition', 'haifanyi kazi'); ?>>Haifanyi kazi</option>
+        </select>
+        <?php echo form_error("co_condition", '<p class="text-xs text-red-600 mt-2">', '</p>'); ?>
+    </div>
 
+    <!-- Thamani ya Dhamana -->
+    <div class="sm:col-span-4">
+        <label for="value" class="block text-sm font-medium mb-2 dark:text-gray-300">* Thamani ya sasa ya Dhamana:</label>
+        <input type="text" id="value" name="value" placeholder="Weka thamani" autocomplete="off" required
+            class="py-2.5 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-cyan-500 focus:ring-cyan-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
+            value="<?php echo set_value('value'); ?>">
+        <?php echo form_error("value", '<p class="text-xs text-red-600 mt-2">', '</p>'); ?>
+    </div>
 
+    <!-- Upload PDF of Picha ya Dhamana -->
+    <!-- <div class="sm:col-span-6">
+        <label for="collateral_pdf" class="block text-sm font-medium mb-2 dark:text-gray-300">* Picha ya Dhamana (PDF)</label>
+    <input type="file" name="collateral_pdf" id="collateral_pdf" accept="application/pdf"
+        class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer dark:text-gray-400 dark:bg-gray-700 dark:border-gray-600" required>
+        <p class="text-xs text-gray-500 mt-1 dark:text-gray-400">Upload PDF file (e.g., scanned document or agreement).</p>
+        </?php echo form_error("collateral_pdf", '<p class="text-xs text-red-600 mt-2">', '</p>'); ?>
+    </div> -->
 
-                    <div class="sm:col-span-4">
-    <label for="value" class="block text-sm font-medium mb-2 dark:text-gray-300">* Thamani ya sasa ya Dhamana:</label>
-    <input type="text" id="value" name="value" placeholder="" autocomplete="off" required
-           class="py-2.5 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-cyan-500 focus:ring-cyan-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 dark:placeholder-gray-500 dark:focus:ring-gray-600"
-           value="<?php echo set_value('value'); ?>">
-    <?php echo form_error("value", '<p class="text-xs text-red-600 mt-2">', '</p>'); ?>
-</div>
-  </div>
+   
 
- <div class="sm:col-span-6">
-  <label for="file_name" class="block text-sm font-medium mb-2 dark:text-gray-300">Picha ya Dhamana</label>
-   <input type="file" id="file_input" accept="image/*"
-         class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer dark:text-gray-400 dark:bg-gray-700 dark:border-gray-600" required>
-
-  <!-- Image crop preview -->
-  <div class="mt-4">
-    <img id="preview" class="hidden rounded border border-gray-300" style="max-width: 100%; max-height: 300px;">
-    
-  </div>
-
-  <!-- Hidden cropped image blob -->
-  
 </div>
 
+<!-- Hidden Input -->
+<input type="hidden" name="loan_id" value="<?php echo $loan_attach->loan_id; ?>">
 
+<!-- Submit Button -->
+<div class="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
+    <div class="flex justify-center gap-x-2">
+        <button type="submit"
+            class="py-2 px-4 btn-primary-sm bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg">Save</button>
+        <a href="<?php echo base_url("oficer/loan_pending"); ?>"
+            class="py-2 px-4 btn-secondary-sm bg-red-600 text-white rounded-lg hover:bg-red-700">Skip</a>
+    </div>
+</div>
 
-  
+<?php echo form_close(); ?>
 
-
-
-
-
-
-                    <div class="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
-                        <div class="flex justify-center gap-x-2">
-                            <button type="submit" class="py-2 px-4 btn-primary-sm bg-cyan-600 hover:bg-cyan-700 text-white">Save</button>
-                            <a href="<?php echo base_url("oficer/loan_pending"); ?>" class="py-2 px-4 btn-secondary-sm dark:bg-red-600">Skip</a>
-                        </div>
-                        </div>
-                    </div>
-                <?php echo form_close(); ?>
             </div>
         </div>
         <!-- End Card: Register Share Holder Form -->
@@ -284,49 +271,3 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 </script>
-
-
-<script>
-let cropper;
-
-document.getElementById('file_input').addEventListener('change', function (e) {
-  const file = e.target.files[0];
-  if (!file) return;
-
-  const reader = new FileReader();
-  reader.onload = function () {
-    const img = document.getElementById('preview');
-    img.src = reader.result;
-    img.style.display = 'block';
-
-    if (cropper) cropper.destroy();
-
-    cropper = new Cropper(img, {
-      aspectRatio: 4 / 3,
-      viewMode: 1,
-      autoCropArea: 1,
-    });
-  };
-  reader.readAsDataURL(file);
-});
-
-// On form submit
-document.querySelector('form').addEventListener('submit', function (e) {
-  e.preventDefault();
-
-  if (cropper) {
-    const canvas = cropper.getCroppedCanvas({ width: 800, height: 600 });
-    const base64 = canvas.toDataURL('image/jpeg');
-
-    // Put into hidden input
-    document.getElementById('cropped_image').value = base64;
-
-    // Submit the form
-    e.target.submit();
-  }
-});
-</script>
-
-
-
-

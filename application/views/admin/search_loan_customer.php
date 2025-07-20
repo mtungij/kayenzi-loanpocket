@@ -20,178 +20,165 @@ include_once APPPATH . "views/partials/header.php";
         <div class="flex flex-col max-w-screen-xl px-4 mx-auto md:flex-row md:justify-between md:px-6 lg:px-8">
             <div class="p-4 flex flex-row items-center justify-between">
                 <a href="#" class="text-lg font-semibold tracking-widest uppercase rounded-lg focus:outline-none focus:shadow-outline">
-                Dashibodi Ya Malipo
+                Payment dashboard
                 </a>
             </div>
         </div>
     </div>
 </div>
 
+<div class=" w-full">
+  <div class="md:flex md:justify-between md:items-start md:space-x-2">
 
-    <div class="container mx-auto my-3 p-4">
-        <div class="md:flex no-wrap md:-mx-2">
-            <!-- Left Side -->
-            <div class="w-full md:w-3/12 md:mx-2">
-                <div class="bg-white p-3 border-t-4 border-green-400">
-                    <div class="image overflow-hidden">
-                    <?php if (!empty($data_customer->passport)): ?>
-                       <img class="h-auto w-full mx-auto" src="<?= base_url($data_customer->passport) ?>" alt="Customer Passport">
-                        <?php else: ?>
-                          <img class="h-auto w-full mx-auto" src="<?= base_url('assets/img/customer21.png') ?>" alt="Customer Image">
+    <!-- Customer Card -->
+   <div class="w-full md:w-1/6 mb-4 md:mb-0">
+
+      <div class="bg-white p-4 border-t-4 border-green-500 rounded-lg shadow-md">
+        <div class="image overflow-hidden mb-4 text-center">
+          <?php if (!empty($data_customer->passport)): ?>
+            <img class="w-32 h-32 mx-auto rounded-full object-cover border-4 border-green-400" src="<?= base_url($data_customer->passport) ?>" alt="Customer Passport">
+          <?php else: ?>
+            <img class="w-32 h-32 mx-auto rounded-full object-cover border-4 border-green-400" src="<?= base_url('assets/img/customer21.png') ?>" alt="Customer Image">
+          <?php endif; ?>
+        </div>
+        <h1 class="text-green-600 font-bold text-xl text-center uppercase whitespace-nowrap overflow-hidden truncate">
+          <?= strtoupper($customer->f_name) . " " . strtoupper($customer->m_name) . " " . strtoupper($customer->l_name) ?>
+        </h1>
+        <h2 class="text-sm text-green-500 text-center font-semibold">(<?= $customer->famous_area; ?>)</h2>
+        <p class="text-center mt-2 text-gray-800 font-medium"><?= $customer->phone_no; ?></p>
+
+        <?php
+          $customer_loan = !empty($customer->customer_id) ? $this->queries->get_loan_active_customer($customer->customer_id) : null;
+          $total_deposit = $this->queries->get_total_amount_paid_loan($customer_loan->loan_id ?? 0);
+          $loan_int = $customer_loan->loan_int ?? 0;
+          $deposit = $total_deposit->total_Deposit ?? 0;
+          $status_label = 'Not Active';
+          $status_class = 'bg-blue-600 text-white';
+          if (!empty($customer_loan)) {
+            switch ($customer_loan->loan_status) {
+              case 'withdrawal': $status_label = 'Active'; $status_class = 'bg-teal-500 text-white'; break;
+              case 'done': $status_label = 'Done'; $status_class = 'bg-yellow-500 text-white'; break;
+              case 'out': $status_label = 'Nje Mkataba'; $status_class = 'bg-red-500 text-white'; break;
+            }
+          }
+        ?>
+
+        <ul class="mt-5 bg-gray-100 text-gray-700 divide-y divide-gray-300 rounded-lg shadow-sm text-sm">
+          <li class="flex items-center justify-between py-2 px-3">
+            <span class="font-bold text-base">Status</span>
+            <span class="px-3 py-1 rounded-full text-xs font-medium <?= $status_class; ?>"><?= $status_label; ?></span>
+          </li>
+          <li class="flex items-center justify-between py-2 px-3 font-bold text-base"><span>Customer Code</span><span><?= $customer->code; ?></span></li>
+          <li class="flex items-center justify-between py-2 px-3 font-bold text-base"><span>Gawa</span><span><?= $customer_loan->loan_stat_date ?? 'YY-MM-DD'; ?></span></li>
+          <li class="flex items-center justify-between py-2 px-3 font-bold text-base"><span>Mwisho</span><span><?= !empty($customer_loan->loan_end_date) ? substr($customer_loan->loan_end_date, 0, 10) : 'YY-MM-DD'; ?></span></li>
+          <li class="flex items-center justify-between py-2 px-3 font-bold text-base"><span>Rejesho</span><span><?= safe_number_format($customer_loan->restration ?? 0); ?></span></li>
+
+        </ul>
+
+         <div class="mt-6">
+                <h3 class="text-sm font-semibold text-gray-800 mb-2">📎 Customer Documents:</h3>
+                <div class="flex flex-col gap-2 text-sm">
+                    <?php if (!empty($customer->barua_path)): ?>
+                        <a href="<?= base_url('assets/sponser_documents/' . basename($customer->barua_path)); ?>" 
+                           target="_blank"
+                           class="text-cyan-600 hover:underline hover:text-cyan-800 transition-all">
+                            📄 Barua ya Utambulisho
+                        </a>
                     <?php endif; ?>
 
-                    </div>
-                    <h1 class="text-green-500 font-bold text-xl leading-8 my-1 dark:text-neutral-900 text-center">
-                        <?= strtoupper($customer->f_name) . " " . strtoupper($customer->m_name) . " " . strtoupper($customer->l_name) ?>
-                    </h1>
-                    <h1 class="text-center text-green-500 font-bold">(<?= $customer->famous_area ;?>)</h1>
-                    <br>
-                    <h1 class="text-center  font-bold"><?= $customer->phone_no ;?></h1>
-                    <ul class="bg-gray-100 text-gray-600 hover:text-gray-700 hover:shadow py-2 px-3 mt-3 divide-y rounded shadow-sm">
-                    <?php
-                         if (!empty($customer->customer_id)) {
-                            $customer_loan = $this->queries->get_loan_active_customer($customer->customer_id);
-
-    //   echo "<pre>";
-    //   print_r( $customer_loan);
-    //  echo "</pre>";
-    //   exit();
-                        }
-                        
-                         $total_deposit = $this->queries->get_total_amount_paid_loan($customer_loan->loan_id ?? 0);
-                         $out_stand = $this->queries->get_outstand_loan_customer($customer_loan->loan_id ?? 0);
-                     ?>
-                                           <?php
-$customer_loan_status = $this->queries->get_loan_active_customer($customer->customer_id);
-
-$status_label = 'Not Active';
-$status_class = 'bg-blue-600 text-white dark:bg-blue-500';
-
-if (!empty($customer_loan_status)) {
-    switch ($customer_loan_status->loan_status) {
-        case 'withdrawal':
-            $status_label = 'Active';
-            $status_class = 'bg-teal-500 text-white';
-            break;
-        case 'done':
-            $status_label = 'Done';
-            $status_class = 'bg-yellow-500 text-white';
-            break;
-        case 'out':
-            $status_label = 'Nje Mkataba';
-            $status_class = 'bg-red-500 text-white';
-            break;
-    }
-}
-?>
-
-<li class="flex items-center py-3">
-    <span class="font-bold">Status</span>
-    <span class="ml-auto">
-        <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-medium <?php echo $status_class; ?>">
-            <?php echo $status_label; ?>
-        </span>
-    </span>
-</li>
-
-<li class="flex items-center py-3">
-    <span class="font-bold">Customer Code</span>
-    <span class="ml-auto">
-        <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-medium">
-            <?php echo $customer->code; ?>
-        </span>
-    </span>
-</li>
-
-
-
-
-
-                        <li class="flex items-center py-3">
-                               <span class="font-bold">Gawa</span>
-                            <?php if (!empty($customer_loan->loan_stat_date)) : ?>
-                                <span class="ml-auto"><?= $customer_loan->loan_stat_date; ?></span>  
-                            <?php else : ?>
-                                <span class="ml-auto">YY-MM-DD</span>
-                              <?php endif; ?>
-                            
-                        </li>
-                        <li class="flex items-center py-3">
-                               <span class="font-bold">Mwisho</span>
-                            <?php if (!empty($customer_loan->loan_end_date)) : ?>
-                                <span class="ml-auto"><?= substr($customer_loan->loan_end_date, 0, 10); ?></span>
-                           <?php else : ?>
-                                <span class="ml-auto">YY-MM-DD</span>
-                           <?php endif; ?>
-                           
-                        </li>
-                        <li class="flex items-center py-3">
-                            <span class="font-bold">Mkopo</span>
-                            <span class="ml-auto"><?= safe_number_format($customer_loan->loan_int ?? 0); ?></span>
-                        </li>
-                        <li class="flex items-center py-3">
-                            <span class="font-bold">Rejesho</span>
-                            <span class="ml-auto"><?= safe_number_format($customer_loan->restration ?? 0); ?></span>
-                        </li>
-                        <li class="flex items-center py-3">
-    <span class="font-bold">Lipwa</span>
-
-    <?php
-    $loan_int = $customer_loan->loan_int ?? 0;
-    $deposit = $total_deposit->total_Deposit ?? 0;
-    ?>
-
-    <span class="ml-auto">
-        <?php if ($deposit > $loan_int): ?>
-            <?= safe_number_format($deposit - $loan_int) ?>
-        <?php else: ?>
-            <?= safe_number_format($deposit) ?>
-        <?php endif; ?>
-    </span>
-</li>
-
-                        <li class="flex items-center py-3">
-                            <span class="font-bold">Deni</span>
-                            <span class="ml-auto"><?= safe_number_format(max(0, $loan_int - $deposit)); ?></span>
-                        </li>
-                        
-                    </ul>
+                    <?php if (!empty($customer->kitambulisho_path)): ?>
+                        <a href="<?= base_url('assets/sponser_documents/' . basename($customer->kitambulisho_path)); ?>" 
+                           target="_blank"
+                           class="text-cyan-600 hover:underline hover:text-cyan-800 transition-all">
+                            📄 Kitambulisho
+                        </a>
+                    <?php endif; ?>
                 </div>
             </div>
-
-            <!-- Right Side -->
-            <div class="w-full md:w-9/12 md:mx-2 mt-4 md:mt-0">
-                <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-4">Taarifa Za Mdhamini</h2>
-
-                <div class="overflow-x-auto">
-                    <table class="min-w-full bg-white border border-gray-200">
-                        <thead class="bg-gray-100 text-gray-600 uppercase text-sm leading-normal">
-                            <tr>
-                                <th class="py-3 px-6 text-left">Jina Mdhamini</th>
-                                <th class="py-3 px-6 text-left">Number Ya Simu</th>
-                                <th class="py-3 px-6 text-left">Mahusiano</th>
-                            </tr>
-                        </thead>
-                        <tbody class="text-gray-700 text-sm">
-   
-                                    <tr class="border-b border-gray-200 hover:bg-gray-100">
-                                        <td class="py-3 px-6"><?= $customer->sp_name ." ". $customer->sp_mname ." ". $customer->sp_lname?></td>
-                                        <td class="py-3 px-6"><?=$customer->sp_phone_no ?></td>
-                                        <td class="py-3 px-6"><?=$customer->sp_relation ?></td>
-                                    </tr>
-                             
-                                <!-- <tr>
-                                    <td colspan="6" class="text-center py-4 text-gray-500">No shareholder data found.</td>
-                                </tr> -->
-                           
-                        </tbody>
-                    </table>
-                </div>
-
-            </div>
-        </div>
+        
+      </div>
     </div>
+
+    <!-- Table in Middle -->
+  <div class="w-full md:w-4/6 mb-4 md:mb-0">
+      <div class="bg-white p-4 rounded-lg shadow-md overflow-auto">
+        <h2 class="text-lg font-bold text-green-600 mb-3">Loan Information</h2>
+        <table class="min-w-full text-sm text-left text-gray-700 border border-gray-200">
+          <thead class="bg-green-100 text-green-800 font-semibold">
+            <tr>
+              <th class="px-4 py-2 border-b">Loan Amount</th>
+              <th class="px-4 py-2 border-b">Paid Amount</th>
+              <th class="px-4 py-2 border-b">Remain Debt</th>
+            </tr>
+          </thead>
+          <tbody>
+           
+              <tr class="hover:bg-gray-50">
+                <td class="px-4 py-2 border-b"><?= safe_number_format($loan_int); ?></td>
+                <td class="px-4 py-2 border-b"><?= $deposit > $loan_int ? safe_number_format($deposit - $loan_int) : safe_number_format($deposit); ?></td>
+                <td class="px-4 py-2 border-b"><?= safe_number_format(max(0, $loan_int - $deposit)); ?></td>
+              </tr>
+            
+          </tbody>
+        </table>
+
+        
+        
+      </div>
+    </div>
+
+    <!-- Sponsor Card -->
+    <!-- Sponsor Card -->
+<div class="w-full md:w-1/6">
+
+      <div class="bg-white p-4 border-t-4 border-green-500 rounded-lg shadow-md">
+        <div class="image overflow-hidden mb-4 text-center">
+          <?php if (!empty($customer->passport_path)): ?>
+            <img class="w-32 h-32 mx-auto rounded-full object-cover border-4 border-green-400" src="<?= base_url($customer->passport_path) ?>" alt="Sponsor Passport">
+          <?php else: ?>
+            <img class="w-32 h-32 mx-auto rounded-full object-cover border-4 border-green-400" src="<?= base_url('assets/img/customer21.png') ?>" alt="Default Image">
+          <?php endif; ?>
+        </div>
+        <h1 class="text-green-600 font-bold text-xl text-center uppercase whitespace-nowrap overflow-hidden truncate">
+          <?= strtoupper($customer->sp_name) . " " . strtoupper($customer->sp_mname) . " " . strtoupper($customer->sp_lname) ?>
+        </h1>
+        <h2 class="text-sm text-green-500 text-center font-semibold">(<?= $customer->famous_area; ?>)</h2>
+        <p class="text-center mt-2 text-gray-800 font-medium"><?= $customer->sp_phone_no; ?></p>
+
+        <ul class="mt-5 bg-gray-100 text-gray-700 divide-y divide-gray-300 rounded-lg shadow-sm text-sm">
+          <li class="flex items-center justify-between py-2 px-3"><span>Namba ya Simu</span><span><?= $customer->sp_phone_no; ?></span></li>
+          <li class="flex items-center justify-between py-2 px-3"><span>Uhusiano</span><span><?= ucfirst($customer->sp_relation) ?></span></li>
+          <li class="flex items-center justify-between py-2 px-3"><span>Biashara/Kazi</span><span><?= $customer->nature; ?></span></li>
+        </ul>
+
+         <div class="mt-6">
+                <h3 class="text-sm font-semibold text-gray-800 mb-2">📎 Sponsor Documents:</h3>
+                <div class="flex flex-col gap-2 text-sm">
+                    <?php if (!empty($customer->barua_path)): ?>
+                        <a href="<?= base_url('assets/sponser_documents/' . basename($customer->barua_path)); ?>" 
+                           target="_blank"
+                           class="text-cyan-600 hover:underline hover:text-cyan-800 transition-all">
+                            📄 Barua ya Utambulisho
+                        </a>
+                    <?php endif; ?>
+
+                    <?php if (!empty($customer->kitambulisho_path)): ?>
+                        <a href="<?= base_url('assets/sponser_documents/' . basename($customer->kitambulisho_path)); ?>" 
+                           target="_blank"
+                           class="text-cyan-600 hover:underline hover:text-cyan-800 transition-all">
+                            📄 Kitambulisho
+                        </a>
+                    <?php endif; ?>
+                </div>
+            </div>
+      </div>
+    </div>
+
+  </div>
 </div>
+
+  
+
 <!-- Table Section -->
 <!-- Table Section -->
         <div>
@@ -273,14 +260,17 @@ if (!empty($customer_loan_status)) {
                 <div class="overflow-x-auto">
                     <div class="min-w-full inline-block align-middle">
                         <div class="border rounded-lg overflow-hidden dark:border-gray-700">
+                           <div class="bg-cyan-600 px-4 py-2">
+        <h2 class="text-white font-semibold text-lg uppercase">Min Statement</h2>
+    </div>
                             <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700" id="shareholder_table">
                                 <thead class="bg-cyan-600 dark:bg-cyan-600">
                                     <tr>
-                                        <th scope="col" class="py-3 px-6 text-start"><div class="inline-flex items-center gap-x-2"><span class="text-xs font-semibold uppercase text-gray-500 dark:text-white">Tarehe</span></div></th>
-                                        <th scope="col" class="py-3 px-6 text-start"><div class="inline-flex items-center gap-x-2"><span class="text-xs font-semibold uppercase text-gray-500 dark:text-white">Maelezo</span><svg class="size-3.5 text-gray-400 dark:text-gray-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path class="hs-datatable-ordering-desc:text-cyan-600 dark:hs-datatable-ordering-desc:text-cyan-500" d="m7 15 5 5 5-5"></path><path class="hs-datatable-ordering-asc:text-cyan-600 dark:hs-datatable-ordering-asc:text-cyan-500" d="m7 9 5-5 5 5"></path></svg></div></th>
-                                        <th scope="col" class="py-3 px-6 text-start"><div class="inline-flex items-center gap-x-2"><span class="text-xs font-semibold uppercase text-gray-500 dark:text-white">Lipwa</span><svg class="size-3.5 text-gray-400 dark:text-gray-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path class="hs-datatable-ordering-desc:text-cyan-600 dark:hs-datatable-ordering-desc:text-cyan-500" d="m7 15 5 5 5-5"></path><path class="hs-datatable-ordering-asc:text-cyan-600 dark:hs-datatable-ordering-asc:text-cyan-500" d="m7 9 5-5 5 5"></path></svg></div></th>
-                                         <th scope="col" class="py-3 px-6 text-start"><div class="inline-flex items-center gap-x-2"><span class="text-xs font-semibold uppercase text-gray-500 dark:text-white">Toka</span><svg class="size-3.5 text-gray-400 dark:text-gray-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path class="hs-datatable-ordering-desc:text-cyan-600 dark:hs-datatable-ordering-desc:text-cyan-500" d="m7 15 5 5 5-5"></path><path class="hs-datatable-ordering-asc:text-cyan-600 dark:hs-datatable-ordering-asc:text-cyan-500" d="m7 9 5-5 5 5"></path></svg></div></th>
-                                        <th scope="col" class="py-3 px-6 text-start"><div class="inline-flex items-center gap-x-2"><span class="text-xs font-semibold uppercase text-gray-500 dark:text-white">Salio</span><svg class="size-3.5 text-gray-400 dark:text-gray-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path class="hs-datatable-ordering-desc:text-cyan-600 dark:hs-datatable-ordering-desc:text-cyan-500" d="m7 15 5 5 5-5"></path><path class="hs-datatable-ordering-asc:text-cyan-600 dark:hs-datatable-ordering-asc:text-cyan-500" d="m7 9 5-5 5 5"></path></svg></div></th>
+                                        <th scope="col" class="py-3 px-6 text-start"><div class="inline-flex items-center gap-x-2"><span class="text-xs font-semibold uppercase text-gray-500 dark:text-white">Date</span></div></th>
+                                        <th scope="col" class="py-3 px-6 text-start"><div class="inline-flex items-center gap-x-2"><span class="text-xs font-semibold uppercase text-gray-500 dark:text-white">description</span><svg class="size-3.5 text-gray-400 dark:text-gray-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path class="hs-datatable-ordering-desc:text-cyan-600 dark:hs-datatable-ordering-desc:text-cyan-500" d="m7 15 5 5 5-5"></path><path class="hs-datatable-ordering-asc:text-cyan-600 dark:hs-datatable-ordering-asc:text-cyan-500" d="m7 9 5-5 5 5"></path></svg></div></th>
+                                        <th scope="col" class="py-3 px-6 text-start"><div class="inline-flex items-center gap-x-2"><span class="text-xs font-semibold uppercase text-gray-500 dark:text-white">Deposit</span><svg class="size-3.5 text-gray-400 dark:text-gray-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path class="hs-datatable-ordering-desc:text-cyan-600 dark:hs-datatable-ordering-desc:text-cyan-500" d="m7 15 5 5 5-5"></path><path class="hs-datatable-ordering-asc:text-cyan-600 dark:hs-datatable-ordering-asc:text-cyan-500" d="m7 9 5-5 5 5"></path></svg></div></th>
+                                         <th scope="col" class="py-3 px-6 text-start"><div class="inline-flex items-center gap-x-2"><span class="text-xs font-semibold uppercase text-gray-500 dark:text-white">Withdraw</span><svg class="size-3.5 text-gray-400 dark:text-gray-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path class="hs-datatable-ordering-desc:text-cyan-600 dark:hs-datatable-ordering-desc:text-cyan-500" d="m7 15 5 5 5-5"></path><path class="hs-datatable-ordering-asc:text-cyan-600 dark:hs-datatable-ordering-asc:text-cyan-500" d="m7 9 5-5 5 5"></path></svg></div></th>
+                                        <th scope="col" class="py-3 px-6 text-start"><div class="inline-flex items-center gap-x-2"><span class="text-xs font-semibold uppercase text-gray-500 dark:text-white">Balance</span><svg class="size-3.5 text-gray-400 dark:text-gray-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path class="hs-datatable-ordering-desc:text-cyan-600 dark:hs-datatable-ordering-desc:text-cyan-500" d="m7 15 5 5 5-5"></path><path class="hs-datatable-ordering-asc:text-cyan-600 dark:hs-datatable-ordering-asc:text-cyan-500" d="m7 9 5-5 5 5"></path></svg></div></th>
 
                                     </tr>
                                 </thead>
