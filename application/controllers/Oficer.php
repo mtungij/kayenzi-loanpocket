@@ -1777,7 +1777,7 @@ public function customer(){
                 
                 $massage = "Habari $full_name! Karibu sana katika familia ya " . $compdata->comp_name . ". " .
                 "Tunathamini uamuzi wako wa kujiunga nasi. Kwa maswali, ushauri au msaada wowote, " .
-                "tupigie simu kupitia namba: 0626573025 / 0627548192. Tuko tayari kukuhudumia kwa moyo wote!";
+                "tupigie simu kupitia namba: 0653356635/0758409884. Tuko tayari kukuhudumia kwa moyo wote!";
             
                 $this->sendsms($phone_no, $massage);
                   $this->session->set_flashdata('massage', 'Customer successfully registered.');
@@ -2477,7 +2477,7 @@ public function create_sponser($customer_id, $comp_id)
         $customer_name = $customer->f_name . ' ' . $customer->m_name . ' ' . $customer->l_name;
 
         $massage = "Habari $sp_fullname, umetajwa kama mdhamini wa $customer_name katika taasisi ya kifedha $comp_name. "
-            . "Iwapo hukubaliani kuwa mdhamini wake, tafadhali wasiliana nasi kupitia 0762062271. Tunathamini ushirikiano wako.";
+            . "Iwapo hukubaliani kuwa mdhamini wake, tafadhali wasiliana nasi kupitia 0653356635/0758409884. Tunathamini ushirikiano wako.";
 
         $this->sendsms($phone, $massage);
 
@@ -4796,9 +4796,9 @@ public function print_officer_todaycash_transaction()
       $left_loan = $loan_int - $total_depost->remain_balance_loan;
 
       if ($left_loan == 0) {
-        $massage = 'Ndugu ' . $first_name . ' ' . $last_name . ', tumepokea malipo yako ' . number_format($new_balance) . ' yaliyofanyika tarehe ' . date("d/m/Y") . ' kupitia ' . $comp_name . '. Asante kwa kumaliza mkopo. Ikiwa una changamoto zozote, tafadhali wasiliana nasi kupitia 0626 573 025 au 0627 548 192.';
+        $massage = 'Ndugu ' . $first_name . ' ' . $last_name . ', tumepokea malipo yako ' . number_format($new_balance) . ' yaliyofanyika tarehe ' . date("d/m/Y") . ' kupitia ' . $comp_name . '. Asante kwa kumaliza mkopo. Ikiwa una changamoto zozote, tafadhali wasiliana nasi kupitia 0653356635 au 0758409884.';
     } else {
-        $massage = 'Ndugu ' . $first_name . ' ' . $last_name . ', tumepokea malipo yako ' . number_format($new_balance) . ' yaliyofanyika tarehe ' . date("d/m/Y") . ' kupitia ' . $comp_name . '. Deni lililobaki kulipwa ni shilingi ' . number_format($left_loan) . '. Ikiwa una changamoto zozote, tafadhali wasiliana nasi kupitia 0626 573 025 au 0627 548 192.';
+        $massage = 'Ndugu ' . $first_name . ' ' . $last_name . ', tumepokea malipo yako ' . number_format($new_balance) . ' yaliyofanyika tarehe ' . date("d/m/Y") . ' kupitia ' . $comp_name . '. Deni lililobaki kulipwa ni shilingi ' . number_format($left_loan) . '. Ikiwa una changamoto zozote, tafadhali wasiliana nasi kupitia 0653356635 au 0758409884.';
     }
     
 
