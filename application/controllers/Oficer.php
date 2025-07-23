@@ -2449,12 +2449,25 @@ public function create_sponser($customer_id, $comp_id)
             $passportPath = $passportUploadPath;
         }
 
-        // Prepare sponsor data
+        // Normalize phone number for SMS sending
+        $input_phone = $this->input->post('sp_phone_no');
+        if (preg_match('/^0([67]\d{8})$/', $input_phone)) {
+            $phone = '255' . substr($input_phone, 1);
+        } elseif (preg_match('/^255([67]\d{8})$/', $input_phone)) {
+            $phone = $input_phone;
+        } else {
+            $phone = ''; // Invalid format, you might want to handle this case
+        }
+  //  echo "<pre>";
+  //           print_r(    $phone);
+  //           echo "</pre>";
+  //               exit();
+        // Prepare sponsor data (store original phone format)
         $data = [
             'sp_name'           => $this->input->post('sp_name'),
             'sp_mname'          => $this->input->post('sp_mname'),
             'sp_lname'          => $this->input->post('sp_lname'),
-            'sp_phone_no'       => $this->input->post('sp_phone_no'),
+            'sp_phone_no'       => $input_phone,
             'sp_relation'       => $this->input->post('sp_relation'),
             'nature'            => $this->input->post('nature'),
             'comp_id'           => $comp_id,
@@ -2468,18 +2481,20 @@ public function create_sponser($customer_id, $comp_id)
 
         $this->session->set_flashdata('massage', 'Taarifa za mdhamini zimepokelewa');
 
-        // Send SMS
+        // Prepare SMS message
         $compdata = $this->queries->get_companyData($comp_id);
         $comp_name = $compdata->comp_name;
 
         $sp_fullname = $data['sp_name'] . ' ' . $data['sp_mname'] . ' ' . $data['sp_lname'];
-        $phone = $data['sp_phone_no'];
         $customer_name = $customer->f_name . ' ' . $customer->m_name . ' ' . $customer->l_name;
 
         $massage = "Habari $sp_fullname, umetajwa kama mdhamini wa $customer_name katika taasisi ya kifedha $comp_name. "
             . "Iwapo hukubaliani kuwa mdhamini wake, tafadhali wasiliana nasi kupitia 0653356635/0758409884. Tunathamini ushirikiano wako.";
 
-        $this->sendsms($phone, $massage);
+        // Send SMS only if phone is valid and normalized
+        if (!empty($phone)) {
+            $this->sendsms($phone, $massage);
+        }
 
         redirect("oficer/loan_applicationForm/" . $customerdata);
     }
