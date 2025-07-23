@@ -36,26 +36,27 @@
     </div>
 
     <!-- Modal -->
-    <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center z-50 p-4">
-      <div class="bg-white dark:bg-gray-900 p-4 sm:p-6 rounded-lg w-full max-w-md sm:max-w-2xl md:max-w-3xl relative overflow-y-auto max-h-[90vh]">
-        <button id="closeModalBtn" class="absolute top-2 right-3 text-2xl font-bold text-gray-600 hover:text-black dark:hover:text-white">&times;</button>
-        <h2 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Crop Passport Photo</h2>
+   <!-- Crop Modal -->
+<div id="modal" class="fixed inset-0 z-50 bg-black bg-opacity-50 hidden flex justify-center items-center p-4 overflow-auto">
+  <div class="bg-white dark:bg-gray-900 p-4 sm:p-6 rounded-lg w-full max-w-md sm:max-w-2xl md:max-w-3xl relative max-h-[95vh] overflow-y-auto">
+    
+    <button id="closeModalBtn" class="absolute top-2 right-3 text-2xl font-bold text-gray-600 hover:text-black dark:hover:text-white">&times;</button>
+    
+    <h2 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Crop Passport Photo</h2>
 
-        <div class="flex flex-col md:flex-row gap-6">
-          <div class="flex-1">
-            <img id="imagePreview" class="max-w-full rounded hidden" />
-          </div>
-          <div class="preview w-32 h-32 sm:w-40 sm:h-40 border border-gray-300 overflow-hidden rounded bg-gray-100"></div>
-        </div>
-
-        <div class="mt-6 text-right">
-          <button id="cropAndUpload" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Crop & Upload</button>
-        </div>
+    <div class="flex flex-col md:flex-row gap-6">
+      <div class="flex-1">
+        <img id="imagePreview" class="max-w-full rounded hidden" />
       </div>
+      <div class="preview w-32 h-32 sm:w-40 sm:h-40 border border-gray-300 overflow-hidden rounded bg-gray-100"></div>
     </div>
 
+    <div class="mt-6 text-right">
+      <button id="cropAndUpload" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Crop & Upload</button>
+    </div>
   </div>
 </div>
+
 
 <?php include_once APPPATH . "views/partials/footer.php"; ?>
 
