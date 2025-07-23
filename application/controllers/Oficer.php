@@ -2451,13 +2451,12 @@ public function create_sponser($customer_id, $comp_id)
 
         // Normalize phone number for SMS sending
         $input_phone = $this->input->post('sp_phone_no');
-        if (preg_match('/^0([67]\d{8})$/', $input_phone)) {
-            $phone = '255' . substr($input_phone, 1);
-        } elseif (preg_match('/^255([67]\d{8})$/', $input_phone)) {
-            $phone = $input_phone;
-        } else {
-            $phone = ''; // Invalid format, you might want to handle this case
-        }
+        if (substr($input_phone, 0, 1) === '0') {
+    $phone = '255' . substr($input_phone, 1);
+} else {
+    // Otherwise, keep it as is
+    $phone = $input_phone;
+}
   //  echo "<pre>";
   //           print_r(    $phone);
   //           echo "</pre>";
@@ -2492,9 +2491,9 @@ public function create_sponser($customer_id, $comp_id)
             . "Iwapo hukubaliani kuwa mdhamini wake, tafadhali wasiliana nasi kupitia 0653356635/0758409884. Tunathamini ushirikiano wako.";
 
         // Send SMS only if phone is valid and normalized
-        if (!empty($phone)) {
+      
             $this->sendsms($phone, $massage);
-        }
+        
 
         redirect("oficer/loan_applicationForm/" . $customerdata);
     }
