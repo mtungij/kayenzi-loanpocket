@@ -20,6 +20,11 @@ user_guide_src/cilexer/build/*
 user_guide_src/cilexer/dist/*
 user_guide_src/cilexer/pycilexer.egg-info/*
 /vendor/
+# Ignore CodeIgniter session files
+application/session/
+
+# Optional: Ignore uploaded files
+assets/uploads/
 
 # IDE Files
 #-------------------------
