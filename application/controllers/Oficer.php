@@ -5287,8 +5287,8 @@ public function create_withdrow_balance($customer_id){
         // List of phone numbers to notify
         $numbers = [
                    
-          '255763727272',     // Admin or officer 1
-          '255619679334'      // Admin or officer 2
+          '255629364847',     // Admin or officer 1
+          '255'      // Admin or officer 2
         ];
         
         // Send SMS to each number
@@ -5344,7 +5344,7 @@ public function create_withdrow_balance($customer_id){
               }
          return redirect('oficer/data_with_depost/'.$customer_id);
     }
-    $this->data_with_depost();
+   $this->data_with_depost($customer_id);
     
 }
 
