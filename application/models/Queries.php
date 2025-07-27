@@ -500,6 +500,31 @@ public function get_monthly_received_loan($comp_id)
 		", [$blanch_id]);
 		return $query->row()->total_open_loans;
 	}
+
+	public function get_open_loans_by_customer($customer_id)
+{
+     $this->db->select('tbl_loans.*, tbl_loan_category.loan_name, tbl_employee.empl_name'); 
+    $this->db->from('tbl_loans');
+    $this->db->join('tbl_loan_category', 'tbl_loans.category_id = tbl_loan_category.category_id', 'left');
+    $this->db->join('tbl_employee', 'tbl_loans.empl_id = tbl_employee.empl_id', 'left');
+    $this->db->where('tbl_loans.loan_status', 'open');
+    $this->db->where('tbl_loans.customer_id', $customer_id);
+    
+    $query = $this->db->get();
+    return $query->result();
+}
+
+
+public function get_loan_by_id($loan_id)
+{
+    return $this->db
+        ->where('loan_id', $loan_id)
+        ->where('loan_status', 'open')
+        ->get('tbl_loans')
+        ->row();
+}
+
+
 	
 
 

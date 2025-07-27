@@ -165,83 +165,118 @@ include_once APPPATH . "views/partials/officerheader.php";
 
 
                
-                <?php echo form_open_multipart("oficer/create_sponser/{$customer->customer_id}/{$customer->comp_id}"); ?>
-
+               <?php echo form_open_multipart("oficer/create_sponser/{$customer->customer_id}/{$customer->comp_id}"); ?>
 
 <div class="grid sm:grid-cols-12 gap-4 sm:gap-6">
+    <!-- First Name -->
     <div class="sm:col-span-4">
         <label for="sp_name" class="block text-sm font-medium mb-2 dark:text-gray-300">* First Name:</label>
-        <input type="text" id="sp_name" name="sp_name" placeholder="jina la kwanza la mdhamini" autocomplete="off" 
-               class="uppercase py-2.5 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-cyan-500 focus:ring-cyan-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300">
+        <input type="text" id="sp_name" name="sp_name"
+               value="<?= isset($sponser->sp_name) ? htmlspecialchars($sponser->sp_name) : '' ?>"
+               placeholder="jina la kwanza la mdhamini" autocomplete="off"
+               class="uppercase py-2.5 px-4 block w-full border-gray-200 rounded-lg text-sm 
+                      focus:border-cyan-500 focus:ring-cyan-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300">
         <?php echo form_error("sp_name", '<p class="text-xs text-red-600 mt-2">', '</p>'); ?>
     </div>
 
+    <!-- Middle Name -->
     <div class="sm:col-span-4">
         <label for="sp_mname" class="block text-sm font-medium mb-2 dark:text-gray-300">* Middle Name:</label>
-        <input type="text" id="sp_mname" name="sp_mname" placeholder="jina la pili la mdhamini" autocomplete="off" 
-               class="uppercase py-2.5 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-cyan-500 focus:ring-cyan-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300">
+        <input type="text" id="sp_mname" name="sp_mname"
+               value="<?= isset($sponser->sp_mname) ? htmlspecialchars($sponser->sp_mname) : '' ?>"
+               placeholder="jina la pili la mdhamini" autocomplete="off"
+               class="uppercase py-2.5 px-4 block w-full border-gray-200 rounded-lg text-sm 
+                      focus:border-cyan-500 focus:ring-cyan-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300">
         <?php echo form_error("sp_mname", '<p class="text-xs text-red-600 mt-2">', '</p>'); ?>
     </div>
 
+    <!-- Last Name -->
     <div class="sm:col-span-4">
         <label for="sp_lname" class="block text-sm font-medium mb-2 dark:text-gray-300">* Last Name:</label>
-        <input type="text" id="sp_lname" name="sp_lname" placeholder="jina la mwisho la mdhamini" autocomplete="off" 
-               class="uppercase py-2.5 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-cyan-500 focus:ring-cyan-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300">
+        <input type="text" id="sp_lname" name="sp_lname"
+               value="<?= isset($sponser->sp_lname) ? htmlspecialchars($sponser->sp_lname) : '' ?>"
+               placeholder="jina la mwisho la mdhamini" autocomplete="off"
+               class="uppercase py-2.5 px-4 block w-full border-gray-200 rounded-lg text-sm 
+                      focus:border-cyan-500 focus:ring-cyan-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300">
         <?php echo form_error("sp_lname", '<p class="text-xs text-red-600 mt-2">', '</p>'); ?>
     </div>
 
+    <!-- Phone Number -->
     <div class="sm:col-span-4">
         <label for="sp_phone_no" class="block text-sm font-medium mb-2 dark:text-gray-300">* Phone no:</label>
-        <input type="text" id="sp_phone_no" name="sp_phone_no" placeholder="Namba ya simu ya mdhamini" autocomplete="off" 
-               class="py-2.5 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-cyan-500 focus:ring-cyan-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300">
+        <input type="text" id="sp_phone_no" name="sp_phone_no"
+               value="<?= isset($sponser->sp_phone_no) ? htmlspecialchars($sponser->sp_phone_no) : '' ?>"
+               placeholder="Namba ya simu ya mdhamini" autocomplete="off"
+               class="py-2.5 px-4 block w-full border-gray-200 rounded-lg text-sm 
+                      focus:border-cyan-500 focus:ring-cyan-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300">
         <?php echo form_error("sp_phone_no", '<p class="text-xs text-red-600 mt-2">', '</p>'); ?>
     </div>
 
+    <!-- Relationship -->
     <div class="sm:col-span-4">
         <label for="sp_relation" class="block text-sm font-medium mb-2 dark:text-gray-300">* Relationship With Customer:</label>
-        <input type="text" id="sp_relation" name="sp_relation" placeholder="mdhamini ana uhusiano gani na mkopaji..? mf mume,kaka n.k" autocomplete="off" 
-               class="uppercase py-2.5 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-cyan-500 focus:ring-cyan-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300">
+        <input type="text" id="sp_relation" name="sp_relation"
+               value="<?= isset($sponser->sp_relation) ? htmlspecialchars($sponser->sp_relation) : '' ?>"
+               placeholder="mdhamini ana uhusiano gani na mkopaji..? mf mume,kaka n.k" autocomplete="off"
+               class="uppercase py-2.5 px-4 block w-full border-gray-200 rounded-lg text-sm 
+                      focus:border-cyan-500 focus:ring-cyan-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300">
         <?php echo form_error("sp_relation", '<p class="text-xs text-red-600 mt-2">', '</p>'); ?>
     </div>
 
+    <!-- Business -->
     <div class="sm:col-span-4">
         <label for="nature" class="block text-sm font-medium mb-2 dark:text-gray-300">* Guarantor Business:</label>
-        <input type="text" id="nature" name="nature" placeholder="Biashara ya Mdhamini" autocomplete="off" 
-               class="uppercase py-2.5 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-cyan-500 focus:ring-cyan-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300">
+        <input type="text" id="nature" name="nature"
+               value="<?= isset($sponser->nature) ? htmlspecialchars($sponser->nature) : '' ?>"
+               placeholder="Biashara ya Mdhamini" autocomplete="off"
+               class="uppercase py-2.5 px-4 block w-full border-gray-200 rounded-lg text-sm 
+                      focus:border-cyan-500 focus:ring-cyan-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300">
         <?php echo form_error("nature", '<p class="text-xs text-red-600 mt-2">', '</p>'); ?>
     </div>
 
+    <!-- Barua ya Utambulisho -->
     <div class="sm:col-span-4">
-   <label for="barua_utambulisho" class="block text-sm font-medium mb-2 dark:text-gray-300">Barua ya Utambulisho (PDF) <span class="text-gray-400">(optional)</span>:</label>
+        <label for="barua_utambulisho" class="block text-sm font-medium mb-2 dark:text-gray-300">
+            Barua ya Utambulisho (PDF) <span class="text-gray-400">(optional)</span>:
+        </label>
+        <input type="file" id="barua_utambulisho" name="barua_utambulisho" accept="application/pdf"
+               class="block w-full text-sm text-gray-700 file:mr-4 file:py-2.5 file:px-4 file:rounded-md 
+                      file:border-0 file:font-semibold file:bg-cyan-50 file:text-cyan-700 hover:file:bg-cyan-100 
+                      dark:file:bg-gray-700 dark:file:text-gray-300">
+        <?php echo form_error("barua_utambulisho", '<p class="text-xs text-red-600 mt-2">', '</p>'); ?>
+    </div>
 
-    <input type="file" id="barua_utambulisho" name="barua_utambulisho" accept="application/pdf"
-        class="block w-full text-sm text-gray-700 file:mr-4 file:py-2.5 file:px-4 file:rounded-md file:border-0 file:font-semibold file:bg-cyan-50 file:text-cyan-700 hover:file:bg-cyan-100 dark:file:bg-gray-700 dark:file:text-gray-300">
-    <?php echo form_error("barua_utambulisho", '<p class="text-xs text-red-600 mt-2">', '</p>'); ?>
-</div>
+    <!-- Kitambulisho -->
+    <div class="sm:col-span-4">
+        <label for="kitambulisho" class="block text-sm font-medium mb-2 dark:text-gray-300">* Kitambulisho (PDF):</label>
+        <input type="file" id="kitambulisho" name="kitambulisho" accept="application/pdf"
+               class="block w-full text-sm text-gray-700 file:mr-4 file:py-2.5 file:px-4 file:rounded-md 
+                      file:border-0 file:font-semibold file:bg-cyan-50 file:text-cyan-700 hover:file:bg-cyan-100 
+                      dark:file:bg-gray-700 dark:file:text-gray-300">
+        <?php echo form_error("kitambulisho", '<p class="text-xs text-red-600 mt-2">', '</p>'); ?>
+    </div>
 
-<div class="sm:col-span-4">
-    <label for="kitambulisho" class="block text-sm font-medium mb-2 dark:text-gray-300">* Kitambulisho (PDF):</label>
-    <input type="file" id="kitambulisho" name="kitambulisho" accept="application/pdf"
-        class="block w-full text-sm text-gray-700 file:mr-4 file:py-2.5 file:px-4 file:rounded-md file:border-0 file:font-semibold file:bg-cyan-50 file:text-cyan-700 hover:file:bg-cyan-100 dark:file:bg-gray-700 dark:file:text-gray-300">
-    <?php echo form_error("kitambulisho", '<p class="text-xs text-red-600 mt-2">', '</p>'); ?>
-</div>
-
-<div class="sm:col-span-4">
-    <label class="block text-sm font-medium mb-2 dark:text-gray-300">* Passport Size Photo:</label>
-    <input type="file" id="passportInput" accept="image/*"
-           class="block w-full text-sm text-gray-700 file:mr-4 file:py-2.5 file:px-4 file:rounded-md file:border-0 file:font-semibold file:bg-cyan-50 file:text-cyan-700 hover:file:bg-cyan-100 dark:file:bg-gray-700 dark:file:text-gray-300">
-    <input type="hidden" name="passport_cropped" id="passportCropped">
-    <div class="mt-3">
-        <img id="previewImage" class="rounded border shadow w-32 h-32 object-cover" src="<?= base_url('assets/img/customer21.png') ?>" alt="Preview">
+    <!-- Passport Size Photo -->
+    <div class="sm:col-span-4">
+        <label class="block text-sm font-medium mb-2 dark:text-gray-300">* Passport Size Photo:</label>
+        <input type="file" id="passportInput" accept="image/*"
+               class="block w-full text-sm text-gray-700 file:mr-4 file:py-2.5 file:px-4 file:rounded-md 
+                      file:border-0 file:font-semibold file:bg-cyan-50 file:text-cyan-700 hover:file:bg-cyan-100 
+                      dark:file:bg-gray-700 dark:file:text-gray-300">
+        <input type="hidden" name="passport_cropped" id="passportCropped">
+        <div class="mt-3">
+            <img id="previewImage" class="rounded border shadow w-32 h-32 object-cover"
+                 src="<?= isset($sponser->passport_path) && !empty($sponser->passport_path) 
+                          ? base_url($sponser->passport_path) 
+                          : base_url('assets/img/customer21.png') ?>"
+                 alt="Preview">
+        </div>
     </div>
 </div>
 
-</div>
-
-
 <!-- Hidden Inputs -->
-<input type="hidden" name="comp_id" value="<?php echo htmlspecialchars($_SESSION['comp_id'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
-<input type="hidden" name="customer_id" value="<?php echo htmlspecialchars($customer->customer_id ?? '', ENT_QUOTES, 'UTF-8'); ?>">
+<input type="hidden" name="comp_id" value="<?= htmlspecialchars($_SESSION['comp_id'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
+<input type="hidden" name="customer_id" value="<?= htmlspecialchars($customer->customer_id ?? '', ENT_QUOTES, 'UTF-8'); ?>">
 
 <!-- Action Buttons -->
 <div class="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">

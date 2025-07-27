@@ -2730,8 +2730,8 @@ public function disburse($loan_id){
         $remain_balance = $loan_aproved - $sms_data;
        }
 
-         $massage= $comp_name.' Imeingiza Mkopo Kiasi cha Tsh.'.$remain_balance.' kwenye Acc Yako ' . $loan_codeID .' Kwa msaada zaidi piga simu Namba '.$comp_phone;
-		
+      $massage = $comp_name . ' inakutakia mafanikio mema kupitia mkopo uliopokea wa Tsh ' . $remain_balance . '. Tunakukumbusha kuwa urejeshaji mzuri wa mkopo huongeza uaminifu na nafasi ya kuendelea kukopesheka. Kwa msaada au maelezo zaidi, wasiliana nasi kupitia namba ' . $comp_phone . '.';
+
       
             //   echo "<pre>";
             // print_r($data);
