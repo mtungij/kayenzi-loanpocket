@@ -1721,7 +1721,8 @@ $this->load->view('admin/search_customer',['customer'=>$customer,'sponser'=>$spo
 
 public function create_sponser($customer_id, $comp_id) {
     $this->load->model('queries');
-
+$compdata = $this->queries->get_companyData($comp_id);
+$comp_phone = $compdata->comp_number;
     $customer = $this->queries->search_CustomerID($customer_id, $comp_id);
     if (!$customer) {
         show_404();
@@ -1758,8 +1759,8 @@ public function create_sponser($customer_id, $comp_id) {
         $comp_name = $compdata->comp_name;
         $customer_name = $customer->f_name . ' ' . $customer->m_name . ' ' . $customer->l_name;
 
-        $massage = "Habari $sp_fullname, umetajwa kama mdhamini wa $customer_name katika taasisi ya kifedha $comp_name. "
-                 . "Iwapo hukubaliani kuwa mdhamini wake, tafadhali wasiliana nasi kupitia 0712345678. Tunathamini ushirikiano wako.";
+      $massage = "Habari $sp_fullname, umetajwa kama mdhamini wa $customer_name katika taasisi ya kifedha $comp_name. "
+    . "Iwapo hukubaliani kuwa mdhamini wake, tafadhali wasiliana nasi kupitia $comp_phone. Tunathamini ushirikiano wako.";
 
         $this->sendsms($phone, $massage);
         redirect("admin/loan_applicationForm/$customer_id");
@@ -3485,7 +3486,7 @@ public function create_withdrow_balance($customer_id) {
 
             $massage = "Habari! Ombi la mkopo wa tsh $amount katika tawi la $branch_name kwa $full_name mwenye namba {$customer_data->phone_no} limeidhinishwa na Manager {$day_loan->approved_by} .Ahsante.";
 
-            $numbers = ['255748470181', '255629364847'];
+            $numbers = ['0748470181', '0629364847'];
             foreach ($numbers as $phone) {
                 $this->sendsms($phone, $massage);
             }

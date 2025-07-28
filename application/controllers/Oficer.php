@@ -1787,7 +1787,9 @@ public function customer(){
   
           $this->load->model('queries');
           $check = $this->queries->check_name($f_name, $m_name, $l_name, $blanch_id, $comp_id);
-  
+          $company_data = $this->queries->get_companyData($comp_id);
+          $comp_phone= $company_data->comp_phone;
+
           if ($check == TRUE) {
               $this->session->set_flashdata('error', 'This customer Already Registered');
               return redirect('oficer/customer');
@@ -1799,8 +1801,9 @@ public function customer(){
                 $full_name = $f_name . ' ' . $m_name . ' ' . $l_name;
                 
                 $massage = "Habari $full_name! Karibu sana katika familia ya " . $compdata->comp_name . ". " .
-                "Tunathamini uamuzi wako wa kujiunga nasi. Kwa maswali, ushauri au msaada wowote, " .
-                "tupigie simu kupitia namba: 255769096078/255765453435. Tuko tayari kukuhudumia kwa moyo wote!";
+    "Tunathamini uamuzi wako wa kujiunga nasi. Kwa maswali, ushauri au msaada wowote, " .
+    "tupigie simu kupitia namba: $comp_phone. Tuko tayari kukuhudumia kwa moyo wote!";
+
            
                 $this->sendsms($phone_no, $massage);
                   $this->session->set_flashdata('massage', 'Customer successfully registered.');
@@ -2428,6 +2431,12 @@ public function create_sponser($customer_id, $comp_id)
 
     $customer = $this->queries->search_CustomerID($customer_id, $comp_id);
     $customerdata = $customer->customer_id;
+    $company_data = $this->queries->get_companyData($comp_id);
+    $comp_phone = $company_data->comp_phone;
+    //  echo "<pre>";
+    //         print_r(     $company_data);
+    //         echo "</pre>";
+    //             exit();
 
     // Set form validation rules
     $this->form_validation->set_rules('sp_name', 'First Name', 'required');
@@ -2547,8 +2556,8 @@ if ($exists) {
         $sp_fullname = $data['sp_name'] . ' ' . $data['sp_mname'] . ' ' . $data['sp_lname'];
         $customer_name = $customer->f_name . ' ' . $customer->m_name . ' ' . $customer->l_name;
 
-        $massage = "Habari $sp_fullname, umetajwa kama mdhamini wa $customer_name katika taasisi ya kifedha $comp_name. "
-            . "Iwapo hukubaliani kuwa mdhamini wake, tafadhali wasiliana nasi kupitia 255769096078/255765453435. Tunathamini ushirikiano wako.";
+     $massage = "Habari $sp_fullname, umetajwa kama mdhamini wa $customer_name katika taasisi ya kifedha $comp_name. "
+    . "Iwapo hukubaliani kuwa mdhamini wake, tafadhali wasiliana nasi kupitia $comp_phone. Tunathamini ushirikiano wako.";
 
         // Send SMS only if phone is valid and normalized
 
@@ -2808,8 +2817,8 @@ private function upload_file($field_name, $new_name_prefix)
   
       // Phone numbers to notify
       $phone_numbers = [
-          '255769096078',
-          '255765453435',
+          '255762062271',
+          '255629364847',
          
       ];
   
@@ -2881,8 +2890,8 @@ Kilichobadilishwa sasa kuwa: TZS " . number_format($how_loan, 0) . ".";
 
             // Phone numbers to notify
             $phone_numbers = [
-                 '255769096078',
-                '255765453435',
+                '255762062271',
+                '255629364847',
             ];
 
             foreach ($phone_numbers as $phone) {
@@ -4594,8 +4603,8 @@ public function print_officer_todaycash_transaction()
          $empl_id = $loan_restoration->empl_id;
 
          $loan_aproved = $loan_aprove;
-           // print_r($empl_id);
-           //        exit();
+          //  print_r( $comp_phone);
+          //         exit();
          $prepaid = $depost - $restoration;
          @$data_depost = $this->queries->get_customer_Loandata($customer_id);
          $customer_data = $this->queries->get_customerData($customer_id);
@@ -4930,9 +4939,12 @@ public function print_officer_todaycash_transaction()
       $left_loan = $loan_int - $total_depost->remain_balance_loan;
 
       if ($left_loan == 0) {
-        $massage = 'Ndugu ' . $first_name . ' ' . $last_name . ', tumepokea malipo yako ' . number_format($new_balance) . ' yaliyofanyika tarehe ' . date("d/m/Y") . ' kupitia ' . $comp_name . '. Asante kwa kumaliza mkopo. Ikiwa una changamoto zozote, tafadhali wasiliana nasi kupitia 255769096078/255765453435.';
+       $massage = 'Ndugu ' . $first_name . ' ' . $last_name . ', tumepokea malipo yako ' . number_format($new_balance) . ' yaliyofanyika tarehe ' . date("d/m/Y") . ' kupitia ' . $comp_name . '. Deni lililobaki kulipwa ni shilingi ' . number_format($left_loan) . '. Ikiwa una changamoto zozote, tafadhali wasiliana nasi kupitia ' . $comp_phone . '.';
+
     } else {
-        $massage = 'Ndugu ' . $first_name . ' ' . $last_name . ', tumepokea malipo yako ' . number_format($new_balance) . ' yaliyofanyika tarehe ' . date("d/m/Y") . ' kupitia ' . $comp_name . '. Deni lililobaki kulipwa ni shilingi ' . number_format($left_loan) . '. Ikiwa una changamoto zozote, tafadhali wasiliana nasi kupitia 255769096078/255765453435 .';
+
+      $massage = 'Ndugu ' . $first_name . ' ' . $last_name . ', tumepokea malipo yako ' . number_format($new_balance) . ' yaliyofanyika tarehe ' . date("d/m/Y") . ' kupitia ' . $comp_name . '. Deni lililobaki kulipwa ni shilingi ' . number_format($left_loan) . '. Ikiwa una changamoto zozote, tafadhali wasiliana nasi kupitia ' . $comp_phone . '.';
+
     }
     
 

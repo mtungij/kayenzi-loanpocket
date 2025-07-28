@@ -135,7 +135,7 @@
                                         <div class="col-lg-9 col-xl-6">
                                             <div class="input-group">
                                                 <div class="input-group-prepend"><span class="input-group-text"><i class="la la-phone"></i></span></div>
-                                                <input readonly type="number" name="comp_phone" class="form-control" value="<?php echo $comp_data->comp_phone; ?>" placeholder="Phone" aria-describedby="basic-addon1">
+                                                <input type="text" name="comp_phone" class="form-control" value="<?php echo $comp_data->comp_phone; ?>" placeholder="Phone" aria-describedby="basic-addon1">
                                             </div>
                                             
                                         </div>
