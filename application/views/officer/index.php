@@ -30,55 +30,40 @@ include_once APPPATH . "views/partials/officerheader.php";
         <!-- Section 2: Top KPIs (Using your new card template) -->
         
         <!-- Section 2: Top KPIs (Revised with Full-Width Account Balance Banner) -->
-        <?php
-        // --- DUMMY DATA - Replace with actual data from your controller ---
-        $sum_comp_capital = (object)['total_comp_balance' => 125000000]; // Main balance
-        // KPIs for the grid
-        $principal_loan = (object)['loan_aproved' => 75000000, 'change_percentage' => 5.1, 'change_period' => 'this week'];
-        $total_expect = (object)['loan_interest' => 8500000, 'change_percentage' => -1.2, 'change_period' => 'last 7 days'];
-        $blanch_capital_circle = (object)['total_balanch_amount' => 250000000, 'change_percentage' => 0.8, 'change_period' => 'YTD'];
-        $total_non_obj = (object)['total_nondeducted' => 15000000]; // Renamed to avoid conflict
-        $total_deducted_balance_obj = (object)['total_deducted' => 500000]; // Renamed
-        $request_expences_obj = (object)['total_exp' => 3500000]; // Renamed
-        $total_remain_obj = (object)['total_out' => 65000000]; // Renamed
+      
 
-        $total_income_val = ($total_non_obj->total_nondeducted ?? 0) + ($total_deducted_balance_obj->total_deducted ?? 0);
-        $total_expenses_val = $request_expences_obj->total_exp ?? 0;
-        $total_outstanding_val = $total_remain_obj->total_out ?? 0;
-        // --- END DUMMY DATA ---
-        ?>
- <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+ <!-- <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
 <div class="bg-white rounded-lg shadow-md overflow-hidden">
     <div class="bg-cyan-800  px-4 py-2 border-b">
       <h2 class="text-lg font-semibold text-white">WATEJA & WAFANYAKAZI</h2>
     </div>
     <div class="p-4">
       <table class="w-full text-sm">
-        <tbody class="text-gray-700">
-          <tr class="border-b">
+        <tbody class="text-gray-700"> -->
+          <!-- <tr class="border-b">
             <td class="py-2">JUMLA YA WATEJA</td>
             <td class="text-right">
               <span class="inline-block bg-green-600 text-white text-xs px-2 py-1 rounded">
              <?= $total_customers ?>
               </span>
             </td>
-          </tr>
-          <tr class="border-b">
+          </tr> -->
+          <!-- <tr class="border-b">
             <td class="py-2">WATEJA WAPYA LEO</td>
             <td class="text-right">
             <span class="inline-block bg-green-600 text-white text-xs px-2 py-1 rounded">
             <?=$new_customer?>
               </span>
             </td>
-          </tr>
-          <tr class="border-b">
+          </tr> -->
+          <!-- <tr class="border-b">
             <td class="py-2">WANAOMALIZA LEO</td>
             <td class="text-right">
             <span class="inline-block bg-green-600 text-white text-xs px-2 py-1 rounded">
-             <?=$done_customer?>
+             </?=$done_customer?>
               </span>
             </td>
-          </tr>
+          </tr> -->
           <!-- <tr class="border-b">
             <td class="py-2">MADENI SUGU</td>
             <td class="text-right">
@@ -94,11 +79,11 @@ include_once APPPATH . "views/partials/officerheader.php";
              
               </span>
             </td> -->
-          </tr>
+          <!-- </tr>
         </tbody>
       </table>
     </div>
-  </div>
+  </div> -->
 
   <!-- Card 2: MALIPO YA LEO -->
   <?php
@@ -125,7 +110,7 @@ include_once APPPATH . "views/partials/officerheader.php";
   ?>
    <?php endforeach; ?>
 
-<div class="bg-white rounded-lg shadow-md overflow-hidden">
+<!-- <div class="bg-white rounded-lg shadow-md overflow-hidden">
   <div class="bg-cyan-800 px-4 py-2 border-b">
     <h2 class="text-lg font-semibold text-white">MALIPO YA LEO</h2>
   </div>
@@ -168,11 +153,187 @@ include_once APPPATH . "views/partials/officerheader.php";
       </tbody>
     </table>
   </div>
+</div> -->
+
+
+<!-- </div> -->
+
+
+<div class="space-y-6">
+
+
+
+    <!-- First Row: 4 Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div class="bg-white shadow rounded p-4 flex items-center">
+            <img src="https://www.wrraptheme.com/templates/lucid/html/assets/images/coin/XRP.svg" class="w-8 h-8 mr-3" />
+            <div>
+                <div class="text-xs text-gray-500 font-semibold">Total Customer</div>
+                <div class="text-xl font-bold text-gray-800">
+                   <?= $total_customers ?>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white shadow rounded p-4 flex items-center">
+            <img src="https://www.wrraptheme.com/templates/lucid/html/assets/images/coin/ETH.svg" class="w-8 h-8 mr-3" />
+            <div>
+                <div class="text-xs text-gray-500 font-semibold">Total Active Customers</div>
+                <div class="text-xl font-bold text-gray-800">
+                   <?= $active_customer ?>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white shadow rounded p-4 flex items-center">
+            <img src="https://www.wrraptheme.com/templates/lucid/html/assets/images/coin/XRP.svg" class="w-8 h-8 mr-3" />
+            <div>
+                <div class="text-xs text-gray-500 font-semibold">Total Default Customers</div>
+                <div class="text-xl font-bold text-gray-800">
+                   <?= $default_customer ?>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white shadow rounded p-4 flex items-center">
+            <img src="https://www.wrraptheme.com/templates/lucid/html/assets/images/coin/neo.svg" class="w-8 h-8 mr-3" />
+            <div>
+                <div class="text-xs text-gray-500 font-semibold">Customers completed today</div>
+                <div class="text-xl font-bold text-gray-800">
+                   <?= $done_customer ?>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Second Row: 3 Colored Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+     <div class="bg-gradient-to-r from-green-400 to-emerald-500 dark:from-green-600 dark:to-emerald-700 text-white rounded-xl shadow p-6">
+    <h4 class="text-2xl font-bold flex items-center gap-2">
+        <i class="icon-wallet"></i> <?= number_format($collect->total_rejesho) ?? 0 ?>
+
+
+    </h4>
+    <span class="text-white text-sm">Today Receivable</span>
+</div>
+
+      <div class="bg-gradient-to-r from-blue-400 to-blue-600 dark:from-blue-700 dark:to-indigo-800 text-white rounded-xl shadow p-6">
+    <h4 class="text-2xl font-bold flex items-center gap-2">
+        <i class="icon-wallet"></i> 	<?php echo number_format($total_lipwa); ?>
+    </h4>
+    <span class="text-white text-sm">Today Deposited</span>
+</div>
+
+
+      <div class="bg-gradient-to-r from-blue-400 to-blue-600 dark:from-blue-700 dark:to-indigo-800 text-white rounded-xl shadow p-6">
+    <h4 class="text-2xl font-bold flex items-center gap-2">
+        <i class="icon-wallet"></i> 	<?php echo number_format($total_laza); ?>
+    </h4>
+    <span class="text-white text-sm">Not Deposited Today</span>
+</div>
+
+      <div class="bg-gradient-to-r from-cyan-400 to-cyan-600 dark:from-cyan-700 dark:to-teal-800 text-white rounded-xl shadow p-6">
+    <h4 class="text-2xl font-bold flex items-center gap-2">
+        <i class="icon-wallet"></i> <?php echo number_format($total_zidi); ?>
+    </h4>
+    <span class="text-white text-sm">Prepaid Amount</span>
+</div>
+
+
+  <div class="bg-gradient-to-r from-orange-400 to-orange-600 dark:from-cyan-700 dark:to-teal-800 text-white rounded-xl shadow p-6">
+    <h4 class="text-2xl font-bold flex items-center gap-2">
+        <i class="icon-wallet"></i> <?php echo number_format($total_zidi); ?>
+    </h4>
+    <span class="text-white text-sm">Total Active payments</span>
+</div>
+
+<div class="bg-gradient-to-r from-orange-400 to-orange-600 dark:from-cyan-700 dark:to-teal-800 text-white rounded-xl shadow p-6">
+    <h4 class="text-2xl font-bold flex items-center gap-2">
+        <i class="icon-wallet"></i> <?php echo number_format($total_default->total_default); ?>
+    </h4>
+    <span class="text-white text-sm">Total Default payments</span>
+</div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+  <!-- WATEJA & WAFANYAKAZI Card -->
+  <!-- <div class="bg-white rounded-lg shadow p-6">
+    <h2 class="text-xl font-semibold mb-4 border-b border-gray-300">WATEJA & WAFANYAKAZI</h2>
+    <table class="w-full text-left table-auto">
+      <tbody>
+        <tr class="border-b border-gray-200">
+          <td class="py-2 font-medium">JUMLA YA WATEJA</td>
+          <td class="py-2 text-right">
+            <span class="inline-block bg-green-500 text-white text-xs font-semibold px-3 py-1 rounded-full">20000</span>
+          </td>
+        </tr>
+        <tr class="border-b border-gray-200">
+          <td class="py-2 font-medium">WATEJA WAPYA</td>
+          <td class="py-2 text-right">
+            <span class="inline-block bg-blue-500 text-white text-xs font-semibold px-3 py-1 rounded-full">6000</span>
+          </td>
+        </tr>
+        <tr class="border-b border-gray-200">
+          <td class="py-2 font-medium">WANAUME</td>
+          <td class="py-2 text-right">
+            <span class="inline-block bg-blue-500 text-white text-xs font-semibold px-3 py-1 rounded-full">8000</span>
+          </td>
+        </tr>
+        <tr class="border-b border-gray-200">
+          <td class="py-2 font-medium">WANAWAKE</td>
+          <td class="py-2 text-right">
+            <span class="inline-block bg-red-500 text-white text-xs font-semibold px-3 py-1 rounded-full">12000</span>
+          </td>
+        </tr>
+        <tr class="border-b border-gray-200">
+          <td class="py-2 font-medium">WAFANYAKAZI</td>
+          <td class="py-2 text-right">
+            <span class="inline-block bg-gray-400 text-white text-xs font-semibold px-3 py-1 rounded-full">500</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div> -->
+
+  <!-- MALIPO YA LEO Card -->
+  <!-- <div class="bg-white rounded-lg shadow p-6">
+    
+    <h2 class="text-xl font-semibold mb-4 pb-2 border-b border-gray-300">MALIPO YA LEO</h2>
+    <table class="w-full text-left table-auto">
+      <tbody>
+        <tr class="border-b border-gray-200">
+          <td class="py-2 font-medium">KILA SIKU</td>
+          <td class="py-2 text-right">
+            <span class="inline-block bg-yellow-500 text-white text-xs font-semibold px-3 py-1 rounded-full">1000</span>
+          </td>
+        </tr>
+        <tr class="border-b border-gray-200">
+          <td class="py-2 font-medium">WIKI</td>
+          <td class="py-2 text-right">
+            <span class="inline-block bg-blue-500 text-white text-xs font-semibold px-3 py-1 rounded-full">3000</span>
+          </td>
+        </tr>
+        <tr class="border-b border-gray-200">
+          <td class="py-2 font-medium">MWEZI</td>
+          <td class="py-2 text-right">
+            <span class="inline-block bg-gray-600 text-white text-xs font-semibold px-3 py-1 rounded-full">5000</span>
+          </td>
+        </tr>
+        <tr>
+          <td class="py-2 font-bold">JUMLA</td>
+          <td class="py-2 text-right font-bold">
+            <span class="inline-block bg-green-600 text-white text-xs font-semibold px-3 py-1 rounded-full">45000</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div> -->
+
 </div>
 
 
 </div>
-
 
 
 

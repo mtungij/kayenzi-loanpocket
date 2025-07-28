@@ -90,10 +90,19 @@ class Oficer extends CI_Controller{
       $lipwa = $this->queries->get_cash_transaction_by_officer($empl_id);
       $approved_customer = $this->queries->get_approved_loans_by_officer($blanch_id, $empl_id);
       $disbursed_customer =$this->queries->count_disbursed_loans_by_officer($blanch_id, $empl_id);
-    
-      // echo "<pre>";get_cash_transaction_by_officer($empl_id, $blanch_id)
-      // print_r( $lipwa);
-      //     exit();
+      $active_customer = $this->queries->count_active_customers_by_officer($empl_id);
+      // $pending_customer = $this->queries->count_pending_customers_by_officer($empl_id);
+      $default_customer = $this->queries->count_default_customers_by_officer($empl_id);
+      $done_customer = $this->queries->count_done_loans_with_today_deposit_by_officer($empl_id);
+        $collect = $this->queries->get_total_recevableBlanch_by_officer($blanch_id, $empl_id);
+       
+        $toyal_default=$this->queries->get_depositing_out_total_officer($empl_id);
+
+        
+
+      echo "<pre>";
+      print_r( $rejesho);
+          exit();
   
   } elseif ($position === 'BRANCH MANAGER') {
     
@@ -105,19 +114,30 @@ class Oficer extends CI_Controller{
       $approved_customer = $this->queries->get_approved_loans_by_branch($blanch_id);
       $disbursed_customer =$this->queries->count_disbursed_loans_by_branch($blanch_id);
       $lipwa = $this->queries->get_cash_transaction_by_blanch($blanch_id);
+      $active_customer = $this->queries->count_active_customers_by_branch($blanch_id);
+      // $pending_customer = $this->queries->count_pending_customers_by_branch($blanch_id);
+      $default_customer = $this->queries->count_default_customers_by_branch($blanch_id);
+      $done_customer = $this->queries->count_done_loans_with_today_deposit_by_branch($blanch_id);
+      $collect = $this->queries->get_total_recevableBlanch($blanch_id);
       
-  
+      $total_default = $this->queries->get_depositing_out_total_blanch($blanch_id);
   } else {
       $total_customers = 0;
       $new_loans = 0;
       $done_customer=0;
       $approved_customer = 0;
       $disbursed_customer=0;
-  }
-    // echo "<pre>";
-    //   print_r( $empl_data);
-    //       exit();
+      $lipwa = 0;
+      $default_customer = 0;
+      $active_customer = 0;
+      $done_customer = 0;
+      $total_default=0;
 
+  }
+    
+      // echo "<pre>";
+      // print_r( $rejesho);
+      //     exit();
 
 
       //    echo "<pre>";
@@ -130,10 +150,15 @@ class Oficer extends CI_Controller{
     'approved_customer'=>$approved_customer,
     'empl_data'=>$empl_data,
     'lipwa'=>$lipwa,
+    'collect'=>$collect,
+    'total_default'=>$total_default,
+    'active_customer'=>$active_customer,
+    'default_customer'=>$default_customer,
     'done_customer'=>$done_customer,
     'total_customers' =>  $total_customers,
     'total_active'=> $active,
     'new_loans' => $new_loans,
+    'done_customer'=>$done_customer,
     'total_loan_pending'=>$total_loan_pending,
     'total_loanWithdrawal'=>$total_loanWithdrawal,
     'today_penart'=>$today_penart,'total_received'=>$total_received,
@@ -144,7 +169,7 @@ class Oficer extends CI_Controller{
     'today_depost'=>$today_depost,
     'today_income'=>$today_income,
     'today_expences'=>$today_expences,
-    'rejesho'=>$rejesho,'manager'=>$manager,
+    'manager'=>$manager,
     'principal_loan'=>$principal_loan,'total_expect'=>$total_expect,
     'done_loan'=>$done_loan,
     'total_blanch'=>$total_blanch,

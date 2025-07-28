@@ -270,6 +270,19 @@ public function get_allcutomer($comp_id){
 		return $query->row()->total_customers;
 	}
 
+	public function count_active_customers_by_officer($empl_id) {
+    $query = $this->db->query("
+        SELECT COUNT(DISTINCT c.customer_id) AS total_customers
+        FROM tbl_customer c
+        JOIN tbl_loans l ON c.customer_id = l.customer_id
+        WHERE c.empl_id = ?
+        AND l.loan_status = 'withdrawal'
+    ", [$empl_id]);
+
+    return $query->row()->total_customers;
+}
+
+
 	public function count_customers_by_branch($blanch_id) {
 		$query = $this->db->query("
 			SELECT COUNT(*) AS total_customers
@@ -279,6 +292,47 @@ public function get_allcutomer($comp_id){
 	
 		return $query->row()->total_customers;
 	}
+
+	public function count_active_customers_by_branch($blanch_id) {
+    $query = $this->db->query("
+        SELECT COUNT(DISTINCT c.customer_id) AS total_customers
+        FROM tbl_customer c
+        JOIN tbl_loans l ON c.customer_id = l.customer_id
+        WHERE c.blanch_id = ?
+        AND l.loan_status = 'withdrawal'
+    ", [$blanch_id]);
+
+    return $query->row()->total_customers;
+}
+
+
+public function count_default_customers_by_officer($empl_id) {
+    $query = $this->db->query("
+        SELECT COUNT(DISTINCT c.customer_id) AS total_customers
+        FROM tbl_customer c
+        JOIN tbl_loans l ON c.customer_id = l.customer_id
+        WHERE c.empl_id = ?
+        AND l.loan_status = 'out'
+    ", [$empl_id]);
+
+    return $query->row()->total_customers;
+}
+
+
+public function count_default_customers_by_branch($blanch_id) {
+    $query = $this->db->query("
+        SELECT COUNT(DISTINCT c.customer_id) AS total_customers
+        FROM tbl_customer c
+        JOIN tbl_loans l ON c.customer_id = l.customer_id
+        WHERE c.blanch_id = ?
+        AND l.loan_status = 'out'
+    ", [$blanch_id]);
+
+    return $query->row()->total_customers;
+}
+
+
+
 
 	public function count_active_by_officer($empl_id) {
 		$query = $this->db->query("
@@ -2295,6 +2349,37 @@ public function count_new_customers_by_customer_id_today($blanch_id) {
 }
 
 
+public function count_done_loans_with_today_deposit_by_branch($branch_id) {
+    $query = $this->db->query("
+        SELECT COUNT(DISTINCT l.customer_id) AS total_customers
+        FROM tbl_loans l
+        JOIN tbl_depost d ON l.customer_id = d.customer_id
+        JOIN tbl_customer c ON l.customer_id = c.customer_id
+        WHERE l.loan_status = 'done'
+        AND DATE(d.depost_day) = CURDATE()
+        AND c.blanch_id = ?
+    ", [$branch_id]);
+
+    return $query->row()->total_customers;
+}
+
+
+public function count_done_loans_with_today_deposit_by_officer($empl_id) {
+    $query = $this->db->query("
+        SELECT COUNT(DISTINCT l.customer_id) AS total_customers
+        FROM tbl_loans l
+        JOIN tbl_depost d ON l.customer_id = d.customer_id
+        JOIN tbl_customer c ON l.customer_id = c.customer_id
+        WHERE l.loan_status = 'done'
+        AND DATE(d.depost_day) = CURDATE()
+        AND c.empl_id = ?
+    ", [$empl_id]);
+
+    return $query->row()->total_customers;
+}
+
+
+
 public function get_repayment_data($comp_id){
 	$data = $this->db->query("SELECT * FROM tbl_loans l JOIN tbl_customer c ON c.customer_id = l.customer_id JOIN tbl_blanch b ON b.blanch_id = l.blanch_id JOIN tbl_loan_category lc ON lc.category_id = l.category_id WHERE l.comp_id = '$comp_id' AND l.loan_status = 'done'");
 	  return $data->result();
@@ -2898,24 +2983,66 @@ public function update_password_data($comp_id, $userdata)
 
 
 
-     public function get_total_recevableBlanch($blanch_id){
-    	$date = date("Y-m-d");
-    	$today_data = $this->db->query("SELECT SUM(restration) AS total_rejesho FROM tbl_loans WHERE blanch_id = '$blanch_id' AND loan_status = 'withdrawal' AND date_show = '$date'");
-    	return $today_data->row();
-    }
-
-	public function get_total_recevableBlanch_by_officer($blanch_id, $empl_id){
+		public function get_depositing_out_total_blanch($blanch_id){
 		$date = date("Y-m-d");
-		$today_data = $this->db->query("
-			SELECT SUM(restration) AS total_rejesho 
-			FROM tbl_loans 
-			WHERE blanch_id = '$blanch_id' 
-			AND empl_id = '$empl_id'
-			AND loan_status = 'withdrawal' 
-			AND date_show = '$date'
-		");
-		return $today_data->row();
+		$data = $this->db->query("SELECT SUM(d.depost) AS total_default FROM tbl_depost d LEFT JOIN tbl_customer c ON c.customer_id = d.customer_id LEFT JOIN tbl_account_transaction at ON at.trans_id = d.depost_method LEFT JOIN tbl_blanch b ON b.blanch_id = d.blanch_id WHERE d.blanch_id = '$blanch_id' AND d.depost_day = '$date' AND d.dep_status = 'out'");
+		return $data->row();
 	}
+
+	public function get_depositing_out_total_officer($empl_id){
+    $date = date("Y-m-d");
+
+    $data = $this->db->query("
+        SELECT SUM(d.depost) AS total_default 
+        FROM tbl_depost d 
+        LEFT JOIN tbl_customer c ON c.customer_id = d.customer_id 
+        LEFT JOIN tbl_account_transaction at ON at.trans_id = d.depost_method 
+        LEFT JOIN tbl_blanch b ON b.blanch_id = d.blanch_id 
+        WHERE c.empl_id = ? 
+        AND d.depost_day = ? 
+        AND d.dep_status = 'out'
+    ", [$empl_id, $date]);
+
+    return $data->row();
+}
+
+
+
+
+public function get_depositing_sugu_blanch($blanch_id){
+		$date = date("Y-m-d");
+		$data = $this->db->query("SELECT COUNT(d.dep_id) AS total_sugu FROM tbl_depost d LEFT JOIN tbl_customer c ON c.customer_id = d.customer_id  LEFT JOIN tbl_blanch b ON b.blanch_id = d.blanch_id WHERE d.blanch_id = '$blanch_id' AND d.depost_day = '$date' AND d.dep_status = 'out'");
+		return $data->row();
+	}
+
+
+  public function get_total_recevableBlanch($blanch_id){
+    $date = date("Y-m-d");
+    $today_data = $this->db->query("
+        SELECT COALESCE(SUM(restration), 0) AS total_rejesho  
+        FROM tbl_loans 
+        WHERE blanch_id = '$blanch_id' 
+        AND loan_status = 'withdrawal' 
+        AND date_show = '$date'
+    ");
+    return $today_data->row(); // this will now return object with total_rejesho = 0 if nothing found
+}
+
+
+	
+public function get_total_recevableBlanch_by_officer($blanch_id, $empl_id){
+    $date = date("Y-m-d");
+    $today_data = $this->db->query("
+        SELECT COALESCE(SUM(restration), 0) AS total_rejesho  
+        FROM tbl_loans 
+        WHERE blanch_id = '$blanch_id' 
+        AND empl_id = '$empl_id' 
+        AND loan_status = 'withdrawal' 
+        AND date_show = '$date'
+    ");
+    return $today_data->row(); // same here
+}
+
 	
 
 	public function get_total_recevableByOfficer($empl_id) {
