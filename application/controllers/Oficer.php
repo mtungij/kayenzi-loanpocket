@@ -100,9 +100,9 @@ class Oficer extends CI_Controller{
 
         
 
-      // echo "<pre>";
-      // print_r( $rejesho);
-      //     exit();
+      echo "<pre>";
+      print_r( $rejesho);
+          exit();
   
   } elseif ($position === 'BRANCH MANAGER') {
     
@@ -135,9 +135,7 @@ class Oficer extends CI_Controller{
 
   }
     
-      // echo "<pre>";
-      // print_r( $rejesho);
-      //     exit();
+    
 
 
       //    echo "<pre>";
@@ -151,6 +149,7 @@ class Oficer extends CI_Controller{
     'empl_data'=>$empl_data,
     'lipwa'=>$lipwa,
     'collect'=>$collect,
+    'total_default'=>$total_default,
     'active_customer'=>$active_customer,
     'default_customer'=>$default_customer,
     'done_customer'=>$done_customer,
@@ -168,7 +167,7 @@ class Oficer extends CI_Controller{
     'today_depost'=>$today_depost,
     'today_income'=>$today_income,
     'today_expences'=>$today_expences,
-    'manager'=>$manager,
+    'rejesho'=>$rejesho,'manager'=>$manager,
     'principal_loan'=>$principal_loan,'total_expect'=>$total_expect,
     'done_loan'=>$done_loan,
     'total_blanch'=>$total_blanch,
