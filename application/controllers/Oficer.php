@@ -96,7 +96,7 @@ class Oficer extends CI_Controller{
       $done_customer = $this->queries->count_done_loans_with_today_deposit_by_officer($empl_id);
         $collect = $this->queries->get_total_recevableBlanch_by_officer($blanch_id, $empl_id);
        
-        $toyal_default=$this->queries->get_depositing_out_total_officer($empl_id);
+        $total_default=$this->queries->get_depositing_out_total_officer($empl_id);
 
         
 
