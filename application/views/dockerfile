@@ -1,10 +1,10 @@
 docker run -it -d \
-  --label traefik.http.routers.mwandetele.rule=Host\(\`mwandetele.loan-pocket.com\`\) \
-  --label traefik.http.routers.mwandetele.tls.certresolver=lets-encrypt \
-  --label traefik.http.routers.mwandetele.tls=true \
-  --label traefik.http.routers.mwandetele.service=mwandetele-credit-http \
-  --label traefik.http.services.mwandetele-credit-http.loadbalancer.server.port=80 \
-  --name mwandetele \
+  --label traefik.http.routers.loanpocket.rule=Host\(\`loan-pocket.com\`\) \
+  --label traefik.http.routers.loanpocket.tls.certresolver=lets-encrypt \
+  --label traefik.http.routers.loanpocket.tls=true \
+  --label traefik.http.routers.loanpocket.service=loanpocket-credit-http \
+  --label traefik.http.services.loanpocket-credit-http.loadbalancer.server.port=80 \
+  --name loanpocket \
   --network web \
   --restart always \
   --expose 80 \
@@ -12,7 +12,3 @@ docker run -it -d \
 
 
 
-
-
-
-  
