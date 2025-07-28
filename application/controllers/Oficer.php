@@ -100,9 +100,9 @@ class Oficer extends CI_Controller{
 
         
 
-      echo "<pre>";
-      print_r( $rejesho);
-          exit();
+      // echo "<pre>";
+      // print_r( $rejesho);
+      //     exit();
   
   } elseif ($position === 'BRANCH MANAGER') {
     
