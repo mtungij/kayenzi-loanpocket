@@ -151,7 +151,6 @@ class Oficer extends CI_Controller{
     'empl_data'=>$empl_data,
     'lipwa'=>$lipwa,
     'collect'=>$collect,
-    'total_default'=>$total_default,
     'active_customer'=>$active_customer,
     'default_customer'=>$default_customer,
     'done_customer'=>$done_customer,
