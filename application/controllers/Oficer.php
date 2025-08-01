@@ -2555,9 +2555,11 @@ if ($exists) {
 
         $sp_fullname = $data['sp_name'] . ' ' . $data['sp_mname'] . ' ' . $data['sp_lname'];
         $customer_name = $customer->f_name . ' ' . $customer->m_name . ' ' . $customer->l_name;
-
-     $massage = "Habari $sp_fullname, umetajwa kama mdhamini wa $customer_name katika taasisi ya kifedha $comp_name. "
-    . "Iwapo hukubaliani kuwa mdhamini wake, tafadhali wasiliana nasi kupitia $comp_phone. Tunathamini ushirikiano wako.";
+$massage = "Habari Bw. $sp_fullname, "
+    . "$comp_name inakutambua kama mdhamini wa $customer_name. "
+    . "Iwapo huhusiki, tafadhali wasiliana nasi kupitia $comp_phone. "
+    . "Asante kwa ushirikiano wako.";
+    
 
         // Send SMS only if phone is valid and normalized
 
@@ -2817,7 +2819,7 @@ private function upload_file($field_name, $new_name_prefix)
   
       // Phone numbers to notify
       $phone_numbers = [
-          '255762062271',
+          '255654443190',
           '255629364847',
          
       ];
@@ -2890,7 +2892,7 @@ Kilichobadilishwa sasa kuwa: TZS " . number_format($how_loan, 0) . ".";
 
             // Phone numbers to notify
             $phone_numbers = [
-                '255762062271',
+                '255654443190',
                 '255629364847',
             ];
 
