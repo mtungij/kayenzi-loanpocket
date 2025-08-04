@@ -1755,67 +1755,83 @@ public function customer(){
     }
 
 
-    public function create_customer() {
+ public function create_customer() {
 
-    
+    if (!isset($_SESSION)) {
+        session_start();
+    }
 
-      $this->form_validation->set_rules('comp_id', 'company', 'required');
-      $this->form_validation->set_rules('empl_id', 'company', 'required');
-      $this->form_validation->set_rules('blanch_id', 'blanch', 'required');
-      $this->form_validation->set_rules('f_name', 'First name', 'required');
-      $this->form_validation->set_rules('m_name', 'Middle name', 'required');
-      $this->form_validation->set_rules('l_name', 'Last name', 'required');
-      $this->form_validation->set_rules('phone_no', 'phone number', 'required');
-      $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
-  
-      if ($this->form_validation->run()) {
-          $data = $this->input->post();
-  
-          // Process the phone number
-          $phone_no = $data['phone_no'];
-          if (substr($phone_no, 0, 1) === '0') { // Check if the number starts with '0'
-              $phone_no = '255' . substr($phone_no, 1); // Replace '0' with '255'
-          }
-          $data['phone_no'] = $phone_no;
-  
-          // Extract other fields
-          $f_name = $data['f_name'];
-          $m_name = $data['m_name'];
-          $l_name = $data['l_name'];
-          $blanch_id = $data['blanch_id'];
-          $comp_id = $data['comp_id'];
-  
-          $this->load->model('queries');
-          $check = $this->queries->check_name($f_name, $m_name, $l_name, $blanch_id, $comp_id);
-          $company_data = $this->queries->get_companyData($comp_id);
-          $comp_phone= $company_data->comp_phone;
+    $post_token = $this->input->post('form_token');
 
-          if ($check == TRUE) {
-              $this->session->set_flashdata('error', 'This customer Already Registered');
-              return redirect('oficer/customer');
-          } elseif ($check == FALSE) {
-              $customer_id = $this->queries->insert_customer($data);
-              if ($customer_id > 0) {
-                $this->load->model('queries');
-				        $compdata = $this->queries->get_companyData($comp_id);
+    if (!$post_token || $post_token !== ($_SESSION['form_token'] ?? null)) {
+        $this->session->set_flashdata('error', 'Invalid or duplicate form submission.');
+        return redirect('oficer/customer');
+    }
+
+    // Invalidate token so it can't be reused
+    unset($_SESSION['form_token']);
+
+    $this->form_validation->set_rules('comp_id', 'company', 'required');
+    $this->form_validation->set_rules('empl_id', 'company', 'required');
+    $this->form_validation->set_rules('blanch_id', 'blanch', 'required');
+    $this->form_validation->set_rules('f_name', 'First name', 'required');
+    $this->form_validation->set_rules('m_name', 'Middle name', 'required');
+    $this->form_validation->set_rules('l_name', 'Last name', 'required');
+    $this->form_validation->set_rules('phone_no', 'phone number', 'required');
+    $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
+
+    if ($this->form_validation->run()) {
+        $data = $this->input->post();
+
+        // Remove form_token before inserting into database
+        if (isset($data['form_token'])) {
+            unset($data['form_token']);
+        }
+
+        // Process the phone number
+        $phone_no = $data['phone_no'];
+        if (substr($phone_no, 0, 1) === '0') {
+            $phone_no = '255' . substr($phone_no, 1);
+        }
+        $data['phone_no'] = $phone_no;
+
+        // Extract other fields
+        $f_name = $data['f_name'];
+        $m_name = $data['m_name'];
+        $l_name = $data['l_name'];
+        $blanch_id = $data['blanch_id'];
+        $comp_id = $data['comp_id'];
+
+        $this->load->model('queries');
+        $check = $this->queries->check_name($f_name, $m_name, $l_name, $blanch_id, $comp_id);
+        $company_data = $this->queries->get_companyData($comp_id);
+        $comp_phone = $company_data->comp_phone;
+
+        if ($check == TRUE) {
+            $this->session->set_flashdata('error', 'This customer Already Registered');
+            return redirect('oficer/customer');
+        } elseif ($check == FALSE) {
+            $customer_id = $this->queries->insert_customer($data);
+            if ($customer_id > 0) {
+                $compdata = $this->queries->get_companyData($comp_id);
                 $full_name = $f_name . ' ' . $m_name . ' ' . $l_name;
-                
-                $massage = "Habari $full_name! Karibu sana katika familia ya " . $compdata->comp_name . ". " .
-    "Tunathamini uamuzi wako wa kujiunga nasi. Kwa maswali, ushauri au msaada wowote, " .
-    "tupigie simu kupitia namba: $comp_phone. Tuko tayari kukuhudumia kwa moyo wote!";
 
-           
+                $massage = "Habari $full_name! Karibu sana katika familia ya " . $compdata->comp_name . ". " .
+                    "Tunathamini uamuzi wako wa kujiunga nasi. Kwa maswali, ushauri au msaada wowote, " .
+                    "tupigie simu kupitia namba: $comp_phone. Tuko tayari kukuhudumia kwa moyo wote!";
+
                 $this->sendsms($phone_no, $massage);
-                  $this->session->set_flashdata('massage', 'Customer successfully registered.');
-              } else {
-                  $this->session->set_flashdata('error', 'Failed to register the customer.');
-              }
-              return redirect('oficer/customer_details/' . $customer_id);
-          }
-      }
-  
-      $this->customer_details();
-  }
+                $this->session->set_flashdata('massage', 'Customer successfully registered.');
+            } else {
+                $this->session->set_flashdata('error', 'Failed to register the customer.');
+            }
+            return redirect('oficer/customer_details/' . $customer_id);
+        }
+    }
+
+    $this->customer_details();
+}
+
 
   public function sendsms($phone,$massage){
     //public function sendsms(){f
@@ -2557,7 +2573,7 @@ if ($exists) {
         $customer_name = $customer->f_name . ' ' . $customer->m_name . ' ' . $customer->l_name;
 $massage = "Habari Bw. $sp_fullname, "
     . "$comp_name inakutambua kama mdhamini wa $customer_name. "
-    . "Iwapo huhusiki, tafadhali wasiliana nasi kupitia $comp_phone. "
+    . "Iwapo huhusiki, tafadhali wasiliana nasi mapema kupitia $comp_phone. "
     . "Asante kwa ushirikiano wako.";
     
 
@@ -4553,6 +4569,19 @@ public function print_officer_todaycash_transaction()
 
   public function deposit_loan($customer_id){
     ini_set("max_execution_time", 3600);
+
+      if (!isset($_SESSION)) {
+        session_start();
+    }
+    
+    $post_token = $this->input->post('form_token');
+    if (!$post_token || $post_token !== ($_SESSION['form_token'] ?? null)) {
+        $this->session->set_flashdata('error', 'Invalid or duplicate form submission.');
+        return redirect("oficer/deposit_loan/{$customer_id}");
+    }
+    // Invalidate token to prevent reuse
+    unset($_SESSION['form_token']);
+
     $this->load->model('queries');
     $blanch_id = $this->session->userdata('blanch_id');
     $empl_id = $this->session->userdata('empl_id');
@@ -4573,6 +4602,11 @@ public function print_officer_todaycash_transaction()
     $this->form_validation->set_error_delimiters('<div class="text-danger">','</div>');
        if ($this->form_validation->run()) {
           $depost = $this->input->post();
+
+              // Remove form_token before processing
+        if (isset($data['form_token'])) {
+            unset($data['form_token']);
+        }
 
           // echo "<pre>";
           // print_r($empl_id);

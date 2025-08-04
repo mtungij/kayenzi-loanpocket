@@ -87,6 +87,17 @@ include_once APPPATH . "views/partials/officerheader.php";
                 <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-6">
                     Register New Customer
                 </h3>
+                
+         <?php
+            if (!isset($_SESSION)) {
+                session_start();
+            }
+
+            if (!isset($_SESSION['form_token'])) {
+                $_SESSION['form_token'] = bin2hex(random_bytes(32));
+            }
+           ?>
+
                 <?php echo form_open("oficer/create_customer", ['novalidate' => true]); ?>
                     <div class="grid sm:grid-cols-12 gap-4 sm:gap-6">
                         <div class="sm:col-span-4">
@@ -124,6 +135,8 @@ include_once APPPATH . "views/partials/officerheader.php";
 						<input type="hidden" name="blanch_id" value="<?php echo $empl_data->blanch_id; ?>">
 								
 								<input type="hidden" name="empl_id" value="<?php echo $empl_data->empl_id; ?>">
+                                <input type="hidden" name="form_token" value="<?php echo $_SESSION['form_token']; ?>">
+
 								
                     </div>
                     <div class="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
@@ -151,6 +164,15 @@ include_once APPPATH . "views/partials/footer.php";
 
 <!-- Include Select2 JS -->
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+document.querySelector('form').addEventListener('submit', function(e) {
+    const btn = this.querySelector('button[type="submit"]');
+    btn.disabled = true;
+    btn.innerText = 'Submitting...';
+});
+</script>
+
 <style>
 .select2-container--default .select2-selection--single {
     background-color: #1f2937;

@@ -463,6 +463,17 @@ if (!empty($customer_loan_status)) {
         </button>
       </div>
 
+      <?php
+if (!isset($_SESSION)) {
+    session_start();
+}
+
+if (!isset($_SESSION['form_token'])) {
+    $_SESSION['form_token'] = bin2hex(random_bytes(32));
+}
+?>
+
+
       <?php echo form_open("oficer/deposit_loan/{$customer->customer_id}"); ?>
 <!-- Modal Body -->
 <div class="p-4 sm:p-6">
@@ -543,9 +554,10 @@ if (!empty($customer_loan_status)) {
   </div>
 
   
+                       <input type="hidden" name="form_token" value="<?php echo $_SESSION['form_token']; ?>">
 
   <!-- Hidden Inputs -->
-  <input type="hidden" value="<?php echo $customer->customer_id; ?>" name="customer_id">
+                   <input type="hidden" value="<?php echo $customer->customer_id; ?>" name="customer_id">
                     <input type="hidden" value="<?php echo $customer->comp_id; ?>" name="comp_id">
                     <input type="hidden" value="<?php echo $customer->blanch_id; ?>" name="blanch_id">
                     <input type="hidden" value="<?php echo $customer_loan->loan_id; ?>" name="loan_id">
@@ -580,6 +592,17 @@ include_once APPPATH . "views/partials/footer.php";
 
 <!-- Include Select2 JS -->
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+
+<script>
+  
+  // Disable submit button on submit
+  document.querySelector('form').addEventListener('submit', function () {
+    const btn = this.querySelector('button[type="submit"]');
+    btn.disabled = true;
+    btn.innerText = 'Processing...';
+  });
+</script>
 
 <style>
 .select2-container--default .select2-selection--single {
