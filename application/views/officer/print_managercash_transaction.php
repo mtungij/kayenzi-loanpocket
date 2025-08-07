@@ -48,11 +48,11 @@
 </head>
 <body>
 <?php 
-$company_name = "CDC MICROFINANCE LIMITED";
-$company_address = "Anglicana Street, TARIME, Tanzania";
-$company_email = "cdcmicrofinance@gmail.com";
-$company_phone = "+255 763 727 272";
-$logo_path = FCPATH . 'assets/img/cdclogo.png';
+$company_name = "DNP MICROFINANCE LIMITED";
+$company_address = "Bundala Street, Dar es Salaam, Tanzania";
+$company_email = "dnpmicrofinance@gmail.com";
+$company_phone = "+255 758 409 884";
+$logo_path = FCPATH . 'assets/img/dnplogo.jpeg';
 $logo_url = 'file://' . $logo_path;
 
 
