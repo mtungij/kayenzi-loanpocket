@@ -2835,8 +2835,8 @@ private function upload_file($field_name, $new_name_prefix)
   
       // Phone numbers to notify
       $phone_numbers = [
-          '255654443190',
-          '255629364847',
+          '255653356635',
+          '255758409884',
          
       ];
   
@@ -2908,8 +2908,8 @@ Kilichobadilishwa sasa kuwa: TZS " . number_format($how_loan, 0) . ".";
 
             // Phone numbers to notify
             $phone_numbers = [
-                '255654443190',
-                '255629364847',
+                '255653356635',
+                '255758409884',
             ];
 
             foreach ($phone_numbers as $phone) {
