@@ -137,13 +137,13 @@ if ($position === 'LOAN OFFICER'): ?>
     <thead class="text-xs text-cyan-500 uppercase bg-gray-50 dark:bg-cyan-500 dark:text-gray-50">
         <tr>
             <th scope="col" class="px-4 py-3">S/No</th>
-            <th scope="col" class="px-4 py-3">Jina La Mteja</th>
+            <th scope="col" class="px-4 py-3">Customer Name</th>
             <th>Status</th>
-            <th scope="col" class="px-4 py-3">Rejesho</th>
-            <th scope="col" class="px-4 py-3">Lipwa</th>
-            <th scope="col" class="px-4 py-3">Laza</th>
-            <th scope="col" class="px-4 py-3">Zidi</th>
-            <th scope="col" class="px-4 py-3">Tarehe</th>
+            <th scope="col" class="px-4 py-3">Collection</th>
+            <th scope="col" class="px-4 py-3">Received</th>
+            <th scope="col" class="px-4 py-3">Missed</th>
+            <th scope="col" class="px-4 py-3">Overpaid</th>
+            <th scope="col" class="px-4 py-3">Dtae</th>
         </tr>
     </thead>
     <tbody>
@@ -208,6 +208,7 @@ if ($position === 'LOAN OFFICER'): ?>
     <tfoot class="font-bold text-gray-900 dark:text-white bg-gray-100 dark:bg-gray-700">
         <tr>
             <td colspan="2" class="px-4 py-3">JUMLA</td>
+            <td></td>
             <td class="px-4 py-3"><?= number_format($total_restration) ?></td>
             <td class="px-4 py-3"><?= number_format($total_depost) ?></td>
             <td class="px-4 py-3"><?= number_format($total_laza) ?></td>

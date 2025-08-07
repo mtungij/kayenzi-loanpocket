@@ -208,21 +208,21 @@ include_once APPPATH . "views/partials/officerheader.php";
 
     <!-- Second Row: 3 Colored Cards -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-     <div class="bg-gradient-to-r from-green-400 to-emerald-500 dark:from-green-600 dark:to-emerald-700 text-white rounded-xl shadow p-6">
+     <a href="<?= base_url('oficer/today_recevable_loan') ?>" class="bg-gradient-to-r from-green-400 to-emerald-500 dark:from-green-600 dark:to-emerald-700 text-white rounded-xl shadow p-6">
     <h4 class="text-2xl font-bold flex items-center gap-2">
         <i class="icon-wallet"></i> <?= number_format($collect->total_rejesho) ?? 0 ?>
 
 
     </h4>
     <span class="text-white text-sm">Today Receivable</span>
-</div>
+  </a>
 
-      <div class="bg-gradient-to-r from-blue-400 to-blue-600 dark:from-blue-700 dark:to-indigo-800 text-white rounded-xl shadow p-6">
+      <a href="<?= base_url('Oficer/cash_transaction')?>" class="bg-gradient-to-r from-blue-400 to-blue-600 dark:from-blue-700 dark:to-indigo-800 text-white rounded-xl shadow p-6">
     <h4 class="text-2xl font-bold flex items-center gap-2">
         <i class="icon-wallet"></i> 	<?php echo number_format($total_lipwa); ?>
     </h4>
     <span class="text-white text-sm">Today Deposited</span>
-</div>
+  </a>
 
 
       <div class="bg-gradient-to-r from-blue-400 to-blue-600 dark:from-blue-700 dark:to-indigo-800 text-white rounded-xl shadow p-6">
