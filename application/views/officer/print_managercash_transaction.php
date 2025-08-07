@@ -76,18 +76,18 @@ $logo_url = 'file://' . $logo_path;
     <thead>
         <tr>
             <th>S/No</th>
-            <th>Jina La Mteja</th>
-            <th>Afisa</th>
-            <th>Namba Ya Simu</th>
-            <th>Mkopo</th>
+            <th>Customer Name</th>
+            <th>Loan Officer</th>
+            <th>Phone Number</th>
+            <th>Loan Amount</th>
             <th>Product</th>
-            <th>Muda</th>
-            <th>Rejesho</th>
-            <th>Lipwa</th>
-            <th>Laza</th>
-            <th>Zidi</th>
+            <th>Duration Type</th>
+            <th>Collection</th>
+            <th>Received</th>
+            <th>Missed</th>
+            <th>Overpaid</th>
             <th>Depositor</th>
-            <th>Tarehe</th>
+            <th>Date</th>
         </tr>
     </thead>
     <tbody>
