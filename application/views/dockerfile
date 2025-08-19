@@ -1,10 +1,10 @@
 docker run -it -d \
-  --label traefik.http.routers.nackcredit.rule=Host\(\`nackcredit.com\`\) \
-  --label traefik.http.routers.nackcredit.tls.certresolver=lets-encrypt \
-  --label traefik.http.routers.nackcredit.tls=true \
-  --label traefik.http.routers.nackcredit.service=nackcredit-credit-http \
-  --label traefik.http.services.nackcredit-credit-http.loadbalancer.server.port=80 \
-  --name nackcredit \
+  --label traefik.http.routers.kalidushi.rule=Host\(\`kalidushifinancial.phamasoft.com\`\) \
+  --label traefik.http.routers.kalidushi.tls.certresolver=lets-encrypt \
+  --label traefik.http.routers.kalidushi.tls=true \
+  --label traefik.http.routers.kalidushi.service=kalidushi-credit-http \
+  --label traefik.http.services.kalidushi-credit-http.loadbalancer.server.port=80 \
+  --name kalidushi \
   --network web \
   --restart always \
   --expose 80 \
