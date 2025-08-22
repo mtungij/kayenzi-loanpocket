@@ -103,7 +103,7 @@ $communication_submenu_active = is_submenu_active(['send_email']); // Assuming S
            href="<?php echo base_url("admin/blanch"); ?>">
           <!-- SVG: Branch Icon (Heroicons: building-office or similar) -->
           <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M11.25 3.25A1.75 1.75 0 0 0 9.5 5v10H5.75a.75.75 0 0 0 0 1.5h10.5a.75.75 0 0 0 0-1.5H12.5V5A1.75 1.75 0 0 0 10.75 3.25H9.5Zm-2.5 6.5h.01a.75.75 0 0 0 0 1.5H8.75a.75.75 0 0 0 0-1.5ZM10.5 9.75h.01a.75.75 0 0 0 0 1.5H10.5a.75.75 0 0 0 0-1.5ZM8.75 12.25h.01a.75.75 0 0 0 0 1.5H8.75a.75.75 0 0 0 0-1.5ZM10.5 12.25h.01a.75.75 0 0 0 0 1.5H10.5a.75.75 0 0 0 0-1.5Z" clip-rule="evenodd" /></svg>
-          Branch
+          Tawi
         </a>
         <?php endif; ?>
       </li>

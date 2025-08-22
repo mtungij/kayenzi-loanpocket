@@ -23,12 +23,7 @@ include_once APPPATH . "views/partials/header.php";
                 ?>
             </div>
         </div>
-        <!-- End Page Title / Subheader -->
-
-
-        <!-- Section 2: Top KPIs (Using your new card template) -->
-        
-        <!-- Section 2: Top KPIs (Revised with Full-Width Account Balance Banner) -->
+   
 
         <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         <!-- Card -->
@@ -68,67 +63,47 @@ include_once APPPATH . "views/partials/header.php";
         <!-- End Card -->
 
         <!-- Card -->
-        <div class="flex flex-col bg-white border border-gray-200 shadow-2xs rounded-xl dark:bg-gray-800 dark:border-gray-700">
-          <div class="p-4 md:p-5">
-            <div class="flex items-center gap-x-2">
-              <p class="text-xs uppercase text-gray-500 dark:text-gray-200">
-                Total Staff
-              </p>
-            </div>
-
-            <div class="mt-1 flex items-center gap-x-2">
-              <h3 class="text-xl sm:text-2xl font-medium text-gray-800 dark:text-gray-50">
-              <?php echo $employee_count; ?>
-              </h3>
-            </div>
-          </div>
-        </div>
+         <div class="flex flex-col bg-gradient-to-br from-green-400 via-green-500 to-cyan-600 text-white border border-transparent rounded-2xl shadow-xl p-5 transition-transform hover:scale-[1.01] dark:from-green-600 dark:via-green-700 dark:to-green-800">
+    <div class="flex items-center gap-x-2">
+      <span class="w-8 h-8 flex items-center justify-center bg-indigo-100 text-indigo-600 rounded-full">
+        👨‍💼
+      </span>
+      <p class="text-xs uppercase text-gray-500 dark:text-gray-300">Total Staff</p>
+    </div>
+    <h3 class="mt-6 text-3xl font-bold text-gray-800 dark:text-gray-50">
+      <?php echo $employee_count; ?>
+    </h3>
+  </div>
         <!-- End Card -->
 
         <!-- Card -->
-        <div class="flex flex-col bg-white border border-gray-200 shadow-2xs rounded-xl dark:bg-gray-800 dark:border-gray-700">
-          <div class="p-4 md:p-5">
-            <div class="flex items-center gap-x-2">
-              <p class="text-xs uppercase text-gray-500 dark:text-gray-200">
-               Today Deposit
-              </p>
-            </div>
-
-            <div class="mt-1 flex items-center gap-x-2">
-              <h3 class="text-xl sm:text-2xl font-medium text-gray-800 dark:text-gray-200">
-              <?php echo number_format($total_deposit_daily); ?>
-              </h3>
-              <span class="flex items-center gap-x-1 text-red-600">
-                <!-- <svg class="inline-block size-4 self-center" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="22 17 13.5 8.5 8.5 13.5 2 7" />
-                  <polyline points="16 17 22 17 22 11" />
-                </svg> -->
-                <!-- <span class="inline-block text-sm">
-                  1.7%
-                </span> -->
-              </span>
-            </div>
-          </div>
-        </div>
+        <div class="flex flex-col bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-md p-5 transition-transform hover:scale-[1.02]">
+    <div class="flex items-center gap-x-2">
+      <span class="w-8 h-8 flex items-center justify-center bg-green-100 text-green-600 rounded-full">
+        💰
+      </span>
+      <p class="text-xs uppercase text-gray-500 dark:text-gray-300">Today Deposit</p>
+    </div>
+    <h3 class="mt-6 text-3xl font-bold text-gray-800 dark:text-gray-50">
+      <?php echo number_format($total_deposit_daily); ?>
+    </h3>
+  </div>
         <!-- End Card -->
 
         <!-- Card -->
-        <div class="flex flex-col bg-white border border-gray-200 shadow-2xs rounded-xl dark:bg-gray-800 dark:border-gray-700">
-          <div class="p-4 md:p-5">
-            <div class="flex items-center gap-x-2">
-              <p class="text-xs uppercase text-gray-500 dark:text-gray-200">
-               Today Withdraw
-              </p>
-            </div>
-
-            <div class="mt-1 flex items-center gap-x-2">
-              <h3 class="text-xl sm:text-2xl font-medium text-gray-800 dark:text-gray-200">
-              <?php echo number_format($total_withdrawal_daily->total_loanWith_day); ?>
-              </h3>
-            </div>
-          </div>
-        </div>
-        <!-- End Card -->
+         <div class="flex flex-col bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-md p-5 transition-transform hover:scale-[1.02]">
+    <div class="flex items-center gap-x-2">
+      <span class="w-8 h-8 flex items-center justify-center bg-red-100 text-red-600 rounded-full">
+        💸
+      </span>
+      <p class="text-xs uppercase text-gray-500 dark:text-gray-300">Today Withdraw</p>
+    </div>
+    <h3 class="mt-6 text-3xl font-bold text-gray-800 dark:text-gray-50">
+      <?php echo number_format($total_withdrawal_daily->total_loanWith_day); ?>
+    </h3>
+  </div>
+  
+  
       </div>
 
 <!--  -->
@@ -186,58 +161,15 @@ include_once APPPATH . "views/partials/header.php";
     </div>
   </div>
 
-  <!-- Card 2: MALIPO YA LEO -->
-  <!-- </?php
+
+   <?php
   $total_deposit_daily = $total_deposit_daily ?? 0;
   $total_deposit_weekly = $total_deposit_weekly ?? 0;
   $total_deposit_monthly = $total_deposit_monthly ?? 0;
   $total_all = $total_deposit_daily + $total_deposit_weekly + $total_deposit_monthly;
-?> -->
+?>  -->
 
-<!-- <div class="bg-white rounded-lg shadow-md overflow-hidden">
-  <div class="bg-cyan-800 px-4 py-2 border-b">
-    <h2 class="text-lg font-semibold text-white">MALIPO YA LEO</h2>
-  </div>
-  <div class="p-4">
-    <table class="w-full text-sm">
-      <tbody class="text-gray-700">
-        <tr class="border-b">
-          <td class="py-2">KILA SIKU</td>
-          <td class="text-right">
-            <span class="inline-block bg-green-600 text-white text-xs px-2 py-1 rounded">
-              <?php echo number_format($total_deposit_daily); ?>
-            </span>
-          </td>
-        </tr>
-        <tr class="border-b">
-          <td class="py-2">WIKI</td>
-          <td class="text-right">
-            <span class="inline-block bg-green-600 text-white text-xs px-2 py-1 rounded">
-              <?php echo number_format($total_deposit_weekly); ?>
-            </span>
-          </td>
-        </tr>
-        <tr class="border-b">
-          <td class="py-2">MWEZI</td>
-          <td class="text-right">
-            <span class="inline-block bg-green-600 text-white text-xs px-2 py-1 rounded">
-              <?php echo number_format($total_deposit_monthly); ?>
-            </span>
-          </td>
-        </tr>
-        <tr>
-          <td class="py-2 font-bold">JUMLA</td>
-          <td class="text-right font-bold">
-            <span class="inline-block bg-green-600 text-white text-xs px-2 py-1 rounded">
-              <?php echo number_format($total_all); ?>
-            </span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</div> -->
-
+ 
 <!-- <div class="bg-white rounded-lg shadow-md overflow-hidden">
   <div class="bg-cyan-800 px-4 py-2 border-b">
     <h2 class="text-lg font-semibold text-white">MIKOPO YA LEO</h2>
