@@ -2610,7 +2610,6 @@ public function view_aggrement($customer_id)
     $local_officer = $this->queries->get_loacagovment_data($loan_id);
     $inc_history   = $this->queries->get_loanIncomeHistory($customer_id);
 
-    // Load the view as HTML
     $html = $this->load->view('officer/loan_aggrement', [
         "customer"      => $customer,
         "loan_form"     => $loan_form,
@@ -2621,14 +2620,19 @@ public function view_aggrement($customer_id)
         "inc_history"   => $inc_history
     ], true);
 
-    // Load Dompdf
     $dompdf = new \Dompdf\Dompdf();
     $dompdf->loadHtml($html);
     $dompdf->setPaper('A4', 'portrait');
     $dompdf->render();
 
-    // Stream PDF to browser (inline preview)
-    $dompdf->stream("mkataba_wa_maombi.pdf", ["Attachment" => false]);
+    // Force inline full-screen display
+    header('Content-Type: application/pdf');
+    header('Content-Disposition: inline; filename="mkataba_wa_maombi.pdf"');
+    header('Cache-Control: private, max-age=0, must-revalidate');
+    header('Pragma: public');
+
+    echo $dompdf->output();
+    exit;
 }
 
 
