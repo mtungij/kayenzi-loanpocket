@@ -2614,7 +2614,18 @@ public function view_aggrement($customer_id)
     @ob_end_clean();
     ob_start();
 
-    $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => 'A4', 'orientation' => 'P']);
+    // Ensure custom temp directory exists and is writable
+    $tempDir = FCPATH . 'application/tmp';
+    if (!is_dir($tempDir)) {
+        mkdir($tempDir, 0775, true);
+    }
+
+    $mpdf = new \Mpdf\Mpdf([
+        'mode'    => 'utf-8',
+        'format'  => 'A4',
+        'orientation' => 'P',
+        'tempDir' => $tempDir
+    ]);
 
     $html = $this->load->view('officer/loan_aggrement', [
         "customer"      => $customer,
@@ -2638,6 +2649,7 @@ public function view_aggrement($customer_id)
     $mpdf->Output('mkataba_wa_maombi.pdf', 'I');
     exit;
 }
+
 
 
 
