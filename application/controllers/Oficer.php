@@ -2588,65 +2588,56 @@ $massage = "Habari Bw. $sp_fullname, "
     }
 }
 
+public function view_aggrement($customer_id)
+{
+    $this->load->model('queries');
 
-    public function view_aggrement($customer_id)
-    {
-  
-        $this->load->model('queries');
-        $blanch_id = $this->session->userdata('blanch_id');
-        $empl_id = $this->session->userdata('empl_id');
-        $manager_data = $this->queries->get_manager_data($empl_id);
-        $comp_id = $manager_data->comp_id;
-        
-       
-        $customer = $this->queries->get_aggrement($customer_id, $comp_id);
-     
-        $loan_form = $this->queries->get_formloanData($customer_id, $comp_id);
-        $compdata = $this->queries->get_comp_data($comp_id);
-   $mdhamini = $this->queries->get_guarator_data($customer_id, $comp_id);
-          //  echo "<pre>";
-          //   print_r(     $customer);
-          //   echo "</pre>";
-          //       exit();
-    
-        // Ensure $loan_form is not null before accessing loan_id
-        $loan_id = $loan_form ? $loan_form->loan_id : null;
-    
-        if (!$loan_id) {
-            die("Loan ID not found. Please check the loan data.");
-        }
-      
-        $collateral = $this->queries->get_colateral_data($loan_id);
-        $local_officer = $this->queries->get_loacagovment_data($loan_id);
-        $inc_history = $this->queries->get_loanIncomeHistory($customer_id);
-        // echo "<pre>";
-        // print_r( $collateral);
-        //     echo "<pre>";
-        //         exit();
-        // Generate PDF
-        $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => 'A4', 'orientation' => 'P']);
-    
-        // Load the agreement view as HTML
-        $html = $this->load->view('officer/loan_aggrement', [
-            "customer" => $customer,
-            "loan_form" => $loan_form,
-            "mdhamini" => $mdhamini,
-            "compdata" => $compdata,
-            "collateral" => $collateral,
-            "local_officer" => $local_officer,
-            "inc_history" => $inc_history,
-            "compdata" => $compdata
-        ], true);
-    
-        // Set PDF Footer
-        $mpdf->SetFooter('');
-    
-        // Write HTML content to PDF
-        $mpdf->WriteHTML($html);
-    
-        // Output the PDF to Browser
-        $mpdf->Output('mkataba_wa_maombi.pdf', 'I'); // 'I' means inline view in browser
+    $empl_id      = $this->session->userdata('empl_id');
+    $manager_data = $this->queries->get_manager_data($empl_id);
+    $comp_id      = $manager_data->comp_id;
+
+    $customer  = $this->queries->get_aggrement($customer_id, $comp_id);
+    $loan_form = $this->queries->get_formloanData($customer_id, $comp_id);
+    $compdata  = $this->queries->get_comp_data($comp_id);
+    $mdhamini  = $this->queries->get_guarator_data($customer_id, $comp_id);
+
+    $loan_id = $loan_form ? $loan_form->loan_id : null;
+    if (!$loan_id) {
+        show_error("Loan ID not found. Please check the loan data."); 
     }
+
+    $collateral    = $this->queries->get_colateral_data($loan_id);
+    $local_officer = $this->queries->get_loacagovment_data($loan_id);
+    $inc_history   = $this->queries->get_loanIncomeHistory($customer_id);
+
+    // Clean buffers to avoid extra output
+    @ob_end_clean();
+    ob_start();
+
+    $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => 'A4', 'orientation' => 'P']);
+
+    $html = $this->load->view('officer/loan_aggrement', [
+        "customer"      => $customer,
+        "loan_form"     => $loan_form,
+        "mdhamini"      => $mdhamini,
+        "compdata"      => $compdata,
+        "collateral"    => $collateral,
+        "local_officer" => $local_officer,
+        "inc_history"   => $inc_history
+    ], true);
+
+    $mpdf->SetFooter('');
+    $mpdf->WriteHTML($html);
+
+    // Force PDF headers
+    header('Content-Type: application/pdf');
+    header('Cache-Control: private, max-age=0, must-revalidate');
+    header('Pragma: public');
+
+    // Preview inline
+    $mpdf->Output('mkataba_wa_maombi.pdf', 'I');
+    exit;
+}
 
 
 
