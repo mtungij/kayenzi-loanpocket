@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Oficer extends CI_Controller{
     public function index()
     {
-      $position = strtoupper(trim($this->session->userdata('position_name')));
+      // $position = strtoupper(trim($this->session->userdata('position_name')));
 
         //print_r($empl_id);
     $this->load->model('queries');
@@ -80,23 +80,23 @@ class Oficer extends CI_Controller{
       // print_r( $empl_data);
       //     exit();
     
-    if ($position === 'LOAN OFFICER') {
+    // if ($position === 'LOAN OFFICER') {
     
-      $total_customers = $this->queries->count_customers_by_officer($empl_id);
-      $active = $this->queries->count_active_by_officer($empl_id);
-      $new_loans = $this->queries->count_open_loans_by_officer($empl_id);
-      $new_customer =  $this->queries->count_customers_with_one_loan_today($blanch_id, $empl_id);
-      $done_customer = $this->queries->count_customers_completed_loan_today_officer($blanch_id, $empl_id);
-      $lipwa = $this->queries->get_cash_transaction_by_officer($empl_id);
-      $approved_customer = $this->queries->get_approved_loans_by_officer($blanch_id, $empl_id);
-      $disbursed_customer =$this->queries->count_disbursed_loans_by_officer($blanch_id, $empl_id);
-      $active_customer = $this->queries->count_active_customers_by_officer($empl_id);
-      // $pending_customer = $this->queries->count_pending_customers_by_officer($empl_id);
-      $default_customer = $this->queries->count_default_customers_by_officer($empl_id);
-      $done_customer = $this->queries->count_done_loans_with_today_deposit_by_officer($empl_id);
-        $collect = $this->queries->get_total_recevableBlanch_by_officer($blanch_id, $empl_id);
+    //   $total_customers = $this->queries->count_customers_by_officer($empl_id);
+    //   $active = $this->queries->count_active_by_officer($empl_id);
+    //   $new_loans = $this->queries->count_open_loans_by_officer($empl_id);
+    //   $new_customer =  $this->queries->count_customers_with_one_loan_today($blanch_id, $empl_id);
+    //   $done_customer = $this->queries->count_customers_completed_loan_today_officer($blanch_id, $empl_id);
+    //   $lipwa = $this->queries->get_cash_transaction_by_officer($empl_id);
+    //   $approved_customer = $this->queries->get_approved_loans_by_officer($blanch_id, $empl_id);
+    //   $disbursed_customer =$this->queries->count_disbursed_loans_by_officer($blanch_id, $empl_id);
+    //   $active_customer = $this->queries->count_active_customers_by_officer($empl_id);
+    //   // $pending_customer = $this->queries->count_pending_customers_by_officer($empl_id);
+    //   $default_customer = $this->queries->count_default_customers_by_officer($empl_id);
+    //   $done_customer = $this->queries->count_done_loans_with_today_deposit_by_officer($empl_id);
+    //     $collect = $this->queries->get_total_recevableBlanch_by_officer($blanch_id, $empl_id);
        
-        $total_default=$this->queries->get_depositing_out_total_officer($empl_id);
+    //     $total_default=$this->queries->get_depositing_out_total_officer($empl_id);
 
         
 
@@ -104,7 +104,7 @@ class Oficer extends CI_Controller{
       // print_r( $rejesho);
       //     exit();
   
-  } elseif ($position === 'BRANCH MANAGER') {
+  // } elseif ($position === 'BRANCH MANAGER') {
     
       $total_customers = $this->queries->count_customers_by_branch($blanch_id);
       $active = $this->queries->count_active_by_branch($blanch_id);
@@ -121,19 +121,19 @@ class Oficer extends CI_Controller{
       $collect = $this->queries->get_total_recevableBlanch($blanch_id);
       
       $total_default = $this->queries->get_depositing_out_total_blanch($blanch_id);
-  } else {
-      $total_customers = 0;
-      $new_loans = 0;
-      $done_customer=0;
-      $approved_customer = 0;
-      $disbursed_customer=0;
-      $lipwa = 0;
-      $default_customer = 0;
-      $active_customer = 0;
-      $done_customer = 0;
-      $total_default=0;
+  // } else {
+  //     $total_customers = 0;
+  //     $new_loans = 0;
+  //     $done_customer=0;
+  //     $approved_customer = 0;
+  //     $disbursed_customer=0;
+  //     $lipwa = 0;
+  //     $default_customer = 0;
+  //     $active_customer = 0;
+  //     $done_customer = 0;
+  //     $total_default=0;
 
-  }
+  // }
     
     
 
@@ -3226,7 +3226,7 @@ $this->loan_application();
 
 
     public function loan_pending() {
-      $position   = strtoupper($this->session->userdata('position_name'));
+      // $position   = strtoupper($this->session->userdata('position_name'));
       $this->load->model('queries');
       $blanch_id = $this->session->userdata('blanch_id');
       $empl_id = $this->session->userdata('empl_id');
@@ -3239,13 +3239,13 @@ $this->loan_application();
       $privillage = $this->queries->get_position_empl($empl_id);
       $total_request = $this->queries->get_total_loanPendingBlanch($blanch_id);
   
-      if ($position === 'LOAN OFFICER') {
-          $loan_pending = $this->queries->get_loanPendingByOfficer($empl_id);
-      } elseif ($position === 'BRANCH MANAGER') {
+      // if ($position === 'LOAN OFFICER') {
+      //     $loan_pending = $this->queries->get_loanPendingByOfficer($empl_id);
+      // } elseif ($position === 'BRANCH MANAGER') {
           $loan_pending = $this->queries->get_loanPendingBlanch($blanch_id);
-      } else {
-          $loan_pending = [];
-      }
+      // } else {
+      //     $loan_pending = [];
+      // }
     // echo "<pre>";
     //           print_r( $empl_data);
     //                exit();
@@ -4080,7 +4080,7 @@ public function disburse($loan_id){
 
 
      public function disburse_loan(){
-      $position   = strtoupper($this->session->userdata('position_name'));
+      // $position   = strtoupper($this->session->userdata('position_name'));
         $this->load->model('queries');
         $blanch_id = $this->session->userdata('blanch_id');
         $empl_id = $this->session->userdata('empl_id');
@@ -4097,31 +4097,31 @@ public function disburse($loan_id){
 
        
 
-        if ($position === 'LOAN OFFICER') {
-          $disburse = $this->queries->get_DisbarsedLoanByOfficer($empl_id);
+      //   if ($position === 'LOAN OFFICER') {
+      //     $disburse = $this->queries->get_DisbarsedLoanByOfficer($empl_id);
 
-            // print_r($disburse);
-            //         exit();
+      //       // print_r($disburse);
+      //       //         exit();
       
-          // Calculate totals for this officer
-          $total_loan = 0;
-          $total_interest = 0;
-          foreach ($disburse as $loan) {
-              $total_loan += $loan->loan_aprove;
-              $total_interest += $loan->loan_int;
-          }
-          $total_loanDis = (object)['total_loan' => $total_loan];
-          $total_interest_loan = (object)['total_loan_int' => $total_interest];
+      //     // Calculate totals for this officer
+      //     $total_loan = 0;
+      //     $total_interest = 0;
+      //     foreach ($disburse as $loan) {
+      //         $total_loan += $loan->loan_aprove;
+      //         $total_interest += $loan->loan_int;
+      //     }
+      //     $total_loanDis = (object)['total_loan' => $total_loan];
+      //     $total_interest_loan = (object)['total_loan_int' => $total_interest];
       
-      } elseif ($position === 'BRANCH MANAGER') {
-          $disburse = $this->queries->get_DisbarsedLoanBlanch($blanch_id);
+      // } elseif ($position === 'BRANCH MANAGER') {
+      //     $disburse = $this->queries->get_DisbarsedLoanBlanch($blanch_id);
           $total_loanDis = $this->queries->get_sum_loanDisbursedBlanch($blanch_id);
           $total_interest_loan = $this->queries->get_sum_loanDisburse_interestBlanch($blanch_id);
-      } else {
-          $disburse = [];
-          $total_loanDis = (object)['total_loan' => 0];
-          $total_interest_loan = (object)['total_loan_int' => 0];
-      }
+      // } else {
+      //     $disburse = [];
+      //     $total_loanDis = (object)['total_loan' => 0];
+      //     $total_interest_loan = (object)['total_loan_int' => 0];
+      // }
       
 
             // echo "<pre>";
@@ -4289,7 +4289,7 @@ public function disburse($loan_id){
 
      public function loan_withdrawal(){
         $this->load->model('queries');
-        $position = strtoupper($this->session->userdata('position_name'));
+        // $position = strtoupper($this->session->userdata('position_name'));
         $blanch_id = $this->session->userdata('blanch_id');
         $empl_id = $this->session->userdata('empl_id');
         $manager_data = $this->queries->get_manager_data($empl_id);
@@ -4301,13 +4301,13 @@ public function disburse($loan_id){
        
         $privillage = $this->queries->get_position_empl($empl_id);
         $manager = $this->queries->get_position_manager($empl_id);
-        if ($position === 'LOAN OFFICER') {
-          $disburse = $this->queries->get_withdrawal_LoanByOfficer($empl_id);
-          $total_interest_loan = $this->queries->get_sum_withdrawal_by_officer($empl_id);
-      } else {
+      //   if ($position === 'LOAN OFFICER') {
+      //     $disburse = $this->queries->get_withdrawal_LoanByOfficer($empl_id);
+      //     $total_interest_loan = $this->queries->get_sum_withdrawal_by_officer($empl_id);
+      // } else {
         $disburse = $this->queries->get_withdrawal_LoanBlanch($blanch_id);
         $total_interest_loan = $this->queries->get_sum_withdrawal_by_branch($blanch_id);
-      }
+      // }
 
            //    echo "<pre>";
            // print_r($disburse);
@@ -4401,7 +4401,7 @@ public function disburse($loan_id){
 
 
         public function teller_dashboard(){
-          $position = strtoupper($this->session->userdata('position_name'));
+          // $position = strtoupper($this->session->userdata('position_name'));
         $this->load->model('queries');
         $blanch_id = $this->session->userdata('blanch_id');
         $empl_id = $this->session->userdata('empl_id');
@@ -4418,16 +4418,16 @@ public function disburse($loan_id){
 
      
 
-if ($position === 'LOAN OFFICER') {
+// if ($position === 'LOAN OFFICER') {
     
-  $customer = $this->queries->get_allcustomer_by_officer($blanch_id, $empl_id);
+//   $customer = $this->queries->get_allcustomer_by_officer($blanch_id, $empl_id);
 
-} elseif ($position === 'BRANCH MANAGER') {
+// } elseif ($position === 'BRANCH MANAGER') {
 
   $customer = $this->queries->get_allcutomerBlanch($blanch_id);
-} else {
-  $customer=[];
-}
+// } else {
+//   $customer=[];
+// }
 
 
           // echo "<pre>";
@@ -4462,7 +4462,7 @@ if ($position === 'LOAN OFFICER') {
 
 
     public function search_customerData(){
-    $position = strtoupper($this->session->userdata('position_name'));
+    // $position = strtoupper($this->session->userdata('position_name'));
     $this->load->model('queries');
     $blanch_id = $this->session->userdata('blanch_id');
     $empl_id = $this->session->userdata('empl_id');
@@ -4485,18 +4485,18 @@ if ($position === 'LOAN OFFICER') {
     $blanch_amount_balance = $this->queries->get_blanch_capital_data($blanch_id);
     $privillage = $this->queries->get_position_empl($empl_id);
 
-    if ($position === 'LOAN OFFICER') {
-      $customery = $this->queries->get_allcutomerblanchData_by_officer($blanch_id, $empl_id);
+  //   if ($position === 'LOAN OFFICER') {
+  //     $customery = $this->queries->get_allcutomerblanchData_by_officer($blanch_id, $empl_id);
       
   
-  } elseif ($position === 'BRANCH MANAGER') {
+  // } elseif ($position === 'BRANCH MANAGER') {
     
     $customery = $this->queries->get_allcutomerblanchData($blanch_id);
   
-  } else {
-    $customery = [];
+  // } else {
+  //   $customery = [];
     
-  }
+  // }
 
     
 
@@ -4509,7 +4509,7 @@ if ($position === 'LOAN OFFICER') {
 
 
 public function today_officer_transaction(){
-  $position = strtoupper($this->session->userdata('position_name'));
+  // $position = strtoupper($this->session->userdata('position_name'));
   $this->load->model('queries');
   $blanch_id = $this->session->userdata('blanch_id');
   $empl_id = $this->session->userdata('empl_id');
@@ -4524,19 +4524,19 @@ public function today_officer_transaction(){
   $privillage = $this->queries->get_position_empl($empl_id);
   $manager = $this->queries->get_position_manager($empl_id);
 
-  if ($position === 'LOAN OFFICER') {
-      $cash = $this->queries->get_cash_transaction_by_officer($empl_id);
-      $sum_depost = $this->queries->get_sumCashtransDepostByOfficer($empl_id);
-      $sum_withdrawls = $this->queries->get_sumCashtransWithdrowByOfficer($empl_id);
+  // if ($position === 'LOAN OFFICER') {
+  //     $cash = $this->queries->get_cash_transaction_by_officer($empl_id);
+  //     $sum_depost = $this->queries->get_sumCashtransDepostByOfficer($empl_id);
+  //     $sum_withdrawls = $this->queries->get_sumCashtransWithdrowByOfficer($empl_id);
       
-  } elseif ($position === 'BRANCH MANAGER') {
+  // } elseif ($position === 'BRANCH MANAGER') {
       $cash = $this->queries->get_cash_transactionBlanch($blanch_id);
       $sum_depost = $this->queries->get_sumCashtransDepostBlanch($blanch_id);
       $sum_withdrawls = $this->queries->get_sumCashtransWithdrowBlanch($blanch_id);
-  } else {
-      $cash = [];
-      $sum_depost = 0;
-  }
+  // } else {
+  //     $cash = [];
+  //     $sum_depost = 0;
+  // }
 
  
  
@@ -5665,7 +5665,7 @@ $this->db->query("INSERT INTO tbl_outstand (`comp_id`,`loan_id`,`blanch_id`,`loa
 
 
      public function cash_transaction(){
-      $position = strtoupper($this->session->userdata('position_name'));
+      // $position = strtoupper($this->session->userdata('position_name'));
       $this->load->model('queries');
       $blanch_id = $this->session->userdata('blanch_id');
       $empl_id = $this->session->userdata('empl_id');
@@ -5684,24 +5684,24 @@ $this->db->query("INSERT INTO tbl_outstand (`comp_id`,`loan_id`,`blanch_id`,`loa
       $privillage = $this->queries->get_position_empl($empl_id);
       $manager = $this->queries->get_position_manager($empl_id);
   
-      if ($position === 'LOAN OFFICER') {
-          $cash = $this->queries->get_cash_transaction_by_officer($empl_id);
-          $lazo =$this->queries->get_today_offficerexpected_collections($blanch_id, $empl_id);
-          $sum_depost = $this->queries->get_sumCashtransDepostByOfficer($empl_id);
-          $sum_withdrawls = $this->queries->get_sumCashtransWithdrowByOfficer($empl_id);
+      // if ($position === 'LOAN OFFICER') {
+      //     $cash = $this->queries->get_cash_transaction_by_officer($empl_id);
+      //     $lazo =$this->queries->get_today_offficerexpected_collections($blanch_id, $empl_id);
+      //     $sum_depost = $this->queries->get_sumCashtransDepostByOfficer($empl_id);
+      //     $sum_withdrawls = $this->queries->get_sumCashtransWithdrowByOfficer($empl_id);
       //      echo "<pre>";
       // print_r($lazo );
       // exit();
 
-      } elseif ($position === 'BRANCH MANAGER') {
+      // } elseif ($position === 'BRANCH MANAGER') {
         $lazo =$this->queries->managerexpected_collections( $blanch_id);
           $cash = $this->queries->get_cash_transactionBlanch($blanch_id);
           $sum_depost = $this->queries->get_sumCashtransDepostBlanch($blanch_id);
           $sum_withdrawls = $this->queries->get_sumCashtransWithdrowBlanch($blanch_id);
-      } else {
-          $cash = [];
-          $sum_depost = 0;
-      }
+      // } else {
+      //     $cash = [];
+      //     $sum_depost = 0;
+      // }
     
      
       // echo "<pre>";
@@ -5722,7 +5722,7 @@ $this->db->query("INSERT INTO tbl_outstand (`comp_id`,`loan_id`,`blanch_id`,`loa
   public function withdraw_transactions()
 
   {
-    $position = strtoupper(trim($this->session->userdata('position_name')));
+    // $position = strtoupper(trim($this->session->userdata('position_name')));
 
 
       $this->load->model('queries');
@@ -5742,22 +5742,22 @@ $this->db->query("INSERT INTO tbl_outstand (`comp_id`,`loan_id`,`blanch_id`,`loa
       $privillage = $this->queries->get_position_empl($empl_id);
       $manager = $this->queries->get_position_manager($empl_id);
 
-      if ($position === 'LOAN OFFICER') {
+      // if ($position === 'LOAN OFFICER') {
     
-        $disburse_grouped = $this->queries->get_grouped_withdrawal_officertodayBlanch($blanch_id, $empl_id);
+      //   $disburse_grouped = $this->queries->get_grouped_withdrawal_officertodayBlanch($blanch_id, $empl_id);
       
         // echo "<pre>";get_cash_transaction_by_officer($empl_id, $blanch_id)
         // print_r( $lipwa);
         //     exit();
     
-    } elseif ($position === 'BRANCH MANAGER') {
+    // } elseif ($position === 'BRANCH MANAGER') {
       
       $disburse_grouped = $this->queries->get_grouped_withdrawal_todayBlanch($blanch_id);
         
     
-    } else {
-      $disburse_grouped=0;
-    }
+    // } else {
+    //   $disburse_grouped=0;
+    // }
   
       $this->load->view('officer/loan_withdrawal', [
           'disburse_grouped' => $disburse_grouped,
@@ -6325,7 +6325,7 @@ $this->db->query("INSERT INTO tbl_outstand (`comp_id`,`loan_id`,`blanch_id`,`loa
     }
 
     public function loan_pending_time() {
-      $position = strtoupper(trim($this->session->userdata('position_name')));
+      // $position = strtoupper(trim($this->session->userdata('position_name')));
       $this->load->model('queries');
   
       $blanch_id = $this->session->userdata('blanch_id');
@@ -6345,14 +6345,14 @@ $this->db->query("INSERT INTO tbl_outstand (`comp_id`,`loan_id`,`blanch_id`,`loa
   
   
   
-      if ($position === 'LOAN OFFICER') {
-          $loan_pending_new = $this->queries->get_total_loan_pending_officer($blanch_id, $empl_id);
-          $new_total_pending = $this->queries->get_total_pend_officerloan($blanch_id, $empl_id);
+      // if ($position === 'LOAN OFFICER') {
+      //     $loan_pending_new = $this->queries->get_total_loan_pending_officer($blanch_id, $empl_id);
+      //     $new_total_pending = $this->queries->get_total_pend_officerloan($blanch_id, $empl_id);
   
-      } elseif ($position === 'BRANCH MANAGER') {
+      // } elseif ($position === 'BRANCH MANAGER') {
           $loan_pending_new = $this->queries->get_total_loan_pending($blanch_id);
           $new_total_pending = $this->queries->get_total_pend_loan($blanch_id);
-      }
+      // }
   
       $this->load->view('officer/loan_pending_time', [
           'loan_pend' => $loan_pend,
@@ -6801,7 +6801,7 @@ $this->db->query("INSERT INTO tbl_outstand (`comp_id`,`loan_id`,`blanch_id`,`loa
 
     public function today_recevable_loan(){
     $this->load->model('queries');
-    $position = strtoupper(trim($this->session->userdata('position_name')));
+    // $position = strtoupper(trim($this->session->userdata('position_name')));
     $blanch_id = $this->session->userdata('blanch_id');
     $empl_id = $this->session->userdata('empl_id');
     $manager_data = $this->queries->get_manager_data($empl_id);
@@ -6820,25 +6820,25 @@ $this->db->query("INSERT INTO tbl_outstand (`comp_id`,`loan_id`,`blanch_id`,`loa
       // print_r($position);
       //     exit();
    
-    if ($position === 'LOAN OFFICER') {
+    // if ($position === 'LOAN OFFICER') {
     
-      $today_recevable = $this->queries->get_today_recevable_loanBlanch_by_officer($blanch_id, $empl_id);
-      $rejesho = $this->queries->get_total_recevableBlanch_by_officer($blanch_id, $empl_id);
+    //   $today_recevable = $this->queries->get_today_recevable_loanBlanch_by_officer($blanch_id, $empl_id);
+    //   $rejesho = $this->queries->get_total_recevableBlanch_by_officer($blanch_id, $empl_id);
       // echo "<pre>";
       // print_r($today_recevable);
       //     exit();
   
-  } elseif ($position === 'BRANCH MANAGER') {
+  // } elseif ($position === 'BRANCH MANAGER') {
     $rejesho = $this->queries->get_total_recevableBlanch($blanch_id);
     $today_recevable = $this->queries->get_today_recevable_loanBlanch($blanch_id);
       // echo "<pre>";
       // print_r($today_recevable);
       //     exit();
   
-  } else {
-      $total_customers = 0;
-      $new_loans = 0;
-  }
+  // } else {
+  //     $total_customers = 0;
+  //     $new_loans = 0;
+  // }
   
           //     echo "<pre>";
           // print_r($today_recevable);
