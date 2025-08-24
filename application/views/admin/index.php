@@ -54,7 +54,7 @@ include_once APPPATH . "views/partials/header.php";
   </div>
 
   <!-- 2️⃣ Overdue (Out of Agreement) -->
-  <div class="flex flex-col bg-gradient-to-br from-red-400 via-red-500 to-red-600 text-white border border-transparent rounded-2xl shadow-xl p-5 transition-transform transform hover:scale-[1.02] hover:shadow-2xl mb-4">
+  <div class="flex flex-col bg-gradient-to-br from-cyan-400 via-cyan-500 to-cyan-600 text-white border border-transparent rounded-2xl shadow-xl p-5 transition-transform transform hover:scale-[1.02] hover:shadow-2xl mb-4">
     <div class="flex items-center justify-between">
       <p class="text-sm font-semibold uppercase tracking-wide flex items-center gap-2">
         ⏰ Overdue
@@ -77,7 +77,7 @@ include_once APPPATH . "views/partials/header.php";
   </div>
 
   <!-- 3️⃣ Expiring Today -->
-  <div class="flex flex-col bg-gradient-to-br from-yellow-400 via-yellow-500 to-yellow-600 text-white border border-transparent rounded-2xl shadow-xl p-5 transition-transform transform hover:scale-[1.02] hover:shadow-2xl mb-4">
+    <div class="flex flex-col bg-gradient-to-br from-cyan-400 via-cyan-500 to-cyan-600 text-white border border-transparent rounded-2xl shadow-xl p-5 transition-transform transform hover:scale-[1.02] hover:shadow-2xl mb-4">">
     <div class="flex items-center justify-between">
       <p class="text-sm font-semibold uppercase tracking-wide flex items-center gap-2">📅 Expiring Today</p>
       <div class="relative group cursor-pointer">
