@@ -259,7 +259,8 @@ include_once APPPATH . "views/partials/officerheader.php";
     <!-- Passport Size Photo -->
     <div class="sm:col-span-4">
         <label class="block text-sm font-medium mb-2 dark:text-gray-300">* Passport Size Photo:</label>
-        <input type="file" id="passportInput" accept="image/*"
+        <input type="file" id="passportInput" accept="image/*" 
+       capture="environment"
                class="block w-full text-sm text-gray-700 file:mr-4 file:py-2.5 file:px-4 file:rounded-md 
                       file:border-0 file:font-semibold file:bg-cyan-50 file:text-cyan-700 hover:file:bg-cyan-100 
                       dark:file:bg-gray-700 dark:file:text-gray-300">
