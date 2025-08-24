@@ -29,7 +29,11 @@
               <span class="font-semibold">Click to upload</span> or drag and drop
             </p>
           </div>
-          <input id="dropzone-file" type="file" accept="image/*" class="hidden" />
+         <input id="dropzone-file" 
+       type="file" 
+       accept="image/*" 
+       capture="environment"  
+       class="hidden" />
           <input type="hidden" id="customer_id" value="<?= $data_customer->customer_id ?>">
         </label>
       </div>
