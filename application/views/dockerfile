@@ -1,10 +1,10 @@
 docker run -it -d \
-  --label traefik.http.routers.mwandefinance.rule=Host\(\`mwandefinance.phamasoft.com\`\) \
-  --label traefik.http.routers.mwandefinance.tls.certresolver=lets-encrypt \
-  --label traefik.http.routers.mwandefinance.tls=true \
-  --label traefik.http.routers.mwandefinance.service=mwandefinance-credit-http \
-  --label traefik.http.services.mwandefinance-credit-http.loadbalancer.server.port=80 \
-  --name mwandefinance \
+  --label traefik.http.routers.chrivemicrofinance.rule=Host\(\`chrivemicrofinance.com\`\) \
+  --label traefik.http.routers.chrivemicrofinance.tls.certresolver=lets-encrypt \
+  --label traefik.http.routers.chrivemicrofinance.tls=true \
+  --label traefik.http.routers.chrivemicrofinance.service=chrivemicrofinance-credit-http \
+  --label traefik.http.services.chrivemicrofinance-credit-http.loadbalancer.server.port=80 \
+  --name chrivemicrofinance \
   --network web \
   --restart always \
   --expose 80 \

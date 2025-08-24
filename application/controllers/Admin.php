@@ -70,18 +70,55 @@ class Admin extends CI_Controller {
 	 $total_withdrawal_weekly = $this->queries->get_total_principal_weekly($comp_id);
 	 $total_withdrawal_monthly = $this->queries->get_total_principal_monthly($comp_id);
 	 $top_employees = $this->queries->get_top_5_employees_today_loans($comp_id);
+	 $branchwise_deposits = $this->queries->get_branchwise_today_deposit($comp_id);
+
 	 $top_depositors = $this->queries->get_top_5_deposit_employees($comp_id);
+
+	 $total_overdue= $this->queries->total_outstand_loan($comp_id);
+	 $total_deni = $this->queries->total_outstand_loan_today($comp_id);
+	 $total_active_paid= $this->queries->get_today_received_from_receivale	($comp_id);
+ $total_default_paid=$this->queries->get_depositing_out_total_comp($comp_id);
+ $today_endactive_paid=$this->queries->get_depositing_out_todayend_comp($comp_id);
+
+  $today_deposits = $this->queries->get_today_received_loan($comp_id);
+
+    if (empty($today_deposits)) {
+        $data['message'] = "Hakuna taarifa za malipo leo.";
+        $data['branches'] = [];
+        $data['amounts'] = [];
+    } else {
+        $branch_totals = [];
+
+        foreach ($today_deposits as $d) {
+            $branch_name = $d->blanch_name; // kutoka tbl_blanch
+            if (!isset($branch_totals[$branch_name])) {
+                $branch_totals[$branch_name] = 0;
+            }
+            $branch_totals[$branch_name] += $d->depost; // jumla kwa branch
+        }
+
+        $data['branches'] = array_keys($branch_totals);
+        $data['amounts'] = array_values($branch_totals);
+        $data['message'] = "";
+    }
+ 	    //  echo "<pre>";
 
 
 	    //  echo "<pre>";
-	   	//       print_r($total_withdrawal_daily );
-	   	//            exit();
+	    //  print_r( $total_default_paid);
+	    //  exit();
 
 	      // print_r($blanch_capital_circle);
 	      //         exit();
 	$this->load->view('admin/index',['receivable_total'=>$receivable_total,'total_deposit_monthly'=>$total_deposit_monthly,'total_deposit_weekly'=> $total_deposit_weekly,'total_deposit_daily'=> $total_deposit_daily,'deposit_daily'=> $deposit_daily,'done_customer_count'=>$done_customer_count,'all_customer_count'=>$all_customer_count,
 	'new_customer'=> $new_customer,'top_depositors'=> $top_depositors,
+	'total_deni'=> $total_deni,
+	'data'=>$data,
+	'total_active_paid'=> $total_active_paid,
+	'today_endactive_paid'=> $today_endactive_paid,
+	'total_default_paid'=> $total_default_paid,
 	'total_withdrawal_daily'=> $total_withdrawal_daily,'total_withdrawal_weekly'=> $total_withdrawal_weekly,'total_withdrawal_monthly'=>$total_withdrawal_monthly,
+	'total_overdue'=> $total_overdue,
 	 'employee_count'=> $employee_count,'top_employees'=>$top_employees,'default_customer_count'=>$default_customer_count,'manager_data' => $manager_data,'total_received'=>$total_received,'total_loan_pending'=>$total_loan_pending,'total_loanWithdrawal'=>$total_loanWithdrawal,'today_penart'=>$today_penart,'prepaid_today'=>$prepaid_today,'total_received'=>$total_received,'prepaid_today'=>$prepaid_today,'total_loan_fee'=>$total_loan_fee,'today_income'=>$today_income,'toay_expences'=>$toay_expences,'total_capital'=>$total_capital,'out_float'=>$out_float,'cash_bank'=>$cash_bank,'principal_loan'=>$principal_loan,'done_loan'=>$done_loan,'total_expect'=>$total_expect,'total_receved'=>$total_receved,'cash_depost'=>$cash_depost,'cash_income'=>$cash_income,'cash_expences'=>$cash_expences,'blanch'=>$blanch,'total_remain'=>$total_remain,'today_total_loan_pend'=>$today_total_loan_pend,'loanAprove'=>$loanAprove,'withdrawal'=>$withdrawal,'loan_depost'=>$loan_depost,'receive_Amount'=>$receive_Amount,'loan_fee'=>$loan_fee,'request_expences'=>$request_expences,'sum_comp_capital'=>$sum_comp_capital,'total_deducted_balance'=>$total_deducted_balance,'total_non'=>$total_non,'blanch_capital_circle'=>$blanch_capital_circle]);
 	}
 

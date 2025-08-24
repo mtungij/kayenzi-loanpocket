@@ -25,86 +25,121 @@ include_once APPPATH . "views/partials/header.php";
         </div>
    
 
-        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-        <!-- Card -->
-        <div class="flex flex-col bg-gradient-to-br from-cyan-400 via-cyan-500 to-cyan-600 text-white border border-transparent rounded-2xl shadow-xl p-5 transition-transform hover:scale-[1.01] dark:from-cyan-600 dark:via-cyan-700 dark:to-cyan-800">
-  <!-- Header -->
-  <div class="flex items-center justify-between">
-    <p class="text-sm font-semibold uppercase tracking-wide">
-      Total Customers
-    </p>
-    <div class="relative group cursor-pointer">
-      <svg class="size-4 text-white opacity-80" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <circle cx="12" cy="12" r="10" />
-        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
-        <path d="M12 17h.01" />
-      </svg>
-      <div class="absolute z-10 mt-2 right-0 w-52 text-xs text-white bg-black/80 rounded-lg shadow-lg px-3 py-2 opacity-0 group-hover:opacity-100 transition-opacity">
-        Hii ni idadi jumla ya wateja wote kwenye kampuni.
+<!-- ====================== -->
+<!-- Dashboard Main Cards -->
+<!-- ====================== -->
+<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+
+  <!-- 1️⃣ Due Today (Within Agreement) -->
+  <div class="flex flex-col bg-gradient-to-br from-cyan-400 via-cyan-500 to-cyan-600 text-white border border-transparent rounded-2xl shadow-xl p-5 transition-transform transform hover:scale-[1.02] hover:shadow-2xl mb-4">
+    <div class="flex items-center justify-between">
+      <p class="text-sm font-semibold uppercase tracking-wide flex items-center gap-2">
+        👥 Due Today
+      </p>
+      <div class="relative group cursor-pointer">
+        <svg class="size-4 text-white opacity-80" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10" />
+          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+          <path d="M12 17h.01" />
+        </svg>
+        <div class="absolute z-10 mt-2 right-0 w-56 text-xs text-white bg-black/80 rounded-lg shadow-lg px-3 py-2 opacity-0 group-hover:opacity-100 transition-opacity">
+          Malipo yanayotarajiwa leo kutoka kwa wateja wenye mikopo hai ndani ya muda wa makubaliano (sio yaliyochelewa).
+        </div>
       </div>
+    </div>
+    <div class="mt-6 flex items-center justify-between">
+      <h3 class="text-3xl font-bold"><?php echo number_format($receivable_total->total_rejesho) ; ?></h3>
+      <span class="flex items-center gap-1 text-green-100 font-medium text-sm">⬆ 1.7%</span>
     </div>
   </div>
 
-  <!-- Value and Growth -->
-  <div class="mt-6 flex items-center justify-between">
-    <h3 class="text-3xl font-bold">
-      <?php echo $all_customer_count; ?>
-    </h3>
-    <span class="flex items-center gap-1 text-green-100 font-medium text-sm">
-      <svg class="size-4" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <polyline points="22 7 13.5 15.5 8.5 10.5 2 17" />
-        <polyline points="16 7 22 7 22 13" />
-      </svg>
-      1.7%
-    </span>
+  <!-- 2️⃣ Overdue (Out of Agreement) -->
+  <div class="flex flex-col bg-gradient-to-br from-red-400 via-red-500 to-red-600 text-white border border-transparent rounded-2xl shadow-xl p-5 transition-transform transform hover:scale-[1.02] hover:shadow-2xl mb-4">
+    <div class="flex items-center justify-between">
+      <p class="text-sm font-semibold uppercase tracking-wide flex items-center gap-2">
+        ⏰ Overdue
+      </p>
+      <div class="relative group cursor-pointer">
+        <svg class="size-4 text-white opacity-80" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10" />
+          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+          <path d="M12 17h.01" />
+        </svg>
+        <div class="absolute z-10 mt-2 right-0 w-56 text-xs text-white bg-black/80 rounded-lg shadow-lg px-3 py-2 opacity-0 group-hover:opacity-100 transition-opacity">
+          Malipo yaliyochelewa kutoka kwa wateja ambao wako nje ya muda wa makubaliano ya mikopo.
+        </div>
+      </div>
+    </div>
+    <div class="mt-6 flex items-center justify-between">
+      <h3 class="text-3xl font-bold"><?= number_format($total_overdue->total_out); ?></h3>
+      <span class="flex items-center gap-1 text-red-100 font-medium text-sm">⬇ -2.3%</span>
+    </div>
   </div>
+
+  <!-- 3️⃣ Expiring Today -->
+  <div class="flex flex-col bg-gradient-to-br from-yellow-400 via-yellow-500 to-yellow-600 text-white border border-transparent rounded-2xl shadow-xl p-5 transition-transform transform hover:scale-[1.02] hover:shadow-2xl mb-4">
+    <div class="flex items-center justify-between">
+      <p class="text-sm font-semibold uppercase tracking-wide flex items-center gap-2">📅 Expiring Today</p>
+      <div class="relative group cursor-pointer">
+        <svg class="size-4 text-white opacity-80" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10" />
+          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+          <path d="M12 17h.01" />
+        </svg>
+        <div class="absolute z-10 mt-2 right-0 w-56 text-xs text-white bg-black/80 rounded-lg shadow-lg px-3 py-2 opacity-0 group-hover:opacity-100 transition-opacity">
+          Malipo yanayotarajiwa leo kutoka kwa wateja ambao makubaliano yao ya mikopo yanamalizika leo.
+        </div>
+      </div>
+    </div>
+    <div class="mt-6 flex items-center justify-between">
+      <h3 class="text-3xl font-bold"><?= number_format($total_deni->total_out) ?></h3>
+      <span class="flex items-center gap-1 text-yellow-100 font-medium text-sm">⬆ 0.9%</span>
+    </div>
+  </div>
+
+  <!-- 4️⃣ Expired Agreements -->
+
+
 </div>
 
-        <!-- End Card -->
+<!-- ====================== -->
+<!-- Paid Cards Section -->
+<!-- ====================== -->
+<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mt-6">
 
-        <!-- Card -->
-         <div class="flex flex-col bg-gradient-to-br from-green-400 via-green-500 to-cyan-600 text-white border border-transparent rounded-2xl shadow-xl p-5 transition-transform hover:scale-[1.01] dark:from-green-600 dark:via-green-700 dark:to-green-800">
-    <div class="flex items-center gap-x-2">
-      <span class="w-8 h-8 flex items-center justify-center bg-indigo-100 text-indigo-600 rounded-full">
-        👨‍💼
-      </span>
-      <p class="text-xs uppercase text-gray-500 dark:text-gray-300">Total Staff</p>
+  <!-- 1️⃣ Paid Today (Within Agreement) -->
+  <div class="flex flex-col bg-gradient-to-br from-cyan-200 via-cyan-300 to-cyan-400 text-black border border-transparent rounded-2xl shadow-md p-5 transition-transform transform hover:scale-[1.02] hover:shadow-lg mb-4">
+    <p class="text-sm font-semibold uppercase tracking-wide flex items-center gap-2">💰 Paid Today</p>
+    <div class="mt-6 flex items-center justify-between">
+      <h3 class="text-3xl font-bold"><?=  $total_active_paid ?></h3>
+      <span class="flex items-center gap-1 text-green-700 font-medium text-sm">✅</span>
     </div>
-    <h3 class="mt-6 text-3xl font-bold text-gray-800 dark:text-gray-50">
-      <?php echo $employee_count; ?>
-    </h3>
   </div>
-        <!-- End Card -->
 
-        <!-- Card -->
-        <div class="flex flex-col bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-md p-5 transition-transform hover:scale-[1.02]">
-    <div class="flex items-center gap-x-2">
-      <span class="w-8 h-8 flex items-center justify-center bg-green-100 text-green-600 rounded-full">
-        💰
-      </span>
-      <p class="text-xs uppercase text-gray-500 dark:text-gray-300">Today Deposit</p>
+  <!-- 2️⃣ Paid Overdue -->
+  <div class="flex flex-col bg-gradient-to-br from-red-200 via-red-300 to-red-400 text-black border border-transparent rounded-2xl shadow-md p-5 transition-transform transform hover:scale-[1.02] hover:shadow-lg mb-4">
+    <p class="text-sm font-semibold uppercase tracking-wide flex items-center gap-2">💸 Paid Overdue</p>
+    <div class="mt-6 flex items-center justify-between">
+      <h3 class="text-3xl font-bold"><?= $total_default_paid->total_default ?></h3>
+      <span class="flex items-center gap-1 text-red-700 font-medium text-sm">✅</span>
     </div>
-    <h3 class="mt-6 text-3xl font-bold text-gray-800 dark:text-gray-50">
-      <?php echo number_format($total_deposit_daily); ?>
-    </h3>
   </div>
-        <!-- End Card -->
 
-        <!-- Card -->
-         <div class="flex flex-col bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-md p-5 transition-transform hover:scale-[1.02]">
-    <div class="flex items-center gap-x-2">
-      <span class="w-8 h-8 flex items-center justify-center bg-red-100 text-red-600 rounded-full">
-        💸
-      </span>
-      <p class="text-xs uppercase text-gray-500 dark:text-gray-300">Today Withdraw</p>
+  <!-- 3️⃣ Paid Expiring Today -->
+  <div class="flex flex-col bg-gradient-to-br from-yellow-200 via-yellow-300 to-yellow-400 text-black border border-transparent rounded-2xl shadow-md p-5 transition-transform transform hover:scale-[1.02] hover:shadow-lg mb-4">
+    <p class="text-sm font-semibold uppercase tracking-wide flex items-center gap-2">📅 Paid Expiring Today</p>
+    <div class="mt-6 flex items-center justify-between">
+      <h3 class="text-3xl font-bold"><?= $today_endactive_paid->total_default?></h3>
+      <span class="flex items-center gap-1 text-yellow-700 font-medium text-sm">✅</span>
     </div>
-    <h3 class="mt-6 text-3xl font-bold text-gray-800 dark:text-gray-50">
-      <?php echo number_format($total_withdrawal_daily->total_loanWith_day); ?>
-    </h3>
   </div>
-  
-  
-      </div>
+
+  <!-- 4️⃣ Paid Expired -->
+
+
+</div>
+
+
 
 <!--  -->
      
@@ -223,78 +258,39 @@ include_once APPPATH . "views/partials/header.php";
 </div>
 </div> -->
 
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-<!-- <div class="bg-white rounded-lg shadow-md overflow-hidden"> -->
-    <!-- <div class="bg-cyan-800 px-4 py-2 border-b">
-      <h2 class="text-lg font-semibold text-white">Tathmini ya Afisa Mikopo Ya Leo</h2>
-    </div> -->
-    <!-- <div class="p-4"> -->
-      <!-- <table class="w-full text-sm">
-        <tbody class="text-gray-700">
-          <?php
-            $total_loan_all = 0;
-            foreach ($top_employees as $emp):
-              $total_loan_all += $emp->total_loan;
-          ?>
-            <tr class="border-b">
-              <td class="py-2"><?php echo htmlspecialchars($emp->empl_name); ?></td>
-              <td class="text-right">
-                <span class="inline-block bg-green-600 text-white text-xs px-2 py-1 rounded">
-                  <?php echo number_format($emp->total_loan); ?>
-                </span>
-              </td>
-            </tr>
-          <?php endforeach; ?>
-
-         
-          <tr>
-            <td class="py-2 font-bold">Jumla:</td>
-            <td class="text-right font-bold">
-              <span class="inline-block bg-green-600 text-white text-xs px-2 py-1 rounded">
-                <?php echo number_format($total_loan_all); ?>
-              </span>
-            </td>
-          </tr>
-        </tbody>
-      </table> -->
-    <!-- </div> -->
-  <!-- </div> -->
-
-
-<!-- Tailwind styled card with pie chart -->
-<div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
+<!-- <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
   <div class="bg-cyan-800 px-4 py-2 border-b border-cyan-900 dark:border-cyan-700">
-    <h2 class="text-lg font-semibold text-white">Evaluation of the Payment Officer for Today</h2>
+    <h2 class="text-lg font-semibold text-white">Tathmini ya Malipo kwa Kila Tawi Leo</h2>
   </div>
 
   <div class="p-4">
     <?php
       $total_deposit = 0;
-      $names = [];
+      $branches = [];
       $amounts = [];
 
-      if (!empty($top_depositors)) {
-        foreach ($top_depositors as $employee) {
-          $names[] = $employee->empl_name;
-          $amounts[] = $employee->total_deposit;
-          $total_deposit += $employee->total_deposit;
+      if (!empty($branchwise_deposits)) {
+        foreach ($branchwise_deposits as $branch) {
+          $branches[] = $branch->blanch_name;
+          $amounts[] = $branch->total_deposit;
+          $total_deposit += $branch->total_deposit;
         }
       }
     ?>
 
-    <?php if (!empty($top_depositors)): ?>
+    <?php if (!empty($branchwise_deposits)): ?>
       <!-- Chart Canvas -->
-      <canvas id="depositChart" height="200"></canvas>
+      <canvas id="branchDepositChart" height="200"></canvas>
 
       <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
       <script>
-        const ctx = document.getElementById('depositChart').getContext('2d');
-        const depositChart = new Chart(ctx, {
-          type: 'bar',
+        const ctxBranch = document.getElementById('branchDepositChart').getContext('2d');
+        const branchDepositChart = new Chart(ctxBranch, {
+          type: 'bar', // unaweza pia kutumia 'pie' or 'doughnut'
           data: {
-            labels: <?= json_encode($names) ?>,
+            labels: <?= json_encode($branches) ?>,
             datasets: [{
-              label: 'Kiasi cha Uwekaji (TZS)',
+              label: 'Malipo ya Leo (TZS)',
               data: <?= json_encode($amounts) ?>,
               backgroundColor: 'rgba(34, 197, 94, 0.7)',
               borderColor: 'rgba(34, 197, 94, 1)',
@@ -320,19 +316,13 @@ include_once APPPATH . "views/partials/header.php";
                   callback: function(value) {
                     return value.toLocaleString('en-US') + ' TZS';
                   },
-                  color: "#ffffff" // y-axis text color in dark mode
+                  color: "#ffffff"
                 },
-                grid: {
-                  color: "rgba(255,255,255,0.1)"
-                }
+                grid: { color: "rgba(255,255,255,0.1)" }
               },
               x: {
-                ticks: {
-                  color: "#ffffff" // x-axis text color in dark mode
-                },
-                grid: {
-                  color: "rgba(255,255,255,0.1)"
-                }
+                ticks: { color: "#ffffff" },
+                grid: { color: "rgba(255,255,255,0.1)" }
               }
             }
           }
@@ -347,19 +337,13 @@ include_once APPPATH . "views/partials/header.php";
       </div>
 
     <?php else: ?>
-      <!-- No Data Message -->
       <div class="text-center text-gray-500 dark:text-gray-300 py-8">
-        Hakuna taarifa za kutosha.
+        Hakuna taarifa za malipo leo.
       </div>
     <?php endif; ?>
-    
   </div>
-</div>
+</div> -->
 
-
-
-
-</div>
 
 
   <!-- Card 2: MALIPO YA LEO -->

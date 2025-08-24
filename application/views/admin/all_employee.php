@@ -98,7 +98,7 @@ include_once APPPATH . "views/partials/header.php";
         <!-- End Header -->
 
         <!-- Table -->
-        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+        <table id="employeeTable" class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
           <thead class="bg-gray-50 dark:bg-gray-800">
             <tr>
               <th scope="col" class="ps-6 py-3 text-start">
@@ -666,6 +666,22 @@ $colour = $isOpen ? 'amber' : 'green';  // Tailwind colour family
   <?php
   include_once APPPATH . "views/partials/footer.php";
   ?>
+
+  <script>
+$(document).ready(function() {
+    $('#employeeTable').DataTable({
+        "paging": true,        // enable pagination
+        "searching": true,     // enable search box
+        "ordering": true,      // enable column sorting
+        "info": true,          // show table info
+        "lengthChange": true,  // allow changing number of rows
+        "pageLength": 10,      // default rows per page
+        "language": {
+            "search": "Search Staff:"
+        }
+    });
+});
+</script>
 
   <?php // Script for cmd+a fix for DataTables search input (if used) ?>
   <script>
