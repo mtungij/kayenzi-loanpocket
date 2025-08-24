@@ -111,7 +111,7 @@ include_once APPPATH . "views/partials/header.php";
    <div class="flex flex-col bg-gradient-to-br from-cyan-400 via-cyan-500 to-cyan-600 text-white border border-transparent rounded-2xl shadow-xl p-5 transition-transform transform hover:scale-[1.02] hover:shadow-2xl mb-4">
     <p class="text-sm font-semibold uppercase tracking-wide flex items-center gap-2">💰 Paid Today</p>
     <div class="mt-6 flex items-center justify-between">
-      <h3 class="text-3xl font-bold"><?=  $total_active_paid ?></h3>
+      <h3 class="text-3xl font-bold"><?=  number_format($total_active_paid) ?></h3>
       <span class="flex items-center gap-1 text-green-700 font-medium text-sm">✅</span>
     </div>
   </div>
