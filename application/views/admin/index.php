@@ -77,7 +77,7 @@ include_once APPPATH . "views/partials/header.php";
   </div>
 
   <!-- 3️⃣ Expiring Today -->
-    <div class="flex flex-col bg-gradient-to-br from-cyan-400 via-cyan-500 to-cyan-600 text-white border border-transparent rounded-2xl shadow-xl p-5 transition-transform transform hover:scale-[1.02] hover:shadow-2xl mb-4">">
+    <div class="flex flex-col bg-gradient-to-br from-cyan-400 via-cyan-500 to-cyan-600 text-white border border-transparent rounded-2xl shadow-xl p-5 transition-transform transform hover:scale-[1.02] hover:shadow-2xl mb-4">
     <div class="flex items-center justify-between">
       <p class="text-sm font-semibold uppercase tracking-wide flex items-center gap-2">📅 Expiring Today</p>
       <div class="relative group cursor-pointer">
@@ -108,7 +108,7 @@ include_once APPPATH . "views/partials/header.php";
 <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mt-6">
 
   <!-- 1️⃣ Paid Today (Within Agreement) -->
-  <div class="flex flex-col bg-gradient-to-br from-cyan-200 via-cyan-300 to-cyan-400 text-black border border-transparent rounded-2xl shadow-md p-5 transition-transform transform hover:scale-[1.02] hover:shadow-lg mb-4">
+   <div class="flex flex-col bg-gradient-to-br from-cyan-400 via-cyan-500 to-cyan-600 text-white border border-transparent rounded-2xl shadow-xl p-5 transition-transform transform hover:scale-[1.02] hover:shadow-2xl mb-4">
     <p class="text-sm font-semibold uppercase tracking-wide flex items-center gap-2">💰 Paid Today</p>
     <div class="mt-6 flex items-center justify-between">
       <h3 class="text-3xl font-bold"><?=  $total_active_paid ?></h3>
@@ -117,7 +117,7 @@ include_once APPPATH . "views/partials/header.php";
   </div>
 
   <!-- 2️⃣ Paid Overdue -->
-  <div class="flex flex-col bg-gradient-to-br from-red-200 via-red-300 to-red-400 text-black border border-transparent rounded-2xl shadow-md p-5 transition-transform transform hover:scale-[1.02] hover:shadow-lg mb-4">
+   <div class="flex flex-col bg-gradient-to-br from-cyan-400 via-cyan-500 to-cyan-600 text-white border border-transparent rounded-2xl shadow-xl p-5 transition-transform transform hover:scale-[1.02] hover:shadow-2xl mb-4">
     <p class="text-sm font-semibold uppercase tracking-wide flex items-center gap-2">💸 Paid Overdue</p>
     <div class="mt-6 flex items-center justify-between">
       <h3 class="text-3xl font-bold"><?= $total_default_paid->total_default ?></h3>
@@ -126,7 +126,7 @@ include_once APPPATH . "views/partials/header.php";
   </div>
 
   <!-- 3️⃣ Paid Expiring Today -->
-  <div class="flex flex-col bg-gradient-to-br from-yellow-200 via-yellow-300 to-yellow-400 text-black border border-transparent rounded-2xl shadow-md p-5 transition-transform transform hover:scale-[1.02] hover:shadow-lg mb-4">
+  <div class="flex flex-col bg-gradient-to-br from-cyan-400 via-cyan-500 to-cyan-600 text-white border border-transparent rounded-2xl shadow-xl p-5 transition-transform transform hover:scale-[1.02] hover:shadow-2xl mb-4">
     <p class="text-sm font-semibold uppercase tracking-wide flex items-center gap-2">📅 Paid Expiring Today</p>
     <div class="mt-6 flex items-center justify-between">
       <h3 class="text-3xl font-bold"><?= $today_endactive_paid->total_default?></h3>
