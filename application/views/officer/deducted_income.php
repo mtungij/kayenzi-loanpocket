@@ -1,211 +1,123 @@
-<?php include('incs/header_1.php'); ?>
-<?php include('incs/side_1.php'); ?>
-<?php include('incs/subheader.php'); ?>
-	
-<style>
-    .select2-container .select2-selection--single{
-    height:37px !important;
-}
-.select2-container--default .select2-selection--single{
-         border: 1px solid #ccc !important; 
-     border-radius: 0px !important; 
-}
-</style>
+<?php
+include_once APPPATH . "views/partials/officerheader.php";
+?>
 
-<div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">					
-<!-- begin:: Subheader -->
-<div class="kt-subheader   kt-grid__item" id="kt_subheader">
-   
+<!-- ========== MAIN CONTENT BODY ========== -->
+<div class="w-full lg:ps-64">
+    <div class="p-4 sm:p-6 space-y-6">
+
+        <!-- Page Title / Subheader -->
+        <div class="mb-6">
+            <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-gray-200">
+               Processing Deducted Income Report
+            </h2>
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                This report provides an overview of all deducted incomes.
+            </p>
+        </div>
+
+        <section class="bg-gray-50 w-max-auto dark:bg-gray-900 p-3 sm:p-5">
+            <div class="w-full">
+                <!-- Start coding here -->
+                <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
+
+                    <!-- Search & Actions -->
+                    <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
+
+                        <!-- Search -->
+                        <div class="w-full md:w-1/2">
+                            <form class="flex items-center">
+                                <label for="simple-search" class="sr-only">Search</label>
+                                <div class="relative w-full">
+                                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M12.9 14.32a8 8 0 111.414-1.414l4.387 4.387a1 1 0 01-1.414 1.414l-4.387-4.387zM8 14a6 6 0 100-12 6 6 0 000 12z" clip-rule="evenodd" />
+                                        </svg>
+                                    </div>
+                                    <input type="text" id="simple-search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500" 
+                                        placeholder="Tafuta mteja hapa" 
+                                        data-hs-datatable-search="#shareholder_table" 
+                                        aria-label="Search share holders">
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
+                            <a href="<?php echo base_url("oficer/print_penalt"); ?>" target="_blank" class="w-full md:w-auto flex items-center justify-center px-3 py-2 text-sm font-medium text-white bg-cyan-600 hover:bg-cyan-700 rounded-lg focus:outline-none focus:ring-4 focus:ring-cyan-300 dark:focus:ring-cyan-800">
+                                <span class="bg-cyan-200 p-1 rounded mr-2">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M14 2H6a2 2 0 00-2 2v16c0 1.104.896 2 2 2h12a2 2 0 002-2V8l-6-6zM13 3.5L18.5 9H13V3.5zM10 14h1v4h-1v-4zm-2.5 0H9v1.5H8v.5h1v1H7.5V14zm7 0H15a1 1 0 110 2h-.5v2H13v-4z" />
+                                    </svg>
+                                </span>
+                                Print PDF
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Table -->
+                    <div class="overflow-x-auto">
+                        <table id="shareholder_table" class="w-full text-sm text-left text-gray-500 dark:text-gray-200">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-cyan-600 dark:text-white">
+                                <tr>
+                                    <th scope="col" class="px-4 py-3">S/No</th>
+                                    <th scope="col" class="px-4 py-3">Customer Name</th>
+                                    <th scope="col" class="px-4 py-3">Income Type</th>
+                                    <th scope="col" class="px-4 py-3">Income Amount</th>
+                                    <th scope="col" class="px-4 py-3">Received By</th>
+                                    <th scope="col" class="px-4 py-3">Date</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <?php $sno = 1; ?>
+                                <?php if (!empty($deducted_data)): ?>
+                                    <?php foreach ($deducted_data as $deducted_incomes): ?>
+                                        <tr class="border-b dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                            <td class="px-4 py-2"><?= $sno++; ?></td>
+                                            <td class="px-4 py-2 font-medium text-gray-900 dark:text-white">
+                                                <?= $deducted_incomes->f_name . ' ' . $deducted_incomes->m_name . ' ' . $deducted_incomes->l_name; ?>
+                                            </td>
+                                            <td class="px-4 py-2 font-medium text-gray-900 dark:text-white">
+                                                <?= $deducted_incomes->income_name ?? 'N/A'; ?>
+                                            </td>
+                                            <td class="px-4 py-2 font-medium text-gray-900 dark:text-white">
+                                                <?= number_format($deducted_incomes->deducted_balance); ?>
+                                            </td>
+                                            <td class="px-4 py-2 font-medium text-gray-900 dark:text-white">
+                                                System Deducted
+                                            </td>
+                                            <td class="px-4 py-2 font-medium text-gray-900 dark:text-white">
+                                                <?= $deducted_incomes->deducted_date; ?>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <tr>
+                                        <td colspan="6" class="px-4 py-3 text-center text-gray-500 dark:text-gray-200">
+                                            Hakuna taarifa za leo.
+                                        </td>
+                                    </tr>
+                                <?php endif; ?>
+                            </tbody>
+
+                            <tfoot class="font-bold text-gray-900 dark:text-white bg-gray-100 dark:bg-gray-700">
+                                <tr>
+                                    <td colspan="3" class="px-4 py-3">JUMLA</td>
+                                    <td class="px-4 py-3"><?= isset($total_income) ? number_format($total_income) : '0'; ?></td>
+                                    <td colspan="2" class="px-4 py-3"></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
 </div>
-<!-- end:: Subheader -->										
-<!-- begin:: Content -->
-<!-- begin:: Content -->
+<!-- ========== END MAIN CONTENT BODY ========== -->
 
-
-<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
-	<!--begin::Portlet-->
-	<?php if ($das = $this->session->flashdata('massage')): ?>
-	  <div class="alert alert-success fade show alert-success" role="alert">
-                            <div class="alert-icon"><i class="flaticon2-check-mark"></i></div>
-                            <div class="alert-text"><?php echo $das;?></div>
-                            <div class="alert-close">
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true"><i class="la la-close"></i></span>
-                                </button>
-                            </div>
-                  </div>
-         <?php endif; ?>
-
-<div class="kt-portlet kt-portlet--mobile">
-	<div class="kt-portlet__head kt-portlet__head--lg">
-		
-		<div class="kt-portlet__head-label">
-			<span class="kt-portlet__head-icon">
-				<i class="kt-font-brand flaticon-list-2"></i>
-			</span>
-			<h3 class="kt-portlet__head-title">
-				Today Deducted Income List
-			</h3>
-			&nbsp;&nbsp
-		</div>
-
-		<div class="kt-portlet__head-toolbar">
-            <div class="kt-portlet__head-wrapper">
-	<div class="kt-portlet__head-actions">
-
-	
-		&nbsp;
-		<a href="<?php //echo base_url("admin/previous_income"); ?>" class="btn btn-brand btn-elevate btn-icon-sm">
-			<i class="flaticon-event-calendar-symbol"></i>
-			Previous
-		</a>
-		<!-- <a href="<?php //echo base_url("admin/print_todayIncome"); ?>" target="_blank" class="btn btn-brand btn-elevate btn-icon-sm">
-			<i class="flaticon-technology"></i>
-			Print
-		</a> -->
-	</div>	
-</div>		</div>
-	</div>
-
-	<div class="kt-portlet__body">
-		<!--begin: Datatable -->
-		<table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_1">
-									     <thead>
-			  						          <tr>
-				  						
-												<th>Customer Name</th>
-												<!-- <th>Branch Name</th> -->
-												<!-- <th>Incomes Type</th> -->
-												<th>Income Amount</th>
-												<th>User</th>
-												<th>Date</th>
-				  						         </tr>
-						                  </thead>
-			
-								    <tbody>
-                                        <?php //$no = 1; ?>
-						<?php foreach ($deducted_data as $deducted_incomes): ?>
-									          <tr>
-				  			 <td><?php echo $deducted_incomes->f_name; ?> <?php echo $deducted_incomes->m_name; ?> <?php echo $deducted_incomes->l_name; ?></td> 
-				  			<!--  <td><?php //echo $deducted_incomes->blanch_name; ?></td> -->
-				  			 <td><?php echo number_format($deducted_incomes->deducted_balance); ?></td> 
-				  			 <td>System Deducted</td> 
-				  			  
-				  			 
-				  			 <td><?php echo $deducted_incomes->deducted_date; ?></td> 
-				  				
-				         </ul>
-			         </div>
-	               </div>
-                 </td>			  											  							
-                 </tr>
-
-    <?php endforeach; ?>
-                 <tr>
-                 	<td><b>TOTAL</b></td>
-                 	<td><b><?php echo number_format($total_deducted->total_deducted_fee); ?></b></td>
-                 	<td></td>
-                 	<td></td>
-                 </tr>
-									
-	                </tbody>
-                   </table>
-		<!--end: Datatable -->
-	</div>
-</div>
-
-
-
-
-
-
-</div>	
-
-
-				
-<?php include('incs/footer_1.php') ?>
-
-
-
-
-<script>
-$(document).ready(function(){
-$('#blanch').change(function(){
-var blanch_id = $('#blanch').val();
-//alert(blanch_id)
-if(blanch_id != ''){
-
-$.ajax({
-url:"<?php echo base_url(); ?>admin/fetch_ward_data",
-method:"POST",
-data:{blanch_id:blanch_id},
-success:function(data)
-{
-$('#customer').html(data);
-//$('#district').html('<option value="">All</option>');
-}
-});
-}
-else
-{
-$('#customer').html('<option value="">Select customer</option>');
-//$('#district').html('<option value="">All</option>');
-}
-});
-
-
-
-$('#customer').change(function(){
-var customer_id = $('#customer').val();
- //alert(customer_id)
-if(customer_id != '')
-{
-$.ajax({
-url:"<?php echo base_url(); ?>admin/fetch_data_vipimioData",
-method:"POST",
-data:{customer_id:customer_id},
-success:function(data)
-{
-$('#loan').html(data);
-//$('#malipo_name').html('<option value="">select center</option>');
-}
-});
-}
-else
-{
-$('#loan').html('<option value="">Select Active loan</option>');
-//$('#malipo_name').html('<option value="">chagua vipimio</option>');
-}
-});
-
-// $('#social').change(function(){
-//  var district_id = $('#social').val();
-//  if(district_id != '')
-//  {
-//   $.ajax({
-//    url:"<?php echo base_url(); ?>user/fetch_data_malipo",
-//    method:"POST",
-//    data:{district_id:district_id},
-//    success:function(data)
-//    {
-//     $('#malipo_name').html(data);
-//     //$('#malipo').html('<option value="">chagua malipo</option>');
-//    }
-//   });
-//  }
-//  else
-//  {
-//   //$('#vipimio').html('<option value="">chagua vipimio</option>');
-//   $('#malipo_name').html('<option value="">chagua vipimio</option>');
-//  }
-// });
-
-
-});
-</script>
-
-</script>
-
-<script>
-    $('.select2').select2();
-</script>
+<?php
+include_once APPPATH . "views/partials/footer.php";
+?>

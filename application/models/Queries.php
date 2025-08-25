@@ -3118,6 +3118,25 @@ public function get_total_recevableBlanch_by_officer($blanch_id, $empl_id){
 	}
 	
 	
+  public function get_total_penart_data($loan_id){
+        $data = $this->db->query("SELECT SUM(return_total) AS Total_Penart FROM tbl_loan_pending WHERE loan_id = '$loan_id'");
+        return $data->row();
+   }
+
+
+
+
+
+   public function get_total_penart_paid_loan($loan_id){
+   	$data = $this->db->query("SELECT SUM(penart_paid) AS total_PaidPenart FROM tbl_pay_penart WHERE loan_id = '$loan_id'");
+   	return $data->row();
+   }
+
+
+   public function get_penart_check($loan_id){
+   	$data = $this->db->query("SELECT * FROM tbl_penart_check WHERE loan_id = '$loan_id'");
+   	return $data->row();
+   }
 
 
     public function get_today_received_loan($comp_id){

@@ -26,6 +26,15 @@ include_once APPPATH . "views/partials/header.php";
         </div>
     </div>
 </div>
+     <!-- </?php @$loan_desc = $this->queries->get_total_pay_description($customer_loan->loan_id);
+                                    @$remain_balance = $this->queries->get_total_remain_with($customer_loan->loan_id);
+                                    @$total_recovery = $this->queries->get_total_loan_pend($customer_loan->loan_id);
+                                    @$total_penart = $this->queries->get_total_penart_loan($customer_loan->loan_id);
+                                    @$total_deposit_penart = $this->queries->get_total_paypenart($customer_loan->loan_id);
+                                    @$end_deposit = $this->queries->get_end_deposit_time($customer_loan->loan_id);
+                                    ?> -->
+
+                                                             </?php //print_r($end_deposit); ?>
 
 <div class=" w-full">
   <div class="md:flex md:justify-between md:items-start md:space-x-2">
@@ -35,8 +44,8 @@ include_once APPPATH . "views/partials/header.php";
 
       <div class="bg-white p-4 border-t-4 border-green-500 rounded-lg shadow-md">
         <div class="image overflow-hidden mb-4 text-center">
-          <?php if (!empty($data_customer->passport)): ?>
-            <img class="w-32 h-32 mx-auto rounded-full object-cover border-4 border-green-400" src="<?= base_url($data_customer->passport) ?>" alt="Customer Passport">
+          <?php if (!empty($customer->passport)): ?>
+            <img class="w-32 h-32 mx-auto rounded-full object-cover border-4 border-green-400" src="<?= base_url($customer->passport) ?>" alt="Customer Passport">
           <?php else: ?>
             <img class="w-32 h-32 mx-auto rounded-full object-cover border-4 border-green-400" src="<?= base_url('assets/img/customer21.png') ?>" alt="Customer Image">
           <?php endif; ?>
@@ -208,15 +217,28 @@ include_once APPPATH . "views/partials/header.php";
         Withdraw
       </button>
     <?php } elseif ($status === 'done') { ?>
-        <a href="#" class="btn btn-info" data-toggle="modal" data-target="#addcontact3">
-            <i class="icon-pencil"></i> kamaliza
-        </a>
+   
+   <button id="defaultModalButton" 
+    data-modal-target="defaultModal" 
+    data-modal-toggle="defaultModal"
+    type="button"
+    class="block text-white 
+           bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none 
+           focus:ring-red-300 
+           font-medium rounded-lg text-sm px-5 py-2.5 text-center 
+           dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800
+           transition-colors duration-200">
+    Clear Penalty
+</button>
+
+
 <?php }
 } ?>
         </div>
     </div>
   
 </div>
+
 
 
 
@@ -417,11 +439,11 @@ include_once APPPATH . "views/partials/header.php";
       data-hs-overlay="#hs-edit-shareholder-modal-<?= $customer->customer_id; ?>">Funga</button>
 
     <!-- <a href="</?php echo base_url("admin/get_loan_code_resend/{$customer->customer_id}"); ?>"
-      class="py-2 px-3 btn-primary-sm bg-green-600 hover:bg-cyan-700 text-white">
+      class="py-2 px-3 btn-gray-sm bg-green-600 hover:bg-cyan-700 text-white">
       Resend Code
     </a> -->
 
-    <button type="submit" class="py-2 px-3 btn-primary-sm bg-cyan-600 hover:bg-cyan-700 text-white">Gawa</button>
+    <button type="submit" class="py-2 px-3 btn-gray-sm bg-cyan-600 hover:bg-cyan-700 text-white">Gawa</button>
   </div>
 </div>
 
@@ -431,6 +453,53 @@ include_once APPPATH . "views/partials/header.php";
   </div>
 </div>
 
+
+<div id="defaultModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-modal md:h-full">
+    <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
+        <!-- Modal content -->
+        <div class="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
+            <!-- Modal header -->
+            <div class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                   Taarifa Ya Faini
+                </h3>
+                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="defaultModal">
+                    <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+            <!-- Modal body -->
+             <?php echo form_open("admin/samehe_faini/{$customer->customer_id}"); ?>
+                <div class="grid gap-4 mb-4 sm:grid-cols-2">
+                    <div>
+                        <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Jumla Ya Faini</label>
+                        <input type="text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-600 focus:border-gray-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500"
+                        
+                        value="<?php echo number_format($total_penart->total_penart); ?>" required="">
+                    </div>
+                    <div>
+                        <label for="brand" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Faini Aliyolipa</label>
+                        <input type="text" name="brand" id="brand" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-600 focus:border-gray-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500"     value="<?php echo number_format($total_deposit_penart->total_penart_paid); ?>.00" required>
+                    </div>
+                    <div>
+                        <label for="price" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Faini Iliyo Baki Kulipwa</label>
+                        <input type="number" name="price" id="price" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-600 focus:border-gray-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500" value="<?php echo number_format($total_penart->total_penart - $total_deposit_penart->total_penart_paid); ?>.00"
+                            required>
+                    </div>
+                   <input type="hidden" value="<?php echo $customer_loan->loan_id; ?>" name="loan_id">
+                    <input type="hidden" value="<?php echo $customer->customer_id; ?>" name="customer_id">
+                    <input type="hidden" value="<?php echo $customer->comp_id; ?>" name="comp_id">
+                    <input type="hidden" value="<?php echo $customer->blanch_id; ?>" name="blanch_id">
+
+                </div>
+                <button type="submit" class="text-white inline-flex items-center bg-cyan-700 hover:bg-cyan-800 focus:ring-4 focus:outline-none focus:ring-cyan-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-cyan-600 dark:hover:bg-cyan-700 dark:focus:ring-cyan-800">
+                    <svg class="mr-1 -ml-1 w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
+                    Samehe Faini
+                </button>
+           <?php echo form_close(); ?>
+        </div>
+    </div>
+</div>
   
 
 <!-- here put data -->
@@ -441,7 +510,25 @@ include_once APPPATH . "views/partials/header.php";
       
       <!-- Modal Header -->
       <div class="flex justify-between items-center py-3 px-4 border-b dark:border-gray-700">
-        <h3 class="font-bold text-gray-800 dark:text-white">Jina La Mteja: <?= htmlspecialchars($customer->f_name, ENT_QUOTES, 'UTF-8'); ?></h3>
+       
+
+         <h7  class="font-bold text-gray-800 dark:text-white"><?php echo $customer->f_name; ?>
+                    <?php echo $customer->m_name; ?> <?php echo $customer->l_name; ?><br>With Date:<?php if (@$customer_loan->loan_stat_date == TRUE) {
+                               ?>
+                        <?php echo @$customer_loan->loan_stat_date; ?>
+                    <?php } elseif (@$customer_loan->loan_stat_date == FALSE) {
+                               ?>
+                        YY-MM-DD
+                    <?php } ?> - End Date: <?php if (@$customer_loan->loan_end_date == TRUE) {
+                           ?>
+                        <?php echo substr(@$customer_loan->loan_end_date, 0, 10); ?>
+                    <?php } elseif (@$customer_loan->loan_end_date == FALSE) {
+                           ?>
+                        YY-MM-DD
+                    <?php } ?> <br> End Deposit Amount : <?php echo number_format(@$end_deposit->depost); ?> <br>Deposit
+                    Time : <?php echo @$end_deposit->deposit_day; ?>
+                </h7>
+
         <button type="button" class="flex justify-center items-center size-7 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" data-hs-overlay="#hs-edit-deposit-modal">
           <span class="sr-only">Close</span>
           <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
@@ -453,7 +540,80 @@ include_once APPPATH . "views/partials/header.php";
 <div class="p-4 sm:p-6">
   <div class="grid sm:grid-cols-12 gap-4 sm:gap-6">
 
-    <!-- Total Withdraw -->
+
+  <div class="sm:col-span-6">
+      <label for="depost" class="block text-sm font-medium mb-2 dark:text-gray-300">
+        * Loan Applied:
+      </label>
+      <input type="text" id="depost" name="depost"
+        class="py-2.5 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-cyan-500 focus:ring-cyan-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 dark:placeholder-gray-500 dark:focus:ring-gray-600"
+         value="<?php echo number_format(@$customer_loan->loan_int); ?>" readonly>
+    </div>
+
+     <div class="sm:col-span-6">
+      <label for="depost" class="block text-sm font-medium mb-2 dark:text-gray-300">
+        *Amount Paid:
+      </label>
+      <input type="text" id="depost" name="depost"
+        class="py-2.5 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-cyan-500 focus:ring-cyan-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 dark:placeholder-gray-500 dark:focus:ring-gray-600"
+         value="<?php if (@$total_deposit->total_Deposit > @$customer_loan->loan_int) {
+                            ?>
+                                        <?php echo number_format(@$customer_loan->loan_int); ?>
+                                         (<?php echo number_format(@$total_deposit->total_Deposit - @$customer_loan->loan_int); ?>)
+                                             <?php } else { ?><?php echo number_format(@$total_deposit->total_Deposit); ?>
+                                                 <?php } ?>" readonly>
+    </div>
+
+    
+
+        <div class="sm:col-span-6">
+      <label for="depost" class="block text-sm font-medium mb-2 dark:text-gray-300">
+        * Due Amount:
+      </label>
+      <input type="text" id="depost" name="depost"
+        class="py-2.5 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-cyan-500 focus:ring-cyan-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 dark:placeholder-gray-500 dark:focus:ring-gray-600"
+       value="<?php if (@$total_deposit->total_Deposit > @$customer_loan->loan_int) {
+                            ?>
+                                                 0.00
+                                                 <?php } else { ?><?php echo number_format(@$customer_loan->loan_int - @$total_deposit->total_Deposit); ?>
+                                                <?php } ?>" readonly>
+    </div>
+
+
+     <div class="sm:col-span-6">
+      
+
+          <?php if ($customer_loan->loan_status == 'withdrawal') {
+                            ?>
+                            <span class="block text-sm font-medium mb-2 dark:text-gray-300">Recovery Amount</span>
+                            <input type="text" class="py-2.5 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-cyan-500 focus:ring-cyan-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 dark:placeholder-gray-500 dark:focus:ring-gray-600"
+                                value="<?php echo number_format($total_recovery->total_pending); ?>.00" readonly
+                                style="color:red">
+                        <?php } elseif ($customer_loan->loan_status == 'out') {
+                            ?>
+                            <span style="color:red;">Default Amount</span>
+                            <input type="text" class="py-2.5 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-cyan-500 focus:ring-cyan-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 dark:placeholder-gray-500 dark:focus:ring-gray-600"
+                                value="<?php echo number_format($out_stand->total_out); ?>.00" readonly style="color:red">
+                        <?php } else { ?>
+                            <span>Recovery Amount</span>
+                            <input type="text" class="py-2.5 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-cyan-500 focus:ring-cyan-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 dark:placeholder-gray-500 dark:focus:ring-gray-600"
+                                value="0.00" readonly style="color:red">
+                        <?php } ?>
+
+    </div>
+
+
+      <div class="sm:col-span-6">
+      <label for="depost" class="block text-sm font-medium mb-2 dark:text-gray-300">
+        * Penalt:
+      </label>
+      <input type="text" id="depost" name="depost"
+        class="py-2.5 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-cyan-500 focus:ring-cyan-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 dark:placeholder-gray-500 dark:focus:ring-gray-600"
+        value="<?php echo number_format($total_penart->total_penart - $total_deposit_penart->total_penart_paid); ?>.00"
+                            readonly style="color:red">
+    </div>
+
+
     <div class="sm:col-span-6">
       <label for="depost" class="block text-sm font-medium mb-2 dark:text-gray-300">
         * Deposit:
@@ -514,7 +674,7 @@ include_once APPPATH . "views/partials/header.php";
     <button type="button" class="py-2 px-3 btn-secondary-sm"
       data-hs-overlay="#hs-edit-deposit-modal">Funga</button>
 
-    <button type="submit" class="py-2 px-3 btn-primary-sm bg-cyan-600 hover:bg-cyan-700 text-white">Deposit</button>
+    <button type="submit" class="py-2 px-3 btn-gray-sm bg-cyan-600 hover:bg-cyan-700 text-white">Deposit</button>
   </div>
 </div>
 <?php echo form_close(); ?>
@@ -522,6 +682,9 @@ include_once APPPATH . "views/partials/header.php";
     </div>
   </div>
 </div>
+
+
+
 
 </div>
 </div>

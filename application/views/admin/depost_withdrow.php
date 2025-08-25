@@ -16,7 +16,7 @@ include_once APPPATH . "views/partials/header.php";
             </div>
             <div class="ms-3">
                 <h3 class="text-gray-800 font-semibold dark:text-white">Success</h3>
-                <p class="mt-2 text-sm text-gray-700 dark:text-gray-400"><?php echo $das;?></p>
+                <p class="mt-2 text-sm text-gray-700 dark:text-gray-400"><?php echo $massage;?></p>
             </div>
             <div class="ps-3 ms-auto">
                 <button type="button" class="inline-flex bg-teal-50 rounded-lg p-1.5 text-teal-500 hover:bg-teal-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-teal-50 focus:ring-teal-600 dark:bg-transparent dark:hover:bg-teal-800/50 dark:text-teal-600" data-hs-remove-element="[role=alert]">

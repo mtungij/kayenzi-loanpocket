@@ -3316,6 +3316,45 @@ public function disburse($loan_id){
 }
 
 
+public function samehe_faini($customer_id){
+	$this->load->model('queries');
+	$this->form_validation->set_rules('comp_id','company','required');
+	$this->form_validation->set_rules('blanch_id','blanch','required');
+	$this->form_validation->set_rules('loan_id','Loan','required');
+	$this->form_validation->set_rules('customer_id','Customer','required');
+	$this->form_validation->set_error_delimiters('<div class="text-danger">','</div>');
+
+	if ($this->form_validation->run()) {
+		$data = $this->input->post();
+		$comp_id = $data['comp_id'];
+		$customer_id = $data['customer_id'];
+		$blanch_id = $data['blanch_id'];
+
+		$company = $this->queries->get_comp_data($comp_id);
+        $comp_name = $company->comp_name;
+        $comp_phone = $company->comp_phone;
+        
+        $data_sms = $this->queries->get_loan_reminder($customer_id);
+        $phone = $data_sms->phone_no;
+        $first_name = $data_sms->f_name;
+        $midle_name = $data_sms->m_name;
+        $last_name = $data_sms->l_name;
+        $massage = 'Ndugu, ' .$first_name . ' ' .$midle_name . ' ' .$last_name . ' ' .'Umesamehewa faini ya kulaza rejesho '.$comp_name .' epuka kuchajiwa faini ukilaza rejesho';
+		// print_r($massage);
+		//     exit();
+		$this->load->model('queries');
+		if ($this->queries->insert_msamaha($data)) {
+			$this->session->set_flashdata("massage",'Umefanikiwa Kusamehe Faini Ahsante');
+		}else{
+		 $this->session->set_flashdata("massage",'Umefanikiwa Kusamehe Faini Ahsante');	
+		}
+		//$this->sendsms($phone,$massage);
+		return redirect('admin/data_with_depost/'.$customer_id);
+	}
+	return redirect('admin/data_with_depost/' . $customer_id);
+}
+
+
 public function today_transactions(){
 	$this->load->model('queries');
 	$comp_id = $this->session->userdata('comp_id');

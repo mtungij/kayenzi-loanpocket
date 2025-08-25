@@ -122,6 +122,42 @@ $communication_submenu_active = is_submenu_active(['send_email']); // Assuming S
           </ul>
         </div>
       </li>
+
+
+
+           <li class="hs-accordion <?php echo $setting_submenu_active ? 'active' : ''; ?>" id="settings-accordion">
+        <button type="button"
+                class="hs-accordion-toggle w-full text-start flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg <?php echo $setting_submenu_active ? 'bg-gray-100 dark:bg-gray-900 text-gray-700 dark:text-white' : 'text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-900 dark:text-gray-400 dark:hover:text-gray-300'; ?>">
+          <!-- SVG: Settings Icon (Heroicons: cog-6-tooth) -->
+          <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 0 1-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 0 1 .947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 0 1 2.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 0 1 2.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 0 1-.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 0 1-.947-2.287c.836-1.372-.734-2.942-2.106-2.106A1.532 1.532 0 0 1 11.49 3.17ZM10 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clip-rule="evenodd" /></svg>
+         Income 
+          <svg class="hs-accordion-active:rotate-180 shrink-0 ms-auto size-4 <?php echo $setting_submenu_active ? 'text-gray-600 dark:text-gray-400' : 'text-gray-600 group-hover:text-gray-500 dark:text-gray-400'; ?>"
+               xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m6 9 6 6 6-6"/>
+          </svg>
+        </button>
+
+        <div id="settings-accordion-child"
+             class="hs-accordion-content w-full overflow-hidden transition-[height] duration-300 <?php echo $setting_submenu_active ? '' : 'hidden'; ?>">
+          <ul class="pt-2 ps-2">
+        
+            <li>
+              <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg <?php echo is_active_link('oficer/expnses_requisition_form') ? 'text-cyan-600 dark:text-cyan-500' : 'text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-900 dark:text-gray-400 dark:hover:text-gray-300'; ?>"
+                 href="<?php echo base_url("oficer/income_dashboard"); ?>">
+                Record Penalty
+              </a>
+            </li>
+
+              <li>
+              <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg <?php echo is_active_link('oficer/expnses_requisition_form') ? 'text-cyan-600 dark:text-cyan-500' : 'text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-900 dark:text-gray-400 dark:hover:text-gray-300'; ?>"
+                 href="<?php echo base_url("oficer/deducted_income"); ?>">
+                Processing Fees
+              </a>
+            </li>
+          
+          </ul>
+        </div>
+      </li>
       <!-- End Settings Accordion -->
 
       <li>
