@@ -1034,10 +1034,8 @@ Jumla leo tawi: " . number_format($jumla_faini) . " TZS.";
 
   
 
-$phone_number = [    255629364847, 
-255679420326, 
-255742117866,
-255717682611  
+$phone_number = [     
+'255762062271'
             ];
   
             foreach ($phone_number as  $phone) {
@@ -2926,10 +2924,8 @@ private function upload_file($field_name, $new_name_prefix)
   
       // Phone numbers to notify
       $phone_numbers = [
-          '255679420326',
-          '255755558901',
-          '255742117866',
-          '255629364847',
+    
+          '255762062271'
       ];
   
       foreach ($phone_numbers as $phone) {
@@ -3000,9 +2996,7 @@ Kilichobadilishwa sasa kuwa: TZS " . number_format($how_loan, 0) . ".";
 
             // Phone numbers to notify
             $phone_numbers = [
-                '255679420326',
-                '255755558901',
-                '255629364847',
+                '255762062271'
                 
             ];
 
