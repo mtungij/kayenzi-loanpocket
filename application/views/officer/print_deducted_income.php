@@ -5,7 +5,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <title><?= htmlspecialchars($company_data->comp_name) ?> - PENALT REPAYMENT REPORT</title>
+    <title><?= htmlspecialchars($company_data->comp_name) ?> - PROCESSING FEE REPAYMENT REPORT</title>
     <style>
         html, body {
             margin: 0;
@@ -70,47 +70,64 @@ $logo_url = 'file://' . $logo_path;
 </div>
 
 <!-- Report Title -->
-<h3 style="text-align: center; margin-top: 30px;">PENALT REPAYMENT REPORT</h3>
+<h3 style="text-align: center; margin-top: 30px;">FEE REPAYMENT REPORT</h3>
 
 <!-- Table -->
 <table>
     <thead>
-        <tr>
-            <th>S/No</th>
-            <th>Customer Name</th>
-            <th>Phone Number</th>
-            <th>Branch</th>
-            <th>Income Type</th>
-            <th>Income Amount</th>
-            <th>Received By</th>
-            <th>Date</th>
-        </tr>
-    </thead>
-    <tbody>
+    <tr>
+        <th>S/No</th>
+        <th>Customer Name</th>
+        <th>Phone Number</th>
+        <th>Loan Amount</th>
+        <th>Rejesho</th>
+        <th>Branch</th>
+        <th>Income Type</th>
+        <th>Income Amount</th>
+        <th>Received By</th>
+        <th>Date</th>
+    </tr>
+</thead>
+<tbody>
 <?php
 $no = 1;
-$total_amount = 0;
-foreach ($detail_income as $item): 
-    $total_amount += $item->receve_amount; ?>
+
+// Jumla kwa kila kipengele
+$total_loan     = 0;
+$total_rejesho  = 0;
+$total_income   = 0;
+
+foreach ($deducted_data as $item): 
+    $total_loan    += $item->how_loan;
+    $total_rejesho += $item->restration;
+    $total_income  += $item->deducted_balance;
+?>
     <tr>
         <td><?= $no++ ?>.</td>
         <td><?= strtoupper(htmlspecialchars($item->f_name . ' ' . $item->m_name . ' ' . $item->l_name)) ?></td>
         <td><?= strtoupper(htmlspecialchars($item->phone_no)) ?></td>
+        <td><?= number_format($item->how_loan) ?></td>
+        <td><?= number_format($item->restration) ?></td>
         <td><?= strtoupper(htmlspecialchars($item->blanch_name)) ?></td>
-        <td><?= strtoupper(htmlspecialchars($item->inc_name)) ?></td>
-        <td><?= number_format($item->receve_amount) ?></td>
-        <td><?= strtoupper(htmlspecialchars($item->empl)) ?></td>
-        <td><?= htmlspecialchars($item->receve_date) ?></td>
+        <td><?= strtoupper(htmlspecialchars('FORM')) ?></td>
+        <td><?= number_format($item->deducted_balance) ?></td>
+        <td><?= strtoupper(htmlspecialchars('System Deducted')) ?></td>
+        <td><?= htmlspecialchars($item->deducted_date) ?></td>
     </tr>
 <?php endforeach; ?>
 
-    <!-- Totals Row -->
-    <tr class="total-row">
-        <td colspan="5"><b>JUMLA</b></td>
-        <td><b><?= number_format($total_amount) ?></b></td>
-        <td colspan="2"></td>
-    </tr>
-    </tbody>
+<!-- Totals Row -->
+<tr class="total-row" style="font-weight:bold; background:#f3f4f6;">
+    <td colspan="3" align="right"><b>JUMLA:</b></td>
+    <td><b><?= number_format($total_loan) ?></b></td>
+    <td><b><?= number_format($total_rejesho) ?></b></td>
+    <td></td>
+    <td></td>
+    <td><b><?= number_format($total_income) ?></b></td>
+    <td colspan="2"></td>
+</tr>
+</tbody>
+
 </table>
 
 </body>

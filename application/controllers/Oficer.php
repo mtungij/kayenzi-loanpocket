@@ -75,9 +75,10 @@ class Oficer extends CI_Controller{
     $deducted = $this->queries->get_today_income_blanch($blanch_id);
     $non_deducted = $this->queries->get_today_nonDeducted_fee($blanch_id);
     $blanch_amount_balance = $this->queries->get_blanch_capital_data($blanch_id);
+    $total_deducted = $this->queries->get_today_deducted_feeblanch($blanch_id);
     
       // echo "<pre>";
-      // print_r( $empl_data);
+      // print_r(   $non_deducted);
       //     exit();
     
     // if ($position === 'LOAN OFFICER') {
@@ -148,6 +149,7 @@ class Oficer extends CI_Controller{
     'approved_customer'=>$approved_customer,
     'empl_data'=>$empl_data,
     'lipwa'=>$lipwa,
+    'total_deducted'=>$total_deducted,
     'collect'=>$collect,
     'total_default'=>$total_default,
     'active_customer'=>$active_customer,
@@ -653,9 +655,9 @@ $this->load->model('queries');
         $customer = $this->queries->get_allcutomerblanchData($blanch_id);
         $privillage = $this->queries->get_position_empl($empl_id);
         $manager = $this->queries->get_position_manager($empl_id);
-         // echo "<pre>";
-         //   print_r($customer);
-         //         exit();
+        //  echo "<pre>";
+        //    print_r( $detail_income);
+        //          exit();
         $this->load->view('officer/income_dashboard',['income'=>$income,'detail_income'=>$detail_income,'total_receved'=>$total_receved,'customer'=>$customer,'empl_data'=>$empl_data,'privillage'=>$privillage,'manager'=>$manager]);
     }
 
@@ -845,87 +847,7 @@ echo $this->queries->fetch_vipmios($this->input->post('region_id'));
         $this->load->view('officer/income',['income'=>$income,'manager'=>$manager,'privillage'=>$privillage,'empl_data'=>$empl_data]);
     }
 
-        public function create_income_detail(){
-        $this->form_validation->set_rules('comp_id','company','required');
-        $this->form_validation->set_rules('blanch_id','company','required');
-        $this->form_validation->set_rules('customer_id','company','required');
-        $this->form_validation->set_rules('inc_id','Income','required');
-        $this->form_validation->set_rules('receve_amount','Amount','required');
-        $this->form_validation->set_rules('receve_day','company','required');
-        $this->form_validation->set_rules('empl','employee','required');
-        $this->form_validation->set_rules('loan_id','Loan','required');
-        $this->form_validation->set_error_delimiters('<div class="text-danger">','</div>');
-        if ($this->form_validation->run()) {
-             $data = $this->input->post();
-
-            //  echo "<pre>";
-            //  print_r($data);
-            //        exit();
-             $this->load->model('queries');
-             $blanch_id = $data['blanch_id'];
-             //$blanch_id = $data['blanch_id'];
-            $loan_id = $data['loan_id'];
-            $comp_id = $data['comp_id'];
-            $penart_paid = $data['receve_amount'];
-            $username = $data['empl'];
-            $customer_id = $data['customer_id'];
-            $penart_date = $data['receve_day'];
-             $receve_amount = $data['receve_amount'];
-             @$blanch_account = $this->queries->get_blanchAccountremain($blanch_id);
-             $old_balance = @$blanch_account->blanch_capital;
-             $total_new = $old_balance + $receve_amount;
-             $inc_id = $data['inc_id'];
-             $income_data = $this->queries->get_income_data($inc_id);
-             $income_name = $income_data->inc_name;
-             $alphabet = $income_name;
-             $penart = $this->queries->get_paidPenart($loan_id);
-
-             $loan_income = $this->queries->get_loan_income($loan_id);
-             $group_id = $loan_income->group_id;
-             
-             @$non_deducted = $this->queries->check_nonDeducted_balance($comp_id,$blanch_id);
-              $deducted_blanch = @$non_deducted->blanch_id;
-              $deducted_balance = @$non_deducted->non_balance;
-              $another_deducted = $deducted_balance + $receve_amount;
-              // print_r($another_deducted);
-              //            exit();
-
-              if ($deducted_blanch == TRUE) {
-               $this->update_nonDeducted_balance($comp_id,$blanch_id,$another_deducted);
-                //echo "update";
-              }else{
-
-             $this->insert_non_deducted_balance($comp_id,$blanch_id,$receve_amount);
-                //echo "ingiza";
-              }
-             //  echo "<pre>";
-             // print_r($penart);
-             //           exit();
-                 if($alphabet == 'Penart'|| $alphabet == 'PENART' || $alphabet == 'penart'|| $alphabet == 'faini' || $alphabet == 'FAINI' || $alphabet == 'Faini' || $alphabet == 'fine' || $alphabet == 'FAINI KULALA' || $alphabet == 'faini kulala' || $alphabet == 'Faini kulala' || $alphabet == 'FAINI (PENALTY)' || $alphabet == 'penalt' || $alphabet == 'PENALT' || $alphabet == 'FAINI LALA' || $alphabet == 'PENATI' || $alphabet == 'penati' || $alphabet == 'Penati' || $alphabet == 'Adhabu' || $alphabet == 'ADHABU' || $alphabet == 'adhabu' || $alphabet == 'PENALTY' || $alphabet == 'Penarty' || $alphabet == 'penarty') {
-                    if ($penart == TRUE) {
-                 $old_paid = $penart->penart_paid;
-                $update_paid = $old_paid + $penart_paid;
-                $this->update_paidPenart($loan_id,$update_paid);
-                $this->insert_income($comp_id,$inc_id,$blanch_id,$customer_id,$username,$penart_paid,$penart_date,$loan_id,$group_id);
-                $this->session->set_flashdata('massage','Tsh. '.$penart_paid .' Paid successfully');
-                    }elseif($penart == FALSE){
-                 $this->insert_income($comp_id,$inc_id,$blanch_id,$customer_id,$username,$penart_paid,$penart_date,$loan_id,$group_id);
-                 $this->insert_penartPaid($loan_id,$inc_id,$blanch_id,$comp_id,$penart_paid,$username,$customer_id,$penart_date,$group_id);
-                 $this->session->set_flashdata('massage','Tsh. '.$penart_paid .' Paid successfully');
-                        }
-                 
-                 }else{ 
-              $this->insert_income($comp_id,$inc_id,$blanch_id,$customer_id,$username,$penart_paid,$penart_date,$loan_id,$group_id);
-              $this->session->set_flashdata('massage','Tsh. '.$penart_paid .' Paid successfully');
-                 }
-              // //print_r($alphabet);
-              //      exit();
-
-             return redirect('oficer/income_dashboard');
-        }
-        $this->income_dashboard();
-    }
-
+   
 
    public function print_penalt()
 {
@@ -998,7 +920,7 @@ return true;
 
 
 
-    public function manager_create_income_detail(){
+   public function create_income_detail(){
         $this->form_validation->set_rules('comp_id','company','required');
         $this->form_validation->set_rules('blanch_id','company','required');
         $this->form_validation->set_rules('customer_id','company','required');
@@ -1011,11 +933,12 @@ return true;
         if ($this->form_validation->run()) {
              $data = $this->input->post();
 
-             
              // echo "<pre>";
-             // print_r($inc_id);
+             // print_r($data);
              //       exit();
              $this->load->model('queries');
+             $empl_id = $this->session->userdata('empl_id');
+             $empl_data = $this->queries->get_employee_data($empl_id);
              $blanch_id = $data['blanch_id'];
              //$blanch_id = $data['blanch_id'];
             $loan_id = $data['loan_id'];
@@ -1032,38 +955,140 @@ return true;
              $income_data = $this->queries->get_income_data($inc_id);
              $income_name = $income_data->inc_name;
              $alphabet = $income_name;
+             $empl = $username;
              $penart = $this->queries->get_paidPenart($loan_id);
 
              $loan_income = $this->queries->get_loan_income($loan_id);
              $group_id = $loan_income->group_id;
+             
+             @$non_deducted = $this->queries->check_nonDeducted_balance($comp_id,$blanch_id);
+              $deducted_blanch = @$non_deducted->blanch_id;
+              $deducted_balance = @$non_deducted->non_balance;
+              $another_deducted = $deducted_balance + $receve_amount;
+
+        $company = $this->queries->get_comp_data($comp_id);
+        $comp_name = $company->comp_name;
+        $comp_phone = $company->comp_phone;
+        
+        $data_sms = $this->queries->get_sms_penart($customer_id);
+        $data_notifications = $this->queries->get_receive_details_by_customer($customer_id);
+        $branch_income = $this->queries->get_total_receive_amount_by_blanch($blanch_id);
+        $phone = $data_sms->phone_no;
+        $first_name = $data_sms->f_name;
+        $midle_name = $data_sms->m_name;
+        $last_name = $data_sms->l_name;
+
+    //         echo "<pre>";
+    // print_r(  $empl_data);
+    //      exit();
+
+
+        if (!empty($data_notifications)) {
+          $data_notification = $data_notifications[0]; // chukua object ya kwanza
+      } else {
+          $data_notification = null;
+      }
+      
+      // Sasa unaweza tumia safely
+      if ($data_notification) {
+          $empl_name = $data_notification->empl_name;
+          $blanch_name = $data_notification->blanch_name;
+          $first_name = $data_notification->f_name;
+          $middle_name = $data_notification->m_name;
+          $last_name = $data_notification->l_name;
+          $phone_number_single = $data_notification->phone_no;
+          
+      }
+
+      $time = date('d/m/Y h:i A');
+      
+    //  echo "<pre>";
+    // print_r( $branch_income);
+    //      exit();
+
+        $massage = 'Ndugu ' . $first_name . ' ' . $last_name . ', ' .
+    'Umelipa Faini ya Tsh. ' . number_format($penart_paid) . '. ' .
+    'Leta marejesho kwa wakati ili kuepuka adhabu.';
+      //  echo "<pre>";
+    // print_r($data_notifications->receve_amount);
+    //      exit();
+
+    $jumla_faini = $penart_paid + $branch_income;
+
+  // echo "<pre>";
+  //   print_r(   $jumla_faini);
+  //        exit();
+
+  // $massage = "Habari, malipo ya faini yamefanyika tawi la {$data_notification->blanch_name}. 
+  // Mteja: {$first_name} {$middle_name} {$last_name} ({$phone_number_single}). 
+  // Afisa: {$data_notification->empl_name}. 
+  // Kiasi: TZS " . number_format($penart_paid, 0) . ". 
+  // Jumla ya faini: TZS " . number_format($jumla_faini, 0) . ".";
+
+ $massage = "Habari, malipo ya faini yamefanyika {$data_sms->blanch_name}. 
+Mteja: {$data_sms->f_name} {$data_sms->m_name} {$data_sms->l_name} ({$data_sms->phone_no}). 
+Afisa: {$empl_data->empl_name}. 
+Kiasi: " . number_format($penart_paid, 0) . " TZS. 
+Muda: {$time}. 
+Jumla leo tawi: " . number_format($jumla_faini) . " TZS.";
+
+  
+
+$phone_number = [    255629364847, 
+255679420326, 
+255742117866,
+255717682611  
+            ];
+  
+            foreach ($phone_number as  $phone) {
+              $this->sendsms($phone, $massage);
+            }
+
+              
+              // print_r($amount);
+              //            exit();
+
+              if ($deducted_blanch == TRUE) {
+               $this->update_nonDeducted_balance($comp_id,$blanch_id,$another_deducted);
+                //echo "update";
+              }else{
+
+             $this->insert_non_deducted_balance($comp_id,$blanch_id,$receve_amount);
+                //echo "ingiza";
+              }
+
+
+
              //  echo "<pre>";
              // print_r($penart);
              //           exit();
-                 if($alphabet == 'Penart'|| $alphabet == 'PENART' || $alphabet == 'penart'|| $alphabet == 'faini' || $alphabet == 'FAINI' || $alphabet == 'Faini' || $alphabet == 'fine' || $alphabet == 'FAINI KULALA' || $alphabet == 'faini kulala' || $alphabet == 'Faini kulala' || $alphabet == 'FAINI (PENALTY)' || $alphabet == 'penalt' || $alphabet == 'PENALT' || $alphabet == 'FAINI LALA' || $alphabet == 'PENATI' || $alphabet == 'penati' || $alphabet == 'Penati' || $alphabet == 'Adhabu' || $alphabet == 'ADHABU' || $alphabet == 'adhabu') {
+                 if($alphabet == 'Penart'|| $alphabet == 'PENART' || $alphabet == 'penart'|| $alphabet == 'faini' || $alphabet == 'FAINI' || $alphabet == 'Faini' || $alphabet == 'fine' || $alphabet == 'FAINI KULALA' || $alphabet == 'faini kulala' || $alphabet == 'Faini kulala' || $alphabet == 'FAINI (PENALTY)' || $alphabet == 'penalt' || $alphabet == 'PENALT' || $alphabet == 'FAINI LALA' || $alphabet == 'PENATI' || $alphabet == 'penati' || $alphabet == 'Penati' || $alphabet == 'Adhabu' || $alphabet == 'ADHABU' || $alphabet == 'adhabu' || $alphabet == 'PENALTY' || $alphabet == 'Penarty' || $alphabet == 'penarty') {
                     if ($penart == TRUE) {
                  $old_paid = $penart->penart_paid;
                 $update_paid = $old_paid + $penart_paid;
                 $this->update_paidPenart($loan_id,$update_paid);
                 $this->insert_income($comp_id,$inc_id,$blanch_id,$customer_id,$username,$penart_paid,$penart_date,$loan_id,$group_id);
                 $this->session->set_flashdata('massage','Tsh. '.$penart_paid .' Paid successfully');
+                $this->sendsms($phone,$massage);
                     }elseif($penart == FALSE){
                  $this->insert_income($comp_id,$inc_id,$blanch_id,$customer_id,$username,$penart_paid,$penart_date,$loan_id,$group_id);
                  $this->insert_penartPaid($loan_id,$inc_id,$blanch_id,$comp_id,$penart_paid,$username,$customer_id,$penart_date,$group_id);
                  $this->session->set_flashdata('massage','Tsh. '.$penart_paid .' Paid successfully');
+                 $this->sendsms($phone,$massage);
                         }
                  
                  }else{ 
               $this->insert_income($comp_id,$inc_id,$blanch_id,$customer_id,$username,$penart_paid,$penart_date,$loan_id,$group_id);
               $this->session->set_flashdata('massage','Tsh. '.$penart_paid .' Paid successfully');
+              $this->sendsms($phone,$massage);
                  }
               // //print_r($alphabet);
               //      exit();
 
-             return redirect('oficer/manager_income_dashboard');
+             return redirect('oficer/income_dashboard');
         }
-        $this->manager_income_dashboard();
+        $this->income_dashboard();
     }
-
 
      public function insert_penartPaid($loan_id,$inc_id,$blanch_id,$comp_id,$penart_paid,$username,$customer_id,$penart_date,$group_id){
    $this->db->query("INSERT INTO tbl_pay_penart (`loan_id`,`inc_id`,`blanch_id`,`comp_id`,`penart_paid`,`username`,`customer_id`,`penart_date`,`group_id`) VALUES ('$loan_id','$inc_id','$blanch_id','$comp_id','$penart_paid','$username','$customer_id','$penart_date','$group_id')");
@@ -2326,7 +2351,7 @@ public function upadate_customer($customer_id){
 }
 
 public function loan_application(){
-  $position = strtoupper(trim($this->session->userdata('position_name')));
+  // $position = strtoupper(trim($this->session->userdata('position_name')));
     $this->load->model('queries');
     $blanch_id = $this->session->userdata('blanch_id');
     $empl_id = $this->session->userdata('empl_id');
@@ -2339,13 +2364,13 @@ public function loan_application(){
    
     $privillage = $this->queries->get_position_empl($empl_id);
     $manager = $this->queries->get_position_manager($empl_id);
-    if (strtoupper($position) === 'LOAN OFFICER') {
-        $customer = $this->queries->get_allcutomerofficerData($blanch_id, $empl_id);
-    } elseif ($position === 'BRANCH MANAGER') {
+    // if (strtoupper($position) === 'LOAN OFFICER') {
+    //     $customer = $this->queries->get_allcutomerofficerData($blanch_id, $empl_id);
+    // } elseif ($position === 'BRANCH MANAGER') {
       $customer = $this->queries->get_allcutomerblanchData($blanch_id);
-    } else {
-        $customer = []; // fallback: empty list
-    }
+    // } else {
+    //     $customer = []; // fallback: empty list
+    // }
     
       //   echo "<pre>";
       // print_r($customer);
@@ -2909,6 +2934,7 @@ private function upload_file($field_name, $new_name_prefix)
       $phone_numbers = [
           '255679420326',
           '255755558901',
+          '255742117866',
           '255629364847',
       ];
   
@@ -8007,10 +8033,36 @@ $sqldata="UPDATE `tbl_depost` SET `depost`= '$remain_oldDepost' WHERE `pay_id`= 
         $deducted_data = $this->queries->get_deducted_balance_blanch($blanch_id);
         $total_deducted = $this->queries->get_today_deducted_feeblanch($blanch_id);
         //  echo "<pre>";
-        // print_r($total_deducted);
+        // print_r($deducted_data);
         //        exit();
 
         $this->load->view('officer/deducted_income',['privillage'=>$privillage,'deducted_data'=>$deducted_data,'total_deducted'=>$total_deducted ]);
+      }
+
+      public function print_deducted()
+      {
+            $this->load->model('queries');
+        $blanch_id = $this->session->userdata('blanch_id');
+        $empl_id = $this->session->userdata('empl_id');
+        $manager_data = $this->queries->get_manager_data($empl_id);
+        $comp_id = $manager_data->comp_id;
+        $company_data = $this->queries->get_companyData($comp_id);
+        $blanch_data = $this->queries->get_blanchData($blanch_id);
+        $empl_data = $this->queries->get_employee_data($empl_id);
+        $privillage = $this->queries->get_position_empl($empl_id);
+
+        $deducted_data = $this->queries->get_deducted_balance_blanch($blanch_id);
+        $total_deducted = $this->queries->get_today_deducted_feeblanch($blanch_id);
+        //  echo "<pre>";
+        // print_r($deducted_data);
+        //        exit();
+
+          $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8','format' => 'A4-L','orientation' => 'L']);
+    $html = $this->load->view('officer/print_deducted_income',['company_data'=>$company_data,'deducted_data'=>$deducted_data, 'empl_data'=>$empl_data,'blanch_data'=>$blanch_data],true);
+     $mpdf->SetFooter('Generated By Brainsoft Technology');
+     $mpdf->WriteHTML($html);
+     $mpdf->Output();
+
       }
 
       public function interest_principal_transfor(){

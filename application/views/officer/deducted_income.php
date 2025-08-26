@@ -44,7 +44,7 @@ include_once APPPATH . "views/partials/officerheader.php";
 
                         <!-- Actions -->
                         <div class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
-                            <a href="<?php echo base_url("oficer/print_penalt"); ?>" target="_blank" class="w-full md:w-auto flex items-center justify-center px-3 py-2 text-sm font-medium text-white bg-cyan-600 hover:bg-cyan-700 rounded-lg focus:outline-none focus:ring-4 focus:ring-cyan-300 dark:focus:ring-cyan-800">
+                            <a href="<?php echo base_url("oficer/print_deducted"); ?>" target="_blank" class="w-full md:w-auto flex items-center justify-center px-3 py-2 text-sm font-medium text-white bg-cyan-600 hover:bg-cyan-700 rounded-lg focus:outline-none focus:ring-4 focus:ring-cyan-300 dark:focus:ring-cyan-800">
                                 <span class="bg-cyan-200 p-1 rounded mr-2">
                                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                                         <path d="M14 2H6a2 2 0 00-2 2v16c0 1.104.896 2 2 2h12a2 2 0 002-2V8l-6-6zM13 3.5L18.5 9H13V3.5zM10 14h1v4h-1v-4zm-2.5 0H9v1.5H8v.5h1v1H7.5V14zm7 0H15a1 1 0 110 2h-.5v2H13v-4z" />
@@ -62,52 +62,80 @@ include_once APPPATH . "views/partials/officerheader.php";
                                 <tr>
                                     <th scope="col" class="px-4 py-3">S/No</th>
                                     <th scope="col" class="px-4 py-3">Customer Name</th>
+                                    <th scope="col" class="px-4 py-3">Phone No</th>
+                                    <th scope="col" class="px-4 py-3">Loan Amount</th>
+                                    <th scope="col" class="px-4 py-3">Rejesho</th>
                                     <th scope="col" class="px-4 py-3">Income Type</th>
                                     <th scope="col" class="px-4 py-3">Income Amount</th>
-                                    <th scope="col" class="px-4 py-3">Received By</th>
+                                    <th scope="col" class="px-4 py-3">Deducted By</th>
                                     <th scope="col" class="px-4 py-3">Date</th>
                                 </tr>
                             </thead>
 
-                            <tbody>
-                                <?php $sno = 1; ?>
-                                <?php if (!empty($deducted_data)): ?>
-                                    <?php foreach ($deducted_data as $deducted_incomes): ?>
-                                        <tr class="border-b dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                            <td class="px-4 py-2"><?= $sno++; ?></td>
-                                            <td class="px-4 py-2 font-medium text-gray-900 dark:text-white">
-                                                <?= $deducted_incomes->f_name . ' ' . $deducted_incomes->m_name . ' ' . $deducted_incomes->l_name; ?>
-                                            </td>
-                                            <td class="px-4 py-2 font-medium text-gray-900 dark:text-white">
-                                                <?= $deducted_incomes->income_name ?? 'N/A'; ?>
-                                            </td>
-                                            <td class="px-4 py-2 font-medium text-gray-900 dark:text-white">
-                                                <?= number_format($deducted_incomes->deducted_balance); ?>
-                                            </td>
-                                            <td class="px-4 py-2 font-medium text-gray-900 dark:text-white">
-                                                System Deducted
-                                            </td>
-                                            <td class="px-4 py-2 font-medium text-gray-900 dark:text-white">
-                                                <?= $deducted_incomes->deducted_date; ?>
-                                            </td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                <?php else: ?>
-                                    <tr>
-                                        <td colspan="6" class="px-4 py-3 text-center text-gray-500 dark:text-gray-200">
-                                            Hakuna taarifa za leo.
-                                        </td>
-                                    </tr>
-                                <?php endif; ?>
-                            </tbody>
+<tbody>
+<?php 
+$sno = 1; 
+$total_loan    = 0;
+$total_rejesho = 0;
+$total_income  = 0;
+?>
+<?php if (!empty($deducted_data)): ?>
+    <?php foreach ($deducted_data as $deducted_incomes): ?>
+        <?php 
+            $total_loan    += $deducted_incomes->how_loan;
+            $total_rejesho += $deducted_incomes->restration;
+            $total_income  += $deducted_incomes->deducted_balance;
+        ?>
+        <tr class="border-b dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700">
+            <td class="px-4 py-2"><?= $sno++; ?></td>
+            <td class="px-4 py-2 font-medium text-gray-900 dark:text-white">
+                <?= $deducted_incomes->f_name . ' ' . $deducted_incomes->m_name . ' ' . $deducted_incomes->l_name; ?>
+            </td>
+            <td class="px-4 py-2 font-medium text-gray-900 dark:text-white">
+                <?= $deducted_incomes->phone_no; ?>
+            </td>
+            <td class="px-4 py-2 font-medium text-gray-900 dark:text-white">
+                <?= number_format($deducted_incomes->how_loan); ?>
+            </td>
+            <td class="px-4 py-2 font-medium text-gray-900 dark:text-white">
+                <?= number_format($deducted_incomes->restration); ?>
+            </td>
+            <td class="px-4 py-2 font-medium text-gray-900 dark:text-white">
+                <?= $deducted_incomes->income_name ?? 'FOMU'; ?>
+            </td>
+            <td class="px-4 py-2 font-medium text-gray-900 dark:text-white">
+                <?= number_format($deducted_incomes->deducted_balance); ?>
+            </td>
+            <td class="px-4 py-2 font-medium text-gray-900 dark:text-white">
+                System Deducted
+            </td>
+            <td class="px-4 py-2 font-medium text-gray-900 dark:text-white">
+                <?= $deducted_incomes->deducted_date; ?>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+<?php else: ?>
+    <tr>
+        <td colspan="9" class="px-4 py-3 text-center text-gray-500 dark:text-gray-200">
+            Hakuna taarifa za leo.
+        </td>
+    </tr>
+<?php endif; ?>
+</tbody>
 
-                            <tfoot class="font-bold text-gray-900 dark:text-white bg-gray-100 dark:bg-gray-700">
-                                <tr>
-                                    <td colspan="3" class="px-4 py-3">JUMLA</td>
-                                    <td class="px-4 py-3"><?= isset($total_income) ? number_format($total_income) : '0'; ?></td>
-                                    <td colspan="2" class="px-4 py-3"></td>
-                                </tr>
-                            </tfoot>
+<tfoot class="font-bold text-gray-900 dark:text-white bg-gray-100 dark:bg-gray-700">
+    <tr>
+        <td colspan="3" class="px-4 py-3 text-right">JUMLA</td>
+        <td class="px-4 py-3"><b><?= number_format($total_loan) ?></b></td>
+        <td class="px-4 py-3"><b><?= number_format($total_rejesho) ?></b></td>
+        <td class="px-4 py-3"></td>
+        <td class="px-4 py-3"><b><?= number_format($total_income) ?></b></td>
+        <td colspan="2" class="px-4 py-3"></td>
+    </tr>
+</tfoot>
+
+
+
                         </table>
                     </div>
                 </div>

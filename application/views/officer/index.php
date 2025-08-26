@@ -257,78 +257,21 @@ include_once APPPATH . "views/partials/officerheader.php";
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-  <!-- WATEJA & WAFANYAKAZI Card -->
-  <!-- <div class="bg-white rounded-lg shadow p-6">
-    <h2 class="text-xl font-semibold mb-4 border-b border-gray-300">WATEJA & WAFANYAKAZI</h2>
-    <table class="w-full text-left table-auto">
-      <tbody>
-        <tr class="border-b border-gray-200">
-          <td class="py-2 font-medium">JUMLA YA WATEJA</td>
-          <td class="py-2 text-right">
-            <span class="inline-block bg-green-500 text-white text-xs font-semibold px-3 py-1 rounded-full">20000</span>
-          </td>
-        </tr>
-        <tr class="border-b border-gray-200">
-          <td class="py-2 font-medium">WATEJA WAPYA</td>
-          <td class="py-2 text-right">
-            <span class="inline-block bg-blue-500 text-white text-xs font-semibold px-3 py-1 rounded-full">6000</span>
-          </td>
-        </tr>
-        <tr class="border-b border-gray-200">
-          <td class="py-2 font-medium">WANAUME</td>
-          <td class="py-2 text-right">
-            <span class="inline-block bg-blue-500 text-white text-xs font-semibold px-3 py-1 rounded-full">8000</span>
-          </td>
-        </tr>
-        <tr class="border-b border-gray-200">
-          <td class="py-2 font-medium">WANAWAKE</td>
-          <td class="py-2 text-right">
-            <span class="inline-block bg-red-500 text-white text-xs font-semibold px-3 py-1 rounded-full">12000</span>
-          </td>
-        </tr>
-        <tr class="border-b border-gray-200">
-          <td class="py-2 font-medium">WAFANYAKAZI</td>
-          <td class="py-2 text-right">
-            <span class="inline-block bg-gray-400 text-white text-xs font-semibold px-3 py-1 rounded-full">500</span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div> -->
 
-  <!-- MALIPO YA LEO Card -->
-  <!-- <div class="bg-white rounded-lg shadow p-6">
-    
-    <h2 class="text-xl font-semibold mb-4 pb-2 border-b border-gray-300">MALIPO YA LEO</h2>
-    <table class="w-full text-left table-auto">
-      <tbody>
-        <tr class="border-b border-gray-200">
-          <td class="py-2 font-medium">KILA SIKU</td>
-          <td class="py-2 text-right">
-            <span class="inline-block bg-yellow-500 text-white text-xs font-semibold px-3 py-1 rounded-full">1000</span>
-          </td>
-        </tr>
-        <tr class="border-b border-gray-200">
-          <td class="py-2 font-medium">WIKI</td>
-          <td class="py-2 text-right">
-            <span class="inline-block bg-blue-500 text-white text-xs font-semibold px-3 py-1 rounded-full">3000</span>
-          </td>
-        </tr>
-        <tr class="border-b border-gray-200">
-          <td class="py-2 font-medium">MWEZI</td>
-          <td class="py-2 text-right">
-            <span class="inline-block bg-gray-600 text-white text-xs font-semibold px-3 py-1 rounded-full">5000</span>
-          </td>
-        </tr>
-        <tr>
-          <td class="py-2 font-bold">JUMLA</td>
-          <td class="py-2 text-right font-bold">
-            <span class="inline-block bg-green-600 text-white text-xs font-semibold px-3 py-1 rounded-full">45000</span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div> -->
+    <div class="bg-gradient-to-r from-orange-400 to-orange-600 dark:from-green-700 dark:to-teal-800 text-white rounded-xl shadow p-6">
+    <h4 class="text-2xl font-bold flex items-center gap-2">
+        <i class="icon-wallet"></i> <?php echo number_format($non_deducted->total_nonDeducted_fee); ?>
+    </h4>
+    <span class="text-white text-sm">Faini Leo</span>
+</div>
+
+<div class="bg-gradient-to-r from-orange-400 to-orange-600 dark:from-teal-700 dark:to-green-800 text-white rounded-xl shadow p-6">
+    <h4 class="text-2xl font-bold flex items-center gap-2">
+        <i class="icon-wallet"></i> <?php echo number_format($total_deducted->total_deducted_fee); ?>
+    </h4>
+    <span class="text-white text-sm">Fomu Leo</span>
+</div>
+
 
 </div>
 
@@ -503,7 +446,7 @@ include_once APPPATH . "views/partials/officerheader.php";
                   <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1 rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
                   </?php echo $total_expect->change_percentage; ?>%
                 </span>
-                </?php endif; ?>
+                </?php endif; ?> 
               </div> -->
               <!-- <div class="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-1"></?php echo number_format($total_expect->loan_interest); ?></div>
               <p class="text-xs text-gray-500 dark:text-gray-400">

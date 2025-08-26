@@ -200,6 +200,7 @@ Print PDF
 <tr>
 <th scope="col" class="px-4 py-3">S/No</th>
 <th scope="col" class="px-4 py-3">Customer Name</th>
+<th scope="col" class="px-4 py-3">Phone Number</th>
 <th scope="col" class="px-4 py-3">Income Type</th>
 <th scope="col" class="px-4 py-3">Income Amount</th>
 <th scope="col" class="px-4 py-3">Received By</th>
@@ -210,48 +211,60 @@ Print PDF
 
 <tbody>
 <?php if (!empty($detail_income)): ?>
-<?php $sno = 1; ?>
-<?php foreach ($detail_income as $detail_incomes): ?>
-<tr class="border-b dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700">
-<td class="px-4 py-2">
-<span class=" text-cyan-800 text-xs font-medium px-2 py-0.5 rounded  dark:text-white">
-<?= $sno++; ?>
-</span>
-</td>
-<td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-<?= $detail_incomes->f_name . ' ' . $detail_incomes->m_name . ' ' . $detail_incomes->l_name; ?>
-</td>
-<td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-<?= $detail_incomes->inc_name; ?>
-</td>
-<td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-<?= number_format($detail_incomes->receve_amount); ?>
-</td>
-<td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-<?= $detail_incomes->empl; ?>
-</td>
-<td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-<?= $detail_incomes->receve_day; ?>
-</td>
-<td class="px-4 py-2">
-
-</td>
-</tr>
-<?php endforeach; ?>
+    <?php 
+    $sno = 1; 
+    $total_receve = 0; 
+    ?>
+    <?php foreach ($detail_income as $detail_incomes): ?>
+        <?php $total_receve += $detail_incomes->receve_amount; ?>
+        <tr class="border-b dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700">
+            <td class="px-4 py-2">
+                <span class=" text-cyan-800 text-xs font-medium px-2 py-0.5 rounded dark:text-white">
+                    <?= $sno++; ?>
+                </span>
+            </td>
+            <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                <?= $detail_incomes->f_name . ' ' . $detail_incomes->m_name . ' ' . $detail_incomes->l_name; ?>
+            </td>
+            <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                <?= $detail_incomes->phone_no; ?>
+            </td>
+            <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                <?= $detail_incomes->inc_name; ?>
+            </td>
+            <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                <?= number_format($detail_incomes->receve_amount); ?>
+            </td>
+            <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                <?= $detail_incomes->empl; ?>
+            </td>
+            <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                <?= $detail_incomes->receve_day; ?>
+            </td>
+            <td class="px-4 py-2"></td>
+        </tr>
+    <?php endforeach; ?>
 <?php else: ?>
-<tr>
-<td colspan="7" class="px-4 py-3 text-center text-gray-500 dark:text-gray-200">
-Hakuna taarifa za leo.
-</td>
-</tr>
+    <tr>
+        <td colspan="8" class="px-4 py-3 text-center text-gray-500 dark:text-gray-200">
+            Hakuna taarifa za leo.
+        </td>
+    </tr>
 <?php endif; ?>
 </tbody>
 
+<?php if (!empty($detail_income)): ?>
 <tfoot class="font-bold text-gray-900 dark:text-white bg-gray-100 dark:bg-gray-700">
-<tr>
-<td colspan="3" class="px-4 py-3"></td>
-</tr>
+    <tr>
+        <td colspan="4" class="px-4 py-3 text-right">JUMLA</td>
+        <td class="px-4 py-3"><b><?= number_format($total_receve) ?></b></td>
+        <td colspan="3"></td>
+    </tr>
 </tfoot>
+<?php endif; ?>
+
+
+
 </table>
 
 </div>
