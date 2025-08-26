@@ -141,10 +141,9 @@ include_once APPPATH . "views/partials/header.php";
 
 
 
-
-<!-- 🚀 Top 5 Depositors Line Chart -->
+<!-- 🚀 Top 5 Depositors Bar Chart -->
 <div class="mt-10 bg-white rounded-2xl shadow-xl p-6">
-  <h2 class="text-xl font-bold text-gray-700 mb-4">📈 Top 5 Employees by Deposit</h2>
+  <h2 class="text-xl font-bold text-gray-700 mb-4">🏆 Top 5 Employees by Deposit</h2>
   <canvas id="topDepositorsChart" height="120"></canvas>
 </div>
 
@@ -152,7 +151,7 @@ include_once APPPATH . "views/partials/header.php";
 <script>
   const ctx = document.getElementById('topDepositorsChart').getContext('2d');
   const topDepositorsChart = new Chart(ctx, {
-    type: 'line',
+    type: 'bar',
     data: {
       labels: [
         <?php foreach($top_depositors as $row){ echo "'".$row->empl_name."',"; } ?>
@@ -162,21 +161,16 @@ include_once APPPATH . "views/partials/header.php";
         data: [
           <?php foreach($top_depositors as $row){ echo $row->total_deposit.","; } ?>
         ],
-        borderColor: '#0ea5e9',
-        backgroundColor: 'rgba(14,165,233,0.2)',
-        fill: true,
-        tension: 0.4,  // smooth curve
-        pointBackgroundColor: '#06b6d4',
-        pointBorderColor: '#0ea5e9',
-        pointRadius: 6,
-        pointHoverRadius: 8,
-        borderWidth: 3
+        backgroundColor: [
+          '#0ea5e9','#06b6d4','#3b82f6','#10b981','#f59e0b'
+        ],
+        borderRadius: 8
       }]
     },
     options: {
       responsive: true,
       plugins: {
-        legend: { display: true },
+        legend: { display: false },
         tooltip: {
           callbacks: {
             label: function(context) {
