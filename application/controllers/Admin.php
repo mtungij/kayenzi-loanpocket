@@ -8,6 +8,7 @@ class Admin extends CI_Controller {
 	{
 	$this->load->model('queries');
 	$comp_id = $this->session->userdata('comp_id');
+   $compdata = $this->queries->get_companyData($comp_id);
     $receivable_total = $this->queries->get_total_recevable($comp_id);
     $total_received = $this->queries->get_sumReceived_amount($comp_id);
     $total_loan_pending = $this->queries->get_sun_loanPending($comp_id);
@@ -73,6 +74,7 @@ class Admin extends CI_Controller {
 	 $branchwise_deposits = $this->queries->get_branchwise_today_deposit($comp_id);
 
 	 $top_depositors = $this->queries->get_top_5_deposit_employees($comp_id);
+	 
 
 	 $total_overdue= $this->queries->total_outstand_loan($comp_id);
 	 $total_deni = $this->queries->total_outstand_loan_today($comp_id);
@@ -80,32 +82,32 @@ class Admin extends CI_Controller {
  $total_default_paid=$this->queries->get_depositing_out_total_comp($comp_id);
  $today_endactive_paid=$this->queries->get_depositing_out_todayend_comp($comp_id);
 
-  $today_deposits = $this->queries->get_today_received_loan($comp_id);
+//   $today_deposits = $this->queries->get_today_received_loan($comp_id);
 
-    if (empty($today_deposits)) {
-        $data['message'] = "Hakuna taarifa za malipo leo.";
-        $data['branches'] = [];
-        $data['amounts'] = [];
-    } else {
-        $branch_totals = [];
+//     if (empty($today_deposits)) {
+//         $data['message'] = "Hakuna taarifa za malipo leo.";
+//         $data['branches'] = [];
+//         $data['amounts'] = [];
+//     } else {
+//         $branch_totals = [];
 
-        foreach ($today_deposits as $d) {
-            $branch_name = $d->blanch_name; // kutoka tbl_blanch
-            if (!isset($branch_totals[$branch_name])) {
-                $branch_totals[$branch_name] = 0;
-            }
-            $branch_totals[$branch_name] += $d->depost; // jumla kwa branch
-        }
+//         foreach ($today_deposits as $d) {
+//             $branch_name = $d->blanch_name; // kutoka tbl_blanch
+//             if (!isset($branch_totals[$branch_name])) {
+//                 $branch_totals[$branch_name] = 0;
+//             }
+//             $branch_totals[$branch_name] += $d->depost; // jumla kwa branch
+//         }
 
-        $data['branches'] = array_keys($branch_totals);
-        $data['amounts'] = array_values($branch_totals);
-        $data['message'] = "";
-    }
- 	    //  echo "<pre>";
+//         $data['branches'] = array_keys($branch_totals);
+//         $data['amounts'] = array_values($branch_totals);
+//         $data['message'] = "";
+//     }
+//  	    //  echo "<pre>";
 
 
 	    //  echo "<pre>";
-	    //  print_r( $total_default_paid);
+	    //  print_r( $top_depositors);
 	    //  exit();
 
 	      // print_r($blanch_capital_circle);
@@ -113,7 +115,7 @@ class Admin extends CI_Controller {
 	$this->load->view('admin/index',['receivable_total'=>$receivable_total,'total_deposit_monthly'=>$total_deposit_monthly,'total_deposit_weekly'=> $total_deposit_weekly,'total_deposit_daily'=> $total_deposit_daily,'deposit_daily'=> $deposit_daily,'done_customer_count'=>$done_customer_count,'all_customer_count'=>$all_customer_count,
 	'new_customer'=> $new_customer,'top_depositors'=> $top_depositors,
 	'total_deni'=> $total_deni,
-	'data'=>$data,
+	' compdata'=> $compdata,
 	'total_active_paid'=> $total_active_paid,
 	'today_endactive_paid'=> $today_endactive_paid,
 	'total_default_paid'=> $total_default_paid,

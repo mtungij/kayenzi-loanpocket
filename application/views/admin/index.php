@@ -13,7 +13,7 @@ include_once APPPATH . "views/partials/header.php";
                     Admin Dashboard
                 </h2>
                 <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                <?php echo htmlspecialchars($manager_data->comp_name ?? 'Your Company', ENT_QUOTES, 'UTF-8'); ?>
+                <?php echo htmlspecialchars($compdata ->comp_name ?? 'Your Company', ENT_QUOTES, 'UTF-8'); ?>
 
                 </p>
             </div>
@@ -134,215 +134,75 @@ include_once APPPATH . "views/partials/header.php";
     </div>
   </div>
 
-  <!-- 4️⃣ Paid Expired -->
+
 
 
 </div>
 
 
 
-<!--  -->
-     
- <!-- <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-<div class="bg-white rounded-lg shadow-md overflow-hidden">
-    <div class="bg-cyan-800  px-4 py-2 border-b">
-      <h2 class="text-lg font-semibold text-white">WATEJA & WAFANYAKAZI</h2>
-    </div>
-    <div class="p-4">
-      <table class="w-full text-sm">
-        <tbody class="text-gray-700">
-          <tr class="border-b">
-            <td class="py-2">JUMLA YA WATEJA</td>
-            <td class="text-right">
-              <span class="inline-block bg-green-600 text-white text-xs px-2 py-1 rounded">
-              </?php echo $all_customer_count; ?>
-              </span>
-            </td>
-          </tr>
-          <tr class="border-b">
-            <td class="py-2">WATEJA WAPYA LEO</td>
-            <td class="text-right">
-            <span class="inline-block bg-green-600 text-white text-xs px-2 py-1 rounded">
-              </?= $new_customer; ?>
-              </span>
-            </td>
-          </tr>
-          <tr class="border-b">
-            <td class="py-2">WANAOMALIZA LEO</td>
-            <td class="text-right">
-            <span class="inline-block bg-green-600 text-white text-xs px-2 py-1 rounded">
-              </?= $done_customer_count ;?>
-              </span>
-            </td>
-          </tr>
-          <tr class="border-b">
-            <td class="py-2">MADENI SUGU</td>
-            <td class="text-right">
-            <span class="inline-block bg-green-600 text-white text-xs px-2 py-1 rounded">
-             </?= $default_customer_count;?>
-              </span>
-            </td>
-          </tr>
-          <tr>
-            <td class="py-2">WAFANYAKAZI</td>
-            <td class="text-right">
-            <span class="inline-block bg-green-600 text-white text-xs px-2 py-1 rounded">
-              </?php echo $employee_count; ?>
-              </span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
 
-
-   <?php
-  $total_deposit_daily = $total_deposit_daily ?? 0;
-  $total_deposit_weekly = $total_deposit_weekly ?? 0;
-  $total_deposit_monthly = $total_deposit_monthly ?? 0;
-  $total_all = $total_deposit_daily + $total_deposit_weekly + $total_deposit_monthly;
-?>  -->
-
- 
-<!-- <div class="bg-white rounded-lg shadow-md overflow-hidden">
-  <div class="bg-cyan-800 px-4 py-2 border-b">
-    <h2 class="text-lg font-semibold text-white">MIKOPO YA LEO</h2>
-  </div>
-  <div class="p-4">
-    <table class="w-full text-sm">
-      <tbody class="text-gray-700">
-        <tr class="border-b">
-          <td class="py-2">KILA SIKU</td>
-          <td class="text-right">
-            <span class="inline-block bg-green-600 text-white text-xs px-2 py-1 rounded">
-              </?php echo number_format($total_withdrawal_daily->total_loanWith_day); ?>
-            </span>
-          </td>
-        </tr>
-        <tr class="border-b">
-          <td class="py-2">WIKI</td>
-          <td class="text-right">
-            <span class="inline-block bg-green-600 text-white text-xs px-2 py-1 rounded">
-               </?php echo number_format($total_withdrawal_weekly->loan_aproved ?? 0); ?> 
-            
-            </span>
-          </td>
-        </tr>
-        <tr class="border-b">
-          <td class="py-2">MWEZI</td>
-          <td class="text-right">
-            <span class="inline-block bg-green-600 text-white text-xs px-2 py-1 rounded">
-              <?php echo number_format($total_withdrawal_monthly->loan_aproved ?? 0); ?>
-            </span>
-          </td>
-        </tr>
-        <tr>
-          <td class="py-2 font-bold">JUMLA</td>
-          <td class="text-right font-bold">
-            <Span class="inline-block bg-green-600 text-white text-xs px-2 py-1 rounded">
-              </?php
-                $daily = $total_withdrawal_daily->loan_aproved ?? 0;
-                $weekly = $total_withdrawal_weekly->loan_aproved ?? 0;
-                $monthly = $total_withdrawal_monthly->loan_aproved ?? 0;
-                $total = $daily + $weekly + $monthly;
-                echo number_format($total);
-              ?>
-             
-            </Span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+<!-- 🚀 Top 5 Depositors Line Chart -->
+<div class="mt-10 bg-white rounded-2xl shadow-xl p-6">
+  <h2 class="text-xl font-bold text-gray-700 mb-4">📈 Top 5 Employees by Deposit</h2>
+  <canvas id="topDepositorsChart" height="120"></canvas>
 </div>
-</div> -->
 
-<!-- <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
-  <div class="bg-cyan-800 px-4 py-2 border-b border-cyan-900 dark:border-cyan-700">
-    <h2 class="text-lg font-semibold text-white">Tathmini ya Malipo kwa Kila Tawi Leo</h2>
-  </div>
-
-  <div class="p-4">
-    <?php
-      $total_deposit = 0;
-      $branches = [];
-      $amounts = [];
-
-      if (!empty($branchwise_deposits)) {
-        foreach ($branchwise_deposits as $branch) {
-          $branches[] = $branch->blanch_name;
-          $amounts[] = $branch->total_deposit;
-          $total_deposit += $branch->total_deposit;
-        }
-      }
-    ?>
-
-    <?php if (!empty($branchwise_deposits)): ?>
-      <!-- Chart Canvas -->
-      <canvas id="branchDepositChart" height="200"></canvas>
-
-      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-      <script>
-        const ctxBranch = document.getElementById('branchDepositChart').getContext('2d');
-        const branchDepositChart = new Chart(ctxBranch, {
-          type: 'bar', // unaweza pia kutumia 'pie' or 'doughnut'
-          data: {
-            labels: <?= json_encode($branches) ?>,
-            datasets: [{
-              label: 'Malipo ya Leo (TZS)',
-              data: <?= json_encode($amounts) ?>,
-              backgroundColor: 'rgba(34, 197, 94, 0.7)',
-              borderColor: 'rgba(34, 197, 94, 1)',
-              borderWidth: 1
-            }]
-          },
-          options: {
-            responsive: true,
-            plugins: {
-              legend: { display: false },
-              tooltip: {
-                callbacks: {
-                  label: function(context) {
-                    return context.parsed.y.toLocaleString('en-US') + ' TZS';
-                  }
-                }
-              }
-            },
-            scales: {
-              y: {
-                beginAtZero: true,
-                ticks: {
-                  callback: function(value) {
-                    return value.toLocaleString('en-US') + ' TZS';
-                  },
-                  color: "#ffffff"
-                },
-                grid: { color: "rgba(255,255,255,0.1)" }
-              },
-              x: {
-                ticks: { color: "#ffffff" },
-                grid: { color: "rgba(255,255,255,0.1)" }
-              }
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const ctx = document.getElementById('topDepositorsChart').getContext('2d');
+  const topDepositorsChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: [
+        <?php foreach($top_depositors as $row){ echo "'".$row->empl_name."',"; } ?>
+      ],
+      datasets: [{
+        label: 'Total Deposit (TZS)',
+        data: [
+          <?php foreach($top_depositors as $row){ echo $row->total_deposit.","; } ?>
+        ],
+        borderColor: '#0ea5e9',
+        backgroundColor: 'rgba(14,165,233,0.2)',
+        fill: true,
+        tension: 0.4,  // smooth curve
+        pointBackgroundColor: '#06b6d4',
+        pointBorderColor: '#0ea5e9',
+        pointRadius: 6,
+        pointHoverRadius: 8,
+        borderWidth: 3
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: true },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              return context.parsed.y.toLocaleString() + " TZS";
             }
           }
-        });
-      </script>
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            callback: function(value) {
+              return value.toLocaleString();
+            }
+          }
+        }
+      }
+    }
+  });
+</script>
 
-      <!-- Total Display -->
-      <div class="mt-4 text-right">
-        <span class="inline-block bg-green-600 text-white text-sm px-3 py-1 rounded font-semibold">
-          Jumla: <?= number_format($total_deposit, 2) ?> TZS
-        </span>
-      </div>
 
-    <?php else: ?>
-      <div class="text-center text-gray-500 dark:text-gray-300 py-8">
-        Hakuna taarifa za malipo leo.
-      </div>
-    <?php endif; ?>
-  </div>
-</div> -->
+
+
+ 
 
 
 

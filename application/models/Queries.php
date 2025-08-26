@@ -1988,6 +1988,15 @@ public function update_guarantor($id, $data)
 			->get('tbl_loans')
 			->num_rows() > 0;
 	}
+
+	 public function get_loan_reminder($customer_id){
+ 	 	$data = $this->db->query("SELECT c.phone_no,c.f_name,c.m_name,c.l_name FROM tbl_customer c   WHERE c.customer_id = '$customer_id'");
+ 	 return $data->row();
+ 	 }
+
+	   public function insert_msamaha($data){
+   	return $this->db->insert('tbl_penart_check',$data);
+   }
 	
 
 	public function get_sum_Depost($comp_id){

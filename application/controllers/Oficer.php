@@ -2418,7 +2418,7 @@ public function search_customer()
         redirect('oficer/loan_application');
     }
 
-    // ✅ Check if the customer has a loan with status 'open'
+    // ✅ Check if the customer has an open loan
     $open_loan = $this->db
         ->where('customer_id', $customer_id)
         ->where('loan_status', 'open')
@@ -2444,54 +2444,47 @@ public function search_customer()
         return;
     }
 
-    // ⚠️ If the customer has a loan that is not 'done' and not 'open'
+    // ⚠️ If the customer has a pending loan (not done and not open)
     if ($this->queries->has_pending_loans($customer_id)) {
         $data = [
-            'message' => 'Mteja bado hajamaliza mkopo.',
-            'type' => 'warning'
+            'message' => 'Mteja bado hajamaliza mkopo wake. Tafadhali maliza mkopo kabla ya kuomba tena.',
+            'type' => 'loan'
         ];
         $this->load->view('officer/toast_message_view', $data);
         return;
     }
 
     // ✅ Check latest done loan penalties
-  $latestLoan = $this->db->select('*')
-    ->from('tbl_loans')
-    ->where('customer_id', $customer_id)
-    ->where('loan_status', 'done')
-    ->order_by('loan_id', 'DESC')
-    ->limit(1)
-    ->get()
-    ->row();
+    $latestLoan = $this->db->select('*')
+        ->from('tbl_loans')
+        ->where('customer_id', $customer_id)
+        ->where('loan_status', 'done')
+        ->order_by('loan_id', 'DESC')
+        ->limit(1)
+        ->get()
+        ->row();
 
+    if ($latestLoan) {
+        $total_penart = $this->queries->get_total_penart_data($latestLoan->loan_id);
+        $total_penart = @$total_penart->Total_Penart ?: 0;
 
+        $paid_penart = $this->queries->get_total_penart_paid_loan($latestLoan->loan_id);
+        $paid = @$paid_penart->total_PaidPenart ?: 0;
 
+        $msamaha = $this->queries->get_penart_check($latestLoan->loan_id);
 
- if ($latestLoan) {
-    $total_penart = $this->queries->get_total_penart_data($latestLoan->loan_id);
-    $total_penart = @$total_penart->Total_Penart ?: 0;
-
-//         echo "<pre>";
-// print_r( $total_penart);
-// echo "</pre>";
-//     exit();
-
-    $paid_penart = $this->queries->get_total_penart_paid_loan($latestLoan->loan_id);
-    $paid = @$paid_penart->total_PaidPenart ?: 0;
-
-    $msamaha = $this->queries->get_penart_check($latestLoan->loan_id);
-
-    if ($total_penart > $paid && !$msamaha) {
-        $data = [
-            'message' => "Ndugu, Jumla ya Faini Unadaiwa TZS " . number_format($total_penart - $paid) . ". Tafadhari lipa Deni Ili uendelee Kufurahia Huduma Ahsante",
-            'type' => 'warning'
-        ];
-        $this->load->view('officer/toast_message_view', $data);
-        return;
+        if ($total_penart > $paid && !$msamaha) {
+            $data = [
+                'message' => "Habari, Mteja anadaiwa Jumla ya TZS " . number_format($total_penart - $paid) . 
+                             ". Tafadhali alipe deni la faini ili uweze kuendelea kumuombea mkopo",
+                'type' => 'penalty'
+            ];
+            $this->load->view('officer/toast_message_view', $data);
+            return;
+        }
     }
-}
 
-    // ✅ If no penalties, proceed normally
+    // ✅ If no penalties and no pending loan, proceed normally
     $sponser = $this->queries->get_sponser($customer_id);
     @$sponsers_data = $this->queries->get_sponserCustomer($customer_id);
     @$region = $this->queries->get_region();
@@ -2508,6 +2501,7 @@ public function search_customer()
         'manager' => $manager
     ]);
 }
+
 
 
 
