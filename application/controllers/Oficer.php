@@ -2474,7 +2474,7 @@ public function search_customer()
 
         if ($total_penart > $paid && !$msamaha) {
             $data = [
-                'message' => "Habari, Mteja anadaiwa Jumla ya TZS " . number_format($total_penart - $paid) . 
+                'message' => "Habari, Mteja anadaiwa faini Jumla ya TZS " . number_format($total_penart - $paid) . 
                              ". Tafadhali alipe deni la faini ili uweze kuendelea kumuombea mkopo",
                 'type' => 'penalty'
             ];
@@ -5423,7 +5423,7 @@ public function create_withdrow_balance($customer_id){
     $this->form_validation->set_rules('method','method','required');
     $this->form_validation->set_rules('withdrow','withdrow','required');
     $this->form_validation->set_rules('loan_status','loan status','required');
-    $this->form_validation->set_rules('code','Code','required');
+    // $this->form_validation->set_rules('code','Code','required');
     $this->form_validation->set_rules('with_date','with date','required');
     $this->form_validation->set_rules('description','description','required');
     if ($this->form_validation->run() ) {
@@ -5436,7 +5436,7 @@ public function create_withdrow_balance($customer_id){
           $comp_id = $data['comp_id'];
           $description = $data['description'];
           $method = $data['method'];
-          $new_code = $data['code'];
+          // $new_code = $data['code'];
           $with_date = $data['with_date'];
           $loan_status = 'withdrawal';
           $new_balance = $withdrow_newbalance;
@@ -5561,7 +5561,7 @@ public function create_withdrow_balance($customer_id){
            
             $new_deducted = $deducted + $sum_total_loanFee;
 
-               if($new_code != $code){
+               if($new_code === $code){
                  $this->session->set_flashdata('error','Pin ya mteja Uliyojaza Haipo Sahihi!!');
                }else
                if($blanch_capital < $withdrow_newbalance){

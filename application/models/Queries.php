@@ -1168,15 +1168,153 @@ public function get_loan_by_id($loan_id)
 		");
 		return $loan->row(); // return single row with sums
 	}
+
+
+	        public function get_withdrawal_Loan_today($comp_id){
+        $date = date("Y-m-d");
+       	$loan = $this->db->query("SELECT * FROM tbl_loans l LEFT JOIN tbl_customer c ON c.customer_id = l.customer_id LEFT JOIN tbl_loan_category lt ON lt.category_id = l.category_id LEFT JOIN tbl_blanch b ON b.blanch_id = l.blanch_id LEFT JOIN tbl_sub_customer s ON s.customer_id = l.customer_id LEFT JOIN tbl_outstand ot ON ot.loan_id = l.loan_id LEFT JOIN tbl_account_transaction at ON at.trans_id = l.method  WHERE l.comp_id = '$comp_id' AND l.loan_status = 'withdrawal' ORDER BY l.loan_id DESC ");
+       	   return $loan->result();
+       }
+
+
+    //      public function get_today_withdrawal_daily_comp($comp_id){
+    //    	$today = date("Y-m-d");
+    //    	$data = $this->db->query("SELECT SUM(loan_aprove) AS total_loanWith_day FROM tbl_loans l LEFT JOIN tbl_outstand ot ON ot.loan_id = l.loan_id WHERE l.comp_id = '$comp_id' AND loan_stat_date = '$today' AND l.day = '1'");
+    //    	return $data->row();
+    //    }
 	
 
 
 
-           public function get_withdrawal_Loan($comp_id){
-        $date = date("Y-m-d");
-       	$loan = $this->db->query("SELECT * FROM tbl_loans l LEFT JOIN tbl_customer c ON c.customer_id = l.customer_id LEFT JOIN tbl_loan_category lt ON lt.category_id = l.category_id LEFT JOIN tbl_blanch b ON b.blanch_id = l.blanch_id LEFT JOIN tbl_sub_customer s ON s.customer_id = l.customer_id LEFT JOIN tbl_outstand ot ON ot.loan_id = l.loan_id LEFT JOIN tbl_account_transaction at ON at.trans_id = l.method  WHERE l.comp_id = '$comp_id' AND l.loan_status = 'withdrawal' AND ot.loan_stat_date = '$date' ORDER BY l.loan_id DESC ");
-       	   return $loan->result();
-       }
+     public function get_withdrawal_Loan($comp_id, $filters = [])
+{
+    $this->db->select('*');
+    $this->db->from('tbl_loans l');
+    $this->db->join('tbl_customer c', 'c.customer_id = l.customer_id', 'left');
+    $this->db->join('tbl_loan_category lt', 'lt.category_id = l.category_id', 'left');
+    $this->db->join('tbl_blanch b', 'b.blanch_id = l.blanch_id', 'left');
+    $this->db->join('tbl_sub_customer s', 's.customer_id = l.customer_id', 'left');
+    $this->db->join('tbl_outstand ot', 'ot.loan_id = l.loan_id', 'left');
+    $this->db->join('tbl_account_transaction at', 'at.trans_id = l.method', 'left');
+
+    $this->db->where('l.comp_id', $comp_id);
+    $this->db->where('l.loan_status', 'withdrawal');
+
+    // ✅ If no filters provided, show only today's data
+    if (empty($filters['from']) && empty($filters['to'])) {
+        $today = date("Y-m-d");
+        $this->db->where('DATE(ot.loan_stat_date)', $today);
+    }
+
+    // ✅ If user passes date range
+    if (!empty($filters['from']) && !empty($filters['to'])) {
+        $this->db->where('ot.loan_stat_date >=', $filters['from']);
+        $this->db->where('ot.loan_stat_date <=', $filters['to']);
+    }
+
+    // ✅ If branch filter
+    if (!empty($filters['blanch_id'])) {
+        $this->db->where('l.blanch_id', $filters['blanch_id']);
+    }
+
+    // ✅ If loan name filter
+    if (!empty($filters['loan_name'])) {
+        $this->db->like('l.loan_name', $filters['loan_name']);
+    }
+
+    $this->db->order_by('l.loan_id', 'DESC');
+    return $this->db->get()->result();
+}
+
+public function get_sum_loanwithdrawal_data_filtered($comp_id, $filters = [])
+{
+    $this->db->select_sum('l.loan_aprove');
+    $this->db->from('tbl_loans l');
+    $this->db->join('tbl_outstand ot', 'ot.loan_id = l.loan_id', 'left');
+    $this->db->where('l.comp_id', $comp_id);
+    $this->db->where('l.loan_status', 'withdrawal');
+
+    // Filter by branch
+    if (!empty($filters['blanch_id'])) {
+        $this->db->where('l.blanch_id', $filters['blanch_id']);
+    }
+
+    // Filter by date range
+    if (!empty($filters['from']) && !empty($filters['to'])) {
+        $this->db->where('ot.loan_stat_date >=', $filters['from']);
+        $this->db->where('ot.loan_end_date <=', $filters['to']);
+    } else {
+        // Default: today
+        $today = date("Y-m-d");
+        $this->db->where('DATE(ot.loan_stat_date)', $today);
+    }
+
+    return $this->db->get()->row()->loan_aprove;
+}
+
+
+
+public function get_withdrawal_Loan_filtered($comp_id, $filters = [])
+{
+    $this->db->select('l.*, c.*, lt.*, b.*, s.*, ot.*, at.*');
+    $this->db->from('tbl_loans l');
+    $this->db->join('tbl_customer c', 'c.customer_id = l.customer_id', 'left');
+    $this->db->join('tbl_loan_category lt', 'lt.category_id = l.category_id', 'left');
+    $this->db->join('tbl_blanch b', 'b.blanch_id = l.blanch_id', 'left');
+    $this->db->join('tbl_sub_customer s', 's.customer_id = l.customer_id', 'left');
+    $this->db->join('tbl_outstand ot', 'ot.loan_id = l.loan_id', 'left');
+    $this->db->join('tbl_account_transaction at', 'at.trans_id = l.method', 'left');
+
+    $this->db->where('l.comp_id', $comp_id);
+    $this->db->where('l.loan_status', 'withdrawal');
+
+    // Apply filters if provided
+    if (!empty($filters['blanch_id'])) {
+        $this->db->where('l.blanch_id', $filters['blanch_id']);
+    }
+
+    if (!empty($filters['from'])) {
+        $this->db->where('ot.loan_stat_date >=', $filters['from']);
+    }
+
+    if (!empty($filters['to'])) {
+        $this->db->where('ot.loan_stat_date <=', $filters['to']);
+    }
+
+    $this->db->order_by('l.loan_id', 'DESC');
+    $query = $this->db->get();
+    return $query->result();
+}
+
+
+
+public function get_sum_loanwithdrawal_interest_filtered($comp_id, $filters = [])
+{
+    $this->db->select_sum('loan_int'); // Sum of interest
+    $this->db->from('tbl_loans l');
+    $this->db->join('tbl_outstand ot', 'ot.loan_id = l.loan_id', 'left');
+
+    $this->db->where('l.comp_id', $comp_id);
+    $this->db->where('l.loan_status', 'withdrawal');
+
+    // Apply filters if provided
+    if (!empty($filters['blanch_id'])) {
+        $this->db->where('l.blanch_id', $filters['blanch_id']);
+    }
+    if (!empty($filters['from'])) {
+        $this->db->where('ot.loan_stat_date >=', $filters['from']);
+    }
+    if (!empty($filters['to'])) {
+        $this->db->where('ot.loan_stat_date <=', $filters['to']);
+    }
+
+    $query = $this->db->get();
+    $result = $query->row();
+    return $result->loan_int ?? 0;
+}
+
+
+
 
 	//    public function get_grouped_withdrawal_LoanBlanch($blanch_id){
 	// 	$this->db->select('l.*, c.*, lt.*, b.*, s.*, ot.*, e.empl_name');
@@ -1553,9 +1691,10 @@ public function get_totalLoanout($customer_id){
 
 
        public function get_sum_loanDisbursed($comp_id){
-       	
-       	$total_loan_dis = $this->db->query("SELECT SUM(loan_aprove) AS total_loan FROM tbl_loans WHERE comp_id = '$comp_id' AND loan_status = 'disbarsed'");
+		    	$date = date("Y-m-d");
+       	$total_loan_dis = $this->db->query("SELECT SUM(l.loan_aprove) AS total_loan FROM tbl_loans l LEFT JOIN tbl_outstand ot ON ot.loan_id = ot.loan_id WHERE l.comp_id = '$comp_id' AND l.loan_status = 'disbarsed' AND ot.loan_stat_date = '$date'");
        	  return $total_loan_dis->row();
+
        }
 
        public function get_sum_loanwithdrawal_data($comp_id){
@@ -3575,7 +3714,7 @@ public function get_total_principal($comp_id){
 
 public function get_today_withdrawal_daily_comp($comp_id){
 	$today = date("Y-m-d");
-	$data = $this->db->query("SELECT SUM(loan_aprove) AS total_loanWith_day FROM tbl_loans l LEFT JOIN tbl_outstand ot ON ot.loan_id = l.loan_id WHERE l.comp_id = '$comp_id' AND loan_stat_date = '$today' AND l.day = '1'");
+	$data = $this->db->query("SELECT SUM(loan_aprove) AS total_loanWith_day FROM tbl_loans l LEFT JOIN tbl_outstand ot ON ot.loan_id = l.loan_id WHERE l.comp_id = '$comp_id' AND loan_stat_date = '$today'");
 	return $data->row();
 }
 

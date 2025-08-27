@@ -532,12 +532,12 @@ echo htmlspecialchars($blanchs->blanch_name ?? '', ENT_QUOTES, 'UTF-8');
                             <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Loan Requests</h2>
                         </div>
                         <?php $new_loan = $this->db->query("SELECT * FROM tbl_loans WHERE comp_id = '$comp_id' AND loan_status = 'open'"); ?>
-                        <p class="text-2xl font-bold text-red-600 dark:text-red-400"><?php echo $new_loan->num_rows();  ?></p>
+                        <p class="text-2xl font-bold text-red-600 dark:text-red-400"><?php echo ($new_loan->num_rows());  ?></p>
                         <p class="text-xs text-gray-500 dark:text-gray-400">New loan applications</p>
                     </a>
 
                     <!-- Stat Card: Approved Loans -->
-                    <a href="<?php echo base_url("admin/get_loan_aproved"); ?>" class="bg-white dark:bg-gray-700 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow duration-300">
+                    <a href="<?php echo base_url("admin/disburse_loan"); ?>" class="bg-white dark:bg-gray-700 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow duration-300">
                         <div class="flex items-center gap-x-3 mb-3">
                         <?php
 							$ap = $this->db->query("SELECT * FROM tbl_loans WHERE comp_id = '$comp_id' AND loan_status = 'aproved'");
@@ -545,8 +545,21 @@ echo htmlspecialchars($blanchs->blanch_name ?? '', ENT_QUOTES, 'UTF-8');
                             <!-- <img src="</?php echo base_url('assets/img/aproved.png'); ?>" class="size-10" alt="Approved Loans"> -->
                             <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Approved Loans</h2>
                         </div>
-                        <p class="text-2xl font-bold text-green-600 dark:text-green-400"><?php echo $ap->num_rows(); ?></p>
-                        <p class="text-xs text-gray-500 dark:text-gray-400">Loans awaiting disbursement</p>
+                        <p class="text-2xl font-bold text-green-600 dark:text-green-400"><?php echo number_format($disbursed_loans->total_loan); ?></p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">Loans that has already disbursed </p>
+                    </a>
+
+
+                        <a href="<?php echo base_url("admin/loan_withdrawal"); ?>" class="bg-white dark:bg-gray-700 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow duration-300">
+                        <div class="flex items-center gap-x-3 mb-3">
+                        <?php
+							$ap = $this->db->query("SELECT * FROM tbl_loans WHERE comp_id = '$comp_id' AND loan_status = 'aproved'");
+							 ?>
+                            <!-- <img src="</?php echo base_url('assets/img/aproved.png'); ?>" class="size-10" alt="Approved Loans"> -->
+                            <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Loan payout</h2>
+                        </div>
+                        <p class="text-2xl font-bold text-green-600 dark:text-green-400"><?php echo number_format($total_withdrawal_daily->total_loanWith_day); ?></p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">loans that have been given  to customers</p>
                     </a>
 
                     <!-- Stat Card: Today Loan Pending -->

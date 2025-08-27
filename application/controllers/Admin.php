@@ -32,6 +32,7 @@ class Admin extends CI_Controller {
      $principal_loan = $this->queries->get_total_principal($comp_id);
      $done_loan = $this->queries->get_totalLoanRepayment($comp_id);
      $total_receved = $this->queries->get_sumReceived_amount($comp_id);
+	 	$total_loanDis = $this->queries->get_sum_loanDisbursed($comp_id);
      
      //new code 
      $cash_depost = $this->queries->get_today_chashData_Comp($comp_id);
@@ -74,6 +75,14 @@ class Admin extends CI_Controller {
 	 $branchwise_deposits = $this->queries->get_branchwise_today_deposit($comp_id);
 
 	 $top_depositors = $this->queries->get_top_5_deposit_employees($comp_id);
+
+	 $disbursed_loans= $this->queries->get_sum_loanDisbursed($comp_id);
+
+	 	    
+
+		//      echo "<pre>";
+	    //  print_r(   $disbursed_loans);
+	    //  exit();
 	 
 
 	 $total_overdue= $this->queries->total_outstand_loan($comp_id);
@@ -116,6 +125,7 @@ class Admin extends CI_Controller {
 	'new_customer'=> $new_customer,'top_depositors'=> $top_depositors,
 	'total_deni'=> $total_deni,
 	' compdata'=> $compdata,
+	'disbursed_loans'=>$disbursed_loans,
 	'total_active_paid'=> $total_active_paid,
 	'today_endactive_paid'=> $today_endactive_paid,
 	'total_default_paid'=> $total_default_paid,
@@ -2350,8 +2360,10 @@ public function loan_fee(){
 	$fee_category = $this->queries->get_loanfee_category($comp_id);
 	$fee_category_data = $this->queries->get_loanfee_categoryData($comp_id);
 	$loan_category = $this->queries->get_loancategory($comp_id);
-	    // print_r($fee_category_data);
-	    //     exit();
+	// echo "<pre>";
+	//     print_r($fee_category);			
+	// 			echo "</pre>";
+	//         exit();
 	$this->load->view('admin/loan_fee',['loan_fee'=>$loan_fee,'fee_type'=>$fee_type,'fee_data'=>$fee_data,'fee_category'=>$fee_category,'fee_category_data'=>$fee_category_data,'loan_category'=>$loan_category]);
 }
 
@@ -2581,11 +2593,22 @@ public function disburse($loan_id){
 
       $loan_fee_type = $this->queries->get_loanfee_type($comp_id);
       $type = $loan_fee_type->type;
+
+	
+	// 	  echo "<pre>";
+	//   print_r(  $type);
+	//   echo "</pre>";
+	//   	 exit();
+
       $this->insert_loan_aprovedDisburse($comp_id,$loan_id,$customer_id,$blanch_id,$balance,$role,$group_id);
 	  $unchangable_balance = $balance;
+	  
+
         if ($type == 'PERCENTAGE VALUE') {
 	  for ($i=0; $i<count($loan_fee); $i++) { 
 		$interest = $loan_fee[$i]->fee_interest;
+
+
 		$fee_description = $loan_fee[$i]->description;
 		$fee_number = $loan_fee[$i]->fee_interest;
 	  	$withdraw_balance = $unchangable_balance * ($interest / 100);
@@ -2939,11 +2962,50 @@ public function disburse($loan_id){
 
 		
 		    // echo "<pre>";
-		    // print_r($comp_loan );
+		    // print_r($disburse );
 		    // echo "</pre>";
 		    //     exit();
 		$this->load->view('admin/loan_withdrawal',['disburse'=>$disburse,'total_loanDis'=>$total_loanDis,'total_interest_loan'=>$total_interest_loan,'blanch'=>$blanch,'formular'=>$formular,'loan_fee_category'=>$loan_fee_category,'loan_category'=>$loan_category]);
 	}
+
+
+public function get_blanch_withdraw()
+{
+    $this->load->model('queries');
+    $comp_id = $this->session->userdata('comp_id');
+
+    // Get POSTed filter values
+    $filters = [
+        'blanch_id' => $this->input->post('blanch_id'),
+        'from'      => $this->input->post('from'),
+        'to'        => $this->input->post('to')
+    ];
+
+    // Fetch filtered loans
+    $disburse = $this->queries->get_withdrawal_Loan_filtered($comp_id, $filters);
+
+    // Calculate totals using the new filtered sum functions
+    $total_loanDis       = $this->queries->get_sum_loanwithdrawal_data_filtered($comp_id, $filters);
+    $total_interest_loan = $this->queries->get_sum_loanwithdrawal_interest_filtered($comp_id, $filters);
+
+    // Other data needed for the view
+    $blanch = $this->queries->get_blanch($comp_id);
+    $formular = $this->queries->get_interestFormular($comp_id);
+    $loan_fee_category = $this->queries->get_loanfee_categoryData($comp_id);
+    $loan_category = $this->queries->get_loancategory($comp_id);
+
+    // Load the same view, passing filtered data
+    $this->load->view('admin/loan_withdrawal', [
+        'disburse'            => $disburse,
+        'total_loanDis'       => $total_loanDis,
+        'total_interest_loan' => $total_interest_loan,
+        'blanch'              => $blanch,
+        'formular'            => $formular,
+        'loan_fee_category'   => $loan_fee_category,
+        'loan_category'       => $loan_category
+    ]);
+}
+
 
 	public function filter_loan_withdrawal(){
 		$this->load->model('queries');
