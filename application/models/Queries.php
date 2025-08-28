@@ -1697,6 +1697,51 @@ public function get_totalLoanout($customer_id){
 
        }
 
+	    public function get_all_numbers()
+    {
+        return $this->db->order_by('id', 'DESC')->get('tbl_notification_numbers')->result();
+    }
+
+    public function get_numbers_by_position($position)
+    {
+        return $this->db->where('position', $position)
+                        ->where('status', 1)
+                        ->get('tbl_notification_numbers')
+                        ->result();
+    }
+
+    public function insert_number($data)
+    {
+        return $this->db->insert('tbl_notification_numbers', $data);
+    }
+
+    public function get_number($id)
+    {
+        return $this->db->where('id', $id)->get('tbl_notification_numbers')->row();
+    }
+
+    public function update_number($id, $data)
+    {
+        return $this->db->where('id', $id)->update('tbl_notification_numbers', $data);
+    }
+
+    public function delete_number($id)
+    {
+        return $this->db->where('id', $id)->delete('tbl_notification_numbers');
+    }
+
+
+	public function get_admin_numbers() {
+    $this->db->select('phone_number');
+    $this->db->from('tbl_notification_numbers');
+    $this->db->where('position', 'admin');
+    $query = $this->db->get();
+    return $query->result(); // inarudisha array ya objects
+}
+
+
+	
+
        public function get_sum_loanwithdrawal_data($comp_id){
        	$date = date("Y-m-d");
        	$total_loan_dis = $this->db->query("SELECT SUM(l.loan_aprove) AS total_loan FROM tbl_loans l LEFT JOIN tbl_outstand ot ON ot.loan_id = ot.loan_id WHERE l.comp_id = '$comp_id' AND l.loan_status = 'withdrawal' AND ot.loan_stat_date = '$date'");

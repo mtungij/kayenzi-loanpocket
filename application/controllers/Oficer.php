@@ -1033,15 +1033,21 @@ Muda: {$time}.
 Jumla leo tawi: " . number_format($jumla_faini) . " TZS.";
 
   
+  $admins_numbers = $this->queries->get_admin_numbers();
 
-$phone_number = [     
-'255765320443',
+  // echo "<pre>";
+  // print_r($admins_numbers);
+  //       exit();
 
-            ];
+        foreach ($admins_numbers as $admin) {
+    $phone_numbers[] = $admin->phone_number; // hakika hakuna validation, tuzichukue raw
+}
+
+      
   
-            foreach ($phone_number as  $phone) {
-              $this->sendsms($phone, $massage);
-            }
+      foreach ($phone_numbers as $phone) {
+          $this->sendsms($phone, $massage);
+      }
 
               
               // print_r($amount);
@@ -2924,11 +2930,14 @@ private function upload_file($field_name, $new_name_prefix)
   Afisa aliyesajili ni $employee_name. Kiasi cha mkopo kilichoombwa ni TZS " . number_format($how_loan, 0);
   
       // Phone numbers to notify
-      $phone_numbers = [
-    
-       '255765320443',
+  $admins_numbers = $this->queries->get_admin_numbers();
+        foreach ($admins_numbers as $admin) {
+    $phone_numbers[] = $admin->phone_number; // hakika hakuna validation, tuzichukue raw
+}
 
-      ];
+            foreach ($phone_numbers as $phone) {
+                $this->sendsms($phone, $message);
+            }
   
       foreach ($phone_numbers as $phone) {
           $this->sendsms($phone, $message);
@@ -2995,13 +3004,10 @@ Jina la mteja: $first_name $middle_name $last_name,
 Nambari ya simu: $phone_number. 
 Kiasi kilichoombwa mwanzo: TZS " . number_format($old_loan_amount, 0) . ", 
 Kilichobadilishwa sasa kuwa: TZS " . number_format($how_loan, 0) . ".";
-
-            // Phone numbers to notify
-            $phone_numbers = [
-               '255765320443',
-
-                
-            ];
+$admins_numbers = $this->queries->get_admin_numbers();
+        foreach ($admins_numbers as $admin) {
+    $phone_numbers[] = $admin->phone_number; // hakika hakuna validation, tuzichukue raw
+}
 
             foreach ($phone_numbers as $phone) {
                 $this->sendsms($phone, $message);

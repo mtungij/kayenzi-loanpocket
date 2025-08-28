@@ -2968,6 +2968,81 @@ public function disburse($loan_id){
 		$this->load->view('admin/loan_withdrawal',['disburse'=>$disburse,'total_loanDis'=>$total_loanDis,'total_interest_loan'=>$total_interest_loan,'blanch'=>$blanch,'formular'=>$formular,'loan_fee_category'=>$loan_fee_category,'loan_category'=>$loan_category]);
 	}
 
+	public function notification(){
+            $this->load->model('queries');
+		  $data['numbers'] = $this->queries->get_all_numbers();
+		//   print_r( $data['numbers']);
+		//        exit();
+        $this->load->view('admin/notifications', $data);
+	}
+
+
+public function create_notifications()
+{
+    $this->form_validation->set_rules('name', 'Name', 'required');
+    $this->form_validation->set_rules('phone_number', 'Phone Number', 'required|numeric');
+    $this->form_validation->set_rules('position', 'Position', 'required');
+    
+    if ($this->form_validation->run() == FALSE) {
+        $this->load->model('queries');
+        $data['numbers'] = $this->queries->get_all_numbers();
+        $this->load->view('admin/create_notifications', $data);
+    } else {
+        $phone = $this->input->post('phone_number');
+        
+        // Remove leading 0 and add 255
+        if (substr($phone, 0, 1) == '0') {
+            $phone = '255' . substr($phone, 1);
+        } else {
+            // If user types full number without 0, just prepend 255 if not already
+            if (substr($phone, 0, 3) != '255') {
+                $phone = '255' . $phone;
+            }
+        }
+
+        $data = [
+            'name'         => $this->input->post('name'),
+            'phone_number' => $phone,
+            'position'     => $this->input->post('position'),
+            'status'       => 1
+        ];
+
+        $this->load->model('queries');
+        $this->queries->insert_number($data);
+        redirect('admin/create_notifications');
+    }
+}
+
+
+public function edit($id)
+{
+    $data['number'] = $this->queries->get_number($id);
+	  $this->form_validation->set_rules('name', 'Name', 'required');
+    $this->form_validation->set_rules('phone_number', 'Phone Number', 'required');
+    $this->form_validation->set_rules('position', 'Position', 'required');
+
+    if ($this->form_validation->run() == FALSE) {
+        $this->load->view('notifications/edit', $data);
+    } else {
+        $update = [
+			  'name'        => $this->input->post('name'),
+            'phone_number' => $this->input->post('phone_number'),
+            'position'     => $this->input->post('position'),
+            'status'       => $this->input->post('status')
+        ];
+		 $this->load->model('queries'); // hakikisha model ipo
+        $this->queries->update_number($id, $update);
+        redirect('admin/create_notifications');
+    }
+}
+
+   public function delete($id)
+    {
+		$this->load->model('queries');
+        $this->queries->delete_number($id);
+        redirect('admin/create_notifications');
+    }
+
 
 public function get_blanch_withdraw()
 {

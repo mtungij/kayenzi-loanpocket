@@ -34,6 +34,7 @@ function is_submenu_active($submenu_segments = []) {
 $dashboard_active = is_active_link('admin/index'); // Example: assuming admin/index is dashboard
 $branch_active = is_active_link('admin/blanch');
 $groups_active = is_active_link('admin/group');
+$notification_active = is_active_link('admin/create_notifications');
 
 $setting_submenu_active = is_submenu_active(['loan_category', 'loan_fee', 'penart_setting', 'formular_setting', 'transaction_account']);
 $capital_submenu_active = is_submenu_active(['shareHolder', 'capital', 'transfar_amount']);
@@ -94,6 +95,17 @@ $communication_submenu_active = is_submenu_active(['send_email']); // Assuming S
         <?php endif; ?>
       </li>
       
+    <li>
+      <?php if (has_permission('sajili namba za simu za kupata sms notifications ')): ?>
+        <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg
+                  <?php echo $notification_active ? 'bg-cyan-100 text-cyan-700 dark:bg-cyan-900/50 dark:text-white' : 'text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-900 dark:text-gray-400 dark:hover:text-gray-300'; ?>"
+           href="<?php echo base_url("admin/create_notifications"); ?>">
+          <!-- SVG: Branch Icon (Heroicons: building-office or similar) -->
+          <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M11.25 3.25A1.75 1.75 0 0 0 9.5 5v10H5.75a.75.75 0 0 0 0 1.5h10.5a.75.75 0 0 0 0-1.5H12.5V5A1.75 1.75 0 0 0 10.75 3.25H9.5Zm-2.5 6.5h.01a.75.75 0 0 0 0 1.5H8.75a.75.75 0 0 0 0-1.5ZM10.5 9.75h.01a.75.75 0 0 0 0 1.5H10.5a.75.75 0 0 0 0-1.5ZM8.75 12.25h.01a.75.75 0 0 0 0 1.5H8.75a.75.75 0 0 0 0-1.5ZM10.5 12.25h.01a.75.75 0 0 0 0 1.5H10.5a.75.75 0 0 0 0-1.5Z" clip-rule="evenodd" /></svg>
+          Manage Notifications
+        </a>
+        <?php endif; ?>
+      </li>
 
 
       <li>
