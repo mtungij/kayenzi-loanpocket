@@ -324,22 +324,40 @@ class Admin extends CI_Controller {
 		$this->load->view('admin/region',['region'=>$region]);
 	}
 
-	public function create_region(){
-		$this->form_validation->set_rules('region_name','Reion','required');
-		$this->form_validation->set_error_delimiters('<div class="text-danger">','</div>');
-		if ($this->form_validation->run() ) {
-			  $data = $this->input->post();
-			  
-			  $this->load->model('queries');
-			  if ($this->queries->insert_region($data)) {
-			  	 $this->session->set_flashdata('massage','Region Saved successfully');
-			  }else{
-			  	$this->session->set_flashdata('error','Data failed');
-			  }
-			  return redirect('admin/region');
-		}
-		$this->region();
-	}
+public function create_region(){
+    $this->form_validation->set_rules('region_name','Region','required');
+    $this->form_validation->set_error_delimiters('<div class="text-danger">','</div>');
+    
+    if ($this->form_validation->run()) {
+        $data = $this->input->post();
+
+        // tengeneza region_code
+        $region_name = strtoupper(substr($data['region_name'], 0, 3)); // herufi 3 za mwanzo
+        $region_code = $region_name;
+
+        // hakikisha haijarudiwa (ongeza namba ikiwa ipo tayari)
+        $this->load->model('queries');
+        $existing = $this->queries->check_region_code($region_code);
+        if ($existing) {
+            // kama ipo, ongeza namba mwishoni
+            $count = $this->queries->count_regions_by_prefix($region_code);
+            $region_code = $region_code . $count;
+        }
+
+        // ongeza kwenye data
+        $data['region_code'] = $region_code;
+
+        if ($this->queries->insert_region($data)) {
+            $this->session->set_flashdata('message','Region Saved successfully');
+        } else {
+            $this->session->set_flashdata('error','Data failed');
+        }
+        return redirect('admin/region');
+    }
+
+    $this->region();
+}
+
 
 	public function table(){
 		//echo "hallooooooo";
@@ -351,32 +369,77 @@ class Admin extends CI_Controller {
 		 $comp_id = $this->session->userdata('comp_id');
 		 $blanch = $this->queries->get_blanch($comp_id);
 		 $region = $this->queries->get_region();
-		  // print_r($region);
-		  //    exit();
+		 $data['branch'] = $this->queries->get_branches_with_region();
+
+		//  echo "<pre>";
+		// print_r($blanch);
+		// exit();
+		
+		//  echo "<pre>";
+		//   print_r($region);
+		//   echo "</pre>";
+		//      exit();
 		$this->load->view('admin/blanch',['blanch'=>$blanch,'region'=>$region]);
 	}
+public function create_blanch() {
+    $this->form_validation->set_rules('comp_id', 'Company', 'required');
+    $this->form_validation->set_rules('region_id', 'Region', 'required');
+    $this->form_validation->set_rules('blanch_name', 'Branch Name', 'required');
+    $this->form_validation->set_rules('blanch_no', 'Branch Number', 'required');
+    $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
 
-	public function  create_blanch(){
-		$this->form_validation->set_rules('comp_id','company','required');
-		$this->form_validation->set_rules('region_id','Region','required');
-		$this->form_validation->set_rules('blanch_name','blanch name','required');
-		$this->form_validation->set_rules('blanch_no','blanch','required');
-		$this->form_validation->set_error_delimiters('<div class="text-danger">','</div>');
-		if ($this->form_validation->run()) {
-			$data = $this->input->post();
-			 // print_r($data);
-			 //   exit();
-			$this->load->model('queries');
-			if ($this->queries->insert_blanch($data)) {
-				 $this->session->set_flashdata('massage','Blanch saved successfully');
-			}else{
-				 $this->session->set_flashdata('error','Failed');
+    if ($this->form_validation->run()) {
+        $data = $this->input->post();
 
-			}
-			return redirect('admin/blanch');
-		}
-		$this->blanch();
-	}
+        $region_id = $data['region_id'];
+        $branch_name = $data['blanch_name'];
+
+        // Check if region exists
+        $region = $this->db->get_where('tbl_region', ['region_id' => $region_id])->row();
+        if (!$region) {
+            $this->session->set_flashdata('error', 'Region does not exist.');
+            return redirect('admin/blanch');
+        }
+
+        // Check for duplicate branch in the same region
+        $duplicate = $this->db->get_where('tbl_blanch', [
+            'region_id' => $region_id,
+            'blanch_name' => $branch_name
+        ])->row();
+
+        if ($duplicate) {
+            $this->session->set_flashdata('error', 'Branch name already exists in this region.');
+            return redirect('admin/blanch');
+        }
+
+        $region_code = $region->region_code;
+
+        // Count existing branches in the region
+        $this->db->where('region_id', $region_id);
+        $count = $this->db->count_all_results('tbl_blanch');
+
+        $next_number = $count + 1;
+
+        // Generate branch code (e.g., DSM-001)
+        $branch_code = $region_code . '-' . str_pad($next_number, 3, '0', STR_PAD_LEFT);
+
+        // Prepare data for insertion
+        $insert_data = [
+            'branch_code' => $branch_code,
+            'blanch_name' => $branch_name,
+            'region_id'   => $region_id,
+            'comp_id'     => $data['comp_id']
+        ];
+
+        $this->db->insert('tbl_blanch', $insert_data);
+
+        $this->session->set_flashdata('success', 'Branch created successfully.');
+        return redirect('admin/blanch');
+    }
+
+    // Reload the branch form if validation fails
+    $this->blanch();
+}
 
 	public function shareHolder(){
 		$this->load->model('queries');
@@ -639,6 +702,35 @@ $sqldata="UPDATE `tbl_ac_company` SET `comp_balance`= '$total_remain' WHERE  `tr
 
 
 	}
+
+
+public function download_branches_pdf()
+{
+    $this->load->model('queries');
+    $comp_id = $this->session->userdata('comp_id');
+    $compdata = $this->queries->get_companyData($comp_id);
+    $blanch = $this->queries->get_blanch($comp_id);
+
+    // Group branches by region
+    $branches_by_region = [];
+    foreach ($blanch as $b) {
+        $region = $b->region_name; // adjust field if different
+        $branches_by_region[$region][] = $b;
+    }
+
+    $mpdf = new \Mpdf\Mpdf();
+    $html = $this->load->view('admin/blanch_report', [
+        'compdata' => $compdata, 
+        'branches_by_region' => $branches_by_region
+    ], true);
+
+    $mpdf->SetFooter('Generated By Brainsoft Technology');
+    $mpdf->WriteHTML($html);
+    $mpdf->Output('branches_report.pdf', 'D');
+}
+
+
+
 
 	public function delete_blanch($blanch_id){
 		$this->load->model('queries');

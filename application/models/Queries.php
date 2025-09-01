@@ -28,6 +28,25 @@ class Queries extends CI_Model {
 }
 
 
+public function check_region_code($code){
+    return $this->db->get_where('tbl_region', ['region_code' => $code])->row();
+}
+
+public function get_branches_with_region() {
+    $this->db->select('blanch_id as branch_id, b.blanch_name, b.branch_code, b.blanch_no, r.region_name');
+    $this->db->from('tbl_blanch b');
+    $this->db->join('tbl_region r', 'r.region_id = b.region_id', 'left'); // tumia region_id sahihi
+    return $this->db->get()->result();
+}
+
+
+
+public function count_regions_by_prefix($prefix){
+    $this->db->like('region_code', $prefix, 'after');
+    return $this->db->count_all_results('tbl_region');
+}
+
+
 	public function insert_blanch($data){
 		return $this->db->insert('tbl_blanch',$data);
 	}
@@ -117,13 +136,35 @@ public function remove_position($position_id){
 	return $this->db->delete('tbl_position',['position_id'=>$position_id]);
 }
 
+public function update_blanch($data, $blanch_id){
+    if (!$blanch_id) {
+        return false;
+    }
 
-public function update_blanch($data,$blanch_id){
-	if (!$blanch_id) {
-		return false;
-	}
-	return $this->db->where('blanch_id',$blanch_id)->update('tbl_blanch',$data);
+    // pata current branch
+    $current_branch = $this->db->get_where('tbl_blanch', ['blanch_id' => $blanch_id])->row();
+    if (!$current_branch) {
+        return false;
+    }
+
+    // kama region_id imebadilika, generate branch_code mpya
+    if ($current_branch->region_id != $data['region_id']) {
+        $region = $this->db->get_where('tbl_region', ['region_id' => $data['region_id']])->row();
+        if (!$region) return false;
+
+        $region_code = $region->region_code;
+
+        // hesabu idadi ya matawi ndani ya region hii
+        $this->db->where('region_id', $data['region_id']);
+        $count = $this->db->count_all_results('tbl_blanch');
+
+        // generate branch_code mpya
+        $data['branch_code'] = $region_code . '-' . str_pad($count + 1, 3, '0', STR_PAD_LEFT);
+    }
+
+    return $this->db->where('blanch_id', $blanch_id)->update('tbl_blanch', $data);
 }
+
 
 public function remove_blanch($blanch_id){
 	return $this->db->delete('tbl_blanch',['blanch_id'=>$blanch_id]);

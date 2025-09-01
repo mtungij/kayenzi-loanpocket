@@ -148,6 +148,10 @@ include_once APPPATH . "views/partials/header.php";
                         </div>
                     </div>
                 </div>
+<a href="<?php echo base_url('admin/download_branches_pdf'); ?>" 
+   class="py-2 px-4 bg-cyan-600 text-white rounded hover:bg-cyan-700">
+   Download PDF
+</a>
 
                 <div class="overflow-x-auto">
                     <div class="min-w-full inline-block align-middle">
@@ -169,6 +173,17 @@ include_once APPPATH . "views/partials/header.php";
                                                 </svg>
                                             </div>
                                         </th>
+
+                                        <th scope="col" class="py-3 px-6 text-start font-normal focus:outline-none">
+                                            <div class="inline-flex items-center gap-x-2">
+                                                <span class="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400">Branch Code</span>
+                                                 <svg class="size-3.5 text-gray-400 dark:text-gray-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path class="hs-datatable-ordering-desc:text-cyan-600 dark:hs-datatable-ordering-desc:text-cyan-500" d="m7 15 5 5 5-5"></path>
+                                                    <path class="hs-datatable-ordering-asc:text-cyan-600 dark:hs-datatable-ordering-asc:text-cyan-500" d="m7 9 5-5 5 5"></path>
+                                                </svg>
+                                            </div>
+                                        </th>
+
                                         <th scope="col" class="py-3 px-6 text-start font-normal focus:outline-none">
                                             <div class="inline-flex items-center gap-x-2">
                                                 <span class="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400">Phone</span>
@@ -187,6 +202,16 @@ include_once APPPATH . "views/partials/header.php";
                                                 </svg>
                                             </div>
                                         </th>
+
+                                        <th scope="col" class="py-3 px-6 text-start font-normal focus:outline-none">
+                                            <div class="inline-flex items-center gap-x-2">
+                                                <span class="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400">Region Code</span>
+                                                 <svg class="size-3.5 text-gray-400 dark:text-gray-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path class="hs-datatable-ordering-desc:text-cyan-600 dark:hs-datatable-ordering-desc:text-cyan-500" d="m7 15 5 5 5-5"></path>
+                                                    <path class="hs-datatable-ordering-asc:text-cyan-600 dark:hs-datatable-ordering-asc:text-cyan-500" d="m7 9 5-5 5 5"></path>
+                                                </svg>
+                                            </div>
+
                                         <th scope="col" class="py-3 px-6 text-start font-normal focus:outline-none --exclude-from-ordering">
                                             <div class="inline-flex items-center gap-x-2">
                                                 <span class="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400">Status</span>
@@ -206,8 +231,10 @@ include_once APPPATH . "views/partials/header.php";
                                         <tr>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-200"><?php echo $no++; ?>.</td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200"><?php echo htmlspecialchars($blanch_item->blanch_name, ENT_QUOTES, 'UTF-8'); ?></td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200"><?php echo htmlspecialchars($blanch_item->branch_code, ENT_QUOTES, 'UTF-8'); ?></td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200"><?php echo htmlspecialchars($blanch_item->blanch_no, ENT_QUOTES, 'UTF-8'); ?></td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200"><?php echo htmlspecialchars($blanch_item->region_name, ENT_QUOTES, 'UTF-8'); ?></td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200"><?php echo htmlspecialchars($blanch_item->region_code, ENT_QUOTES, 'UTF-8'); ?></td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm">
                                                 <span class="py-1 px-2.5 inline-flex items-center gap-x-1 text-xs font-medium bg-teal-100 text-teal-800 rounded-full dark:bg-teal-500/10 dark:text-teal-500">
                                                     <svg class="size-2.5" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg>

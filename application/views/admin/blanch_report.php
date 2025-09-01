@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -50,8 +51,11 @@
           
 
  <div style="width: 20%;">
-  <img src="<?php echo base_url().'assets/img/'.$compdata->comp_logo ?>" style="width: 100px;height: 80px;">
-  </div> 
+ <img src="<?= FCPATH.'assets/img/logo.jpeg' ?>" 
+     style="width:100px;height:80px; transform: rotate(270deg); transform-origin: top left;">
+
+
+  </div>
 
         </td>
         <td style="border: none">
@@ -96,24 +100,30 @@ tr:nth-child(even) {
 <table>
   <tr>
     <th style="font-size:12px;border: none;">S/No.</th>
-    <th style="font-size:12px;border: none;">Branch Name</th>
-    <th style="font-size:12px;border: none;">Branch Region</th>
-    <th style="font-size:12px;border: none;">Branch Phone Number</th>
-  </tr>
-   <?php $no = 1; ?>
-  <?php foreach ($blanch as $blanchs): ?>
+    <th style="font-size:12px;border: none;">JINA LA TAWI</th>
+    <th style="font-size:12px;border: none;">CODE YA TAWI</th>
+      <th style="font-size:12px;border: none;">NAMBARI YA SIMU</th>
+    <th style="font-size:12px;border: none;">MKOA</th>
   
- <tr>
-    <td style="font-size:12px;border: none;" class="c"><?php echo $no++; ?>.</td>
-    <td style="font-size:12px;border: none;" class="c"><?php echo $blanchs->blanch_name; ?></td>
-    <td style="font-size:12px;border: none;" class="c">
-      <?php echo $blanchs->region_name; ?>
-      </td>
-       <td style="font-size:12px;border: none;" class="c">
-      <?php echo $blanchs->blanch_no; ?>
-      </td>
   </tr>
- <?php endforeach; ?>
+<?php $no = 1; ?>
+<?php foreach ($branches_by_region as $region => $branches): ?>
+    <tr>
+        <td colspan="5" style="font-weight:bold; background-color:#eee; text-align:center;">
+            <?= strtoupper(htmlspecialchars($region)) ?>
+        </td>
+    </tr>
+    <?php foreach ($branches as $blanchs): ?>
+        <tr>
+            <td><?= $no++ ?>.</td>
+            <td><?= strtoupper(htmlspecialchars($blanchs->blanch_name)) ?></td>
+            <td><?= strtoupper(htmlspecialchars($blanchs->branch_code)) ?></td>
+            <td><?= strtoupper(htmlspecialchars($blanchs->blanch_no)) ?></td>
+            <td><?= strtoupper(htmlspecialchars($blanchs->region_name)) ?></td>
+        </tr>
+    <?php endforeach; ?>
+<?php endforeach; ?>
+
  
 
 </table>
@@ -123,6 +133,120 @@ tr:nth-child(even) {
 
 </body>
 </html>
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title><?= htmlspecialchars($comp_data->comp_name) ?> - Cash Transaction</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            color: #333;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 6px 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #00bcd4;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .total-row {
+            background-color: #ddd;
+            font-weight: bold;
+        }
+        .company-header {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .company-header img {
+            max-height: 80px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+<?php 
+$company_name = "CDC MICROFINANCE LIMITED";
+$company_address = "Anglicana Street, TARIME, Tanzania";
+$company_email = "cdcmicrofinance@gmail.com";
+$company_phone = "+255 763 727 272";
+$logo_path = FCPATH . 'assets/img/cdclogo.png';
+$logo_url = 'file://' . $logo_path;
+
+
+?>
+    <!-- Company Header -->
+    <div class="company-header">
+    <div style="text-align: center;">
+    <img src="<?= $logo_url ?>" alt="Company Logo" style="max-height: 100px; width: auto;" />
+</div>
+
+        <h2><?= htmlspecialchars($company_name) ?></h2>
+        <p><?= htmlspecialchars($company_address) ?></p>
+        <p>Email: <?= htmlspecialchars($company_email) ?> | Phone: <?= htmlspecialchars($company_phone) ?></p>
+    </div>
+
+    <!-- Report Title -->
+    <h3 style="text-align: center; margin-top: 30px;">CASH TRANSANCTION REPORT</h3>
+
+    <!-- Table -->
+    <table>
+    <thead>
+        <tr>
+            <th>S/No</th>
+            <th>Jina La Tawi</th>
+            <th>Code Ya Tawi</th>
+            <th>Namba Ya Simu</th>
+            <th>Mkoa</th>
+        </tr>
+    </thead>
+    <tbody>
+   <?php $no = 1; ?>
+  <?php foreach ($blanch as $blanchs): ?>          
+            <tr>
+                <td><?= $no++ ?>.</td>
+                <td><?= strtoupper(htmlspecialchars($blanchs->blanch_name)) ?></td>
+                <td><?= strtoupper(htmlspecialchars($blanchs->branch_code)) ?></td>
+                <td><?= strtoupper(htmlspecialchars($blanchs->blanch_phone)) ?></td>
+                <td><?= strtoupper(htmlspecialchars($blanchs->region)) ?></td>
+            </tr>
+        <?php endforeach; ?>
+        
+    </tbody>
+</table>
+
+<br><br>
+
+
+    
+
+</body>
+</html>
+
 
 
 

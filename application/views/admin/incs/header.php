@@ -88,7 +88,7 @@ Fixed Sidebar
 <ul class="nav-notification clearfix">
 <li class="profile dropdown">
 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-<strong><?php echo $_SESSION['comp_name']; ?></strong>
+<!--  -->
 <span><i class="fa fa-chevron-down"></i></span>
 </a>
 <ul class="dropdown-menu">
