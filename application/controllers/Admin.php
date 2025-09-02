@@ -427,6 +427,7 @@ public function create_blanch() {
         $insert_data = [
             'branch_code' => $branch_code,
             'blanch_name' => $branch_name,
+			'blanch_no' => $data['blanch_no'],
             'region_id'   => $region_id,
             'comp_id'     => $data['comp_id']
         ];
