@@ -73,6 +73,54 @@ include_once APPPATH . "views/partials/header.php";
                     </div>
                 </div>
 
+                <!-- Filter Form -->
+<form method="get" action="<?php echo base_url('admin/disbursed_loans'); ?>" class="flex flex-wrap gap-4 mb-4">
+
+  <!-- Date From -->
+  <div>
+    <label for="from_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300">From Date</label>
+    <input type="date" name="from_date" id="from_date"
+           value="<?php echo htmlspecialchars($this->input->get('from_date')); ?>"
+           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-cyan-500 focus:ring-cyan-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+  </div>
+
+  <!-- Date To -->
+  <div>
+    <label for="to_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300">To Date</label>
+    <input type="date" name="to_date" id="to_date"
+           value="<?php echo htmlspecialchars($this->input->get('to_date')); ?>"
+           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-cyan-500 focus:ring-cyan-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+  </div>
+
+  <!-- Branch Dropdown -->
+  <div>
+    <label for="blanch_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Branch</label>
+    <select name="blanch_id" id="blanch_id"
+            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-cyan-500 focus:ring-cyan-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+      <option value="">-- All Branches --</option>
+      <?php if (isset($branches) && is_array($branches)): ?>
+        <?php foreach ($branches as $branch): ?>
+          <option value="<?php echo $branch->blanch_id; ?>"
+            <?php echo ($this->input->get('blanch_id') == $branch->blanch_id) ? 'selected' : ''; ?>>
+            <?php echo htmlspecialchars($branch->blanch_name, ENT_QUOTES, 'UTF-8'); ?>
+          </option>
+        <?php endforeach; ?>
+      <?php endif; ?>
+    </select>
+  </div>
+
+  <!-- Submit Button -->
+  <div class="flex items-end">
+    <button type="submit"
+            class="px-4 py-2 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500">
+      Filter
+    </button>
+  </div>
+
+</form>
+<!-- End Filter Form -->
+
+
                 <div class="overflow-x-auto">
                     <div class="min-w-full inline-block align-middle">
                         <div class="border rounded-lg overflow-hidden dark:border-gray-700">

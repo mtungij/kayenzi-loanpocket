@@ -5,44 +5,61 @@ include_once APPPATH . "views/partials/header.php";
 <div class="w-full lg:ps-64">
     <div class="p-4 sm:p-6 space-y-6">
 
-       <?php if ($das = $this->session->flashdata('massage')): ?>
+  <?php
+// Get flash messages
+$success_msg = $this->session->flashdata('massage');
+$error_msg   = $this->session->flashdata('error');
+?>
+
+<?php if ($success_msg): ?>
     <!-- Success Message -->
     <div class="bg-teal-100 border border-teal-200 text-sm text-teal-800 rounded-lg p-4 dark:bg-teal-800/10 dark:border-teal-900 dark:text-teal-500" role="alert">
         <div class="flex">
             <div class="flex-shrink-0">
                 <span class="inline-flex justify-center items-center size-8 rounded-full border-4 border-teal-100 bg-teal-200 text-teal-800 dark:border-teal-900 dark:bg-teal-800 dark:text-teal-500">
-                    <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path><path d="m9 12 2 2 4-4"></path></svg>
+                    <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path>
+                        <path d="m9 12 2 2 4-4"></path>
+                    </svg>
                 </span>
             </div>
             <div class="ms-3">
                 <h3 class="text-gray-800 font-semibold dark:text-white">Success</h3>
-                <p class="mt-2 text-sm text-gray-700 dark:text-gray-400"><?php echo $massage;?></p>
+                <p class="mt-2 text-sm text-gray-700 dark:text-gray-400"><?= $success_msg; ?></p>
             </div>
             <div class="ps-3 ms-auto">
                 <button type="button" class="inline-flex bg-teal-50 rounded-lg p-1.5 text-teal-500 hover:bg-teal-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-teal-50 focus:ring-teal-600 dark:bg-transparent dark:hover:bg-teal-800/50 dark:text-teal-600" data-hs-remove-element="[role=alert]">
                     <span class="sr-only">Dismiss</span>
-                    <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+                    <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M18 6 6 18"></path>
+                        <path d="m6 6 12 12"></path>
+                    </svg>
                 </button>
             </div>
         </div>
     </div>
-<?php elseif ($error = $this->session->flashdata('error')): ?>
+<?php elseif ($error_msg): ?>
     <!-- Error Message -->
     <div class="bg-red-100 border border-red-200 text-sm text-red-800 rounded-lg p-4 dark:bg-red-800/10 dark:border-red-900 dark:text-red-500" role="alert">
         <div class="flex">
             <div class="flex-shrink-0">
                 <span class="inline-flex justify-center items-center size-8 rounded-full border-4 border-red-100 bg-red-200 text-red-800 dark:border-red-900 dark:bg-red-800 dark:text-red-500">
-                    <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20z"/></svg>
+                    <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20z"/>
+                    </svg>
                 </span>
             </div>
             <div class="ms-3">
                 <h3 class="text-gray-800 font-semibold dark:text-white">Error</h3>
-                <p class="mt-2 text-sm text-gray-700 dark:text-gray-400"><?php echo $error;?></p>
+                <p class="mt-2 text-sm text-gray-700 dark:text-gray-400"><?= $error_msg; ?></p>
             </div>
             <div class="ps-3 ms-auto">
                 <button type="button" class="inline-flex bg-red-50 rounded-lg p-1.5 text-red-500 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-red-50 focus:ring-red-600 dark:bg-transparent dark:hover:bg-red-800/50 dark:text-red-600" data-hs-remove-element="[role=alert]">
                     <span class="sr-only">Dismiss</span>
-                    <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+                    <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M18 6 6 18"></path>
+                        <path d="m6 6 12 12"></path>
+                    </svg>
                 </button>
             </div>
         </div>

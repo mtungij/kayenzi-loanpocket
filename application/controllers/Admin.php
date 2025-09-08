@@ -9,6 +9,10 @@ class Admin extends CI_Controller {
 	$this->load->model('queries');
 	$comp_id = $this->session->userdata('comp_id');
    $compdata = $this->queries->get_companyData($comp_id);
+
+ 
+
+
     $receivable_total = $this->queries->get_total_recevable($comp_id);
     $total_received = $this->queries->get_sumReceived_amount($comp_id);
     $total_loan_pending = $this->queries->get_sun_loanPending($comp_id);
@@ -32,7 +36,7 @@ class Admin extends CI_Controller {
      $principal_loan = $this->queries->get_total_principal($comp_id);
      $done_loan = $this->queries->get_totalLoanRepayment($comp_id);
      $total_receved = $this->queries->get_sumReceived_amount($comp_id);
-	 	$total_loanDis = $this->queries->get_sum_loanDisbursed($comp_id);
+	 	$total_loanDis = $this->queries->get_today_disbursed_loans_sum($comp_id);
      
      //new code 
      $cash_depost = $this->queries->get_today_chashData_Comp($comp_id);
@@ -78,14 +82,14 @@ class Admin extends CI_Controller {
 
 	 $disbursed_loans= $this->queries->get_sum_loanDisbursed($comp_id);
 
-	 	    
+ $today_enddate_collection = $this->queries->get_next7days_ending_loans_restriction($comp_id);
 
 		//      echo "<pre>";
-	    //  print_r(   $disbursed_loans);
+	    //  print_r(   $today_enddate_collection);
 	    //  exit();
 	 
 
-	 $total_overdue= $this->queries->total_outstand_loan($comp_id);
+	 $total_overdue= $this->queries->total_outstand_loans($comp_id);
 	 $total_deni = $this->queries->total_outstand_loan_today($comp_id);
 	 $total_active_paid= $this->queries->get_today_received_from_receivale	($comp_id);
  $total_default_paid=$this->queries->get_depositing_out_total_comp($comp_id);
@@ -124,7 +128,10 @@ class Admin extends CI_Controller {
 	$this->load->view('admin/index',['receivable_total'=>$receivable_total,'total_deposit_monthly'=>$total_deposit_monthly,'total_deposit_weekly'=> $total_deposit_weekly,'total_deposit_daily'=> $total_deposit_daily,'deposit_daily'=> $deposit_daily,'done_customer_count'=>$done_customer_count,'all_customer_count'=>$all_customer_count,
 	'new_customer'=> $new_customer,'top_depositors'=> $top_depositors,
 	'total_deni'=> $total_deni,
+	'today_enddate_collection' => $today_enddate_collection,
+	'total_loanWithdrawal'=>$total_loanWithdrawal,
 	' compdata'=> $compdata,
+	'total_loanDis'=>$total_loanDis,
 	'disbursed_loans'=>$disbursed_loans,
 	'total_active_paid'=> $total_active_paid,
 	'today_endactive_paid'=> $today_endactive_paid,
@@ -2955,7 +2962,7 @@ public function disburse($loan_id){
 	public function disburse_loan(){
 		$this->load->model('queries');
 		$comp_id = $this->session->userdata('comp_id');
-		$disburse = $this->queries->get_DisbarsedLoan($comp_id);
+		$disburse = $this->queries->get_today_disbursed_loans($comp_id);
 		$total_loanDis = $this->queries->get_sum_loanDisbursed($comp_id);
 		$total_interest_loan = $this->queries->get_sum_loanDisburse_interest($comp_id);
 
@@ -3378,6 +3385,10 @@ public function get_blanch_withdraw()
 
 
 
+
+
+
+
   //loan not loan fee function
 	public function aprove_disbas_statusNotloanfee($loan_id){
 		    //Prepare array of user data
@@ -3642,12 +3653,10 @@ public function print_today_cash(){
 
 
 public function data_with_depost($customer_id){
-	$this->load->model('queries');
+    $this->load->model('queries');
     $comp_id = $this->session->userdata('comp_id');
     $customer = $this->queries->search_CustomerLoan($customer_id);
     $customery = $this->queries->get_allcustomerDatagroup($comp_id);
-    $customer_id = $this->input->post('customer_id');
-    $comp_id = $this->input->post('comp_id');
 
     $opening_blanch = $this->queries->get_sum_total_BlanchCapital($comp_id);
     $depost_blanch_account = $this->queries->get_blanch_depost_Balance($comp_id);
@@ -3655,15 +3664,17 @@ public function data_with_depost($customer_id){
 
     @$blanch_id = $customer->blanch_id;
     $acount = $this->queries->get_customer_account_verfied($blanch_id);
-   
-			
-				//  echo "<pre>";
-				//  print_r( $customer);
-				//  echo "</pre>";
-				//  exit();
-     
-	$this->load->view('admin/depost_withdrow',['opening_blanch'=>$opening_blanch,'depost_blanch_account'=>$depost_blanch_account,'loan_withdrawal_blanch'=>$loan_withdrawal_blanch,'customer'=>$customer,'customery'=>$customery,'acount'=>$acount]);
+
+    $this->load->view('admin/depost_withdrow', [
+        'opening_blanch'=>$opening_blanch,
+        'depost_blanch_account'=>$depost_blanch_account,
+        'loan_withdrawal_blanch'=>$loan_withdrawal_blanch,
+        'customer'=>$customer,
+        'customery'=>$customery,
+        'acount'=>$acount
+    ]);
 }
+
 
 
 public function create_withdrow_balance($customer_id) {
@@ -7594,28 +7605,72 @@ return true;
 		return redirect('admin/penart_setting');
 	}
 
-	public function today_recevable_loan(){
-		$this->load->model('queries');
-		$comp_id = $this->session->userdata('comp_id');
-	
-		// Data collections
-		$today_recevable = $this->queries->get_today_recevable_loan($comp_id);
-		$rejesho = $this->queries->get_total_recevable($comp_id);
-		$kusanyo = $this->queries->get_today_recevable_loan_branchwise($comp_id);
-		$employee = $this->queries->get_today_recevable_employee($comp_id);
+	public function today_recevable_loan() {
+    $this->load->model('queries');
+    $comp_id = $this->session->userdata('comp_id');
 
-	
-		// Load view
-		$this->load->view('admin/today_recevable', [
-			'today_recevable' => $today_recevable,
-			'rejesho' => $rejesho,
-			'employee' => $employee
-		]);
+    // Get filters from POST
+    $blanch_id = $this->input->post('blanch_id');
+    $empl_id = $this->input->post('empl_id');
+
+    $today_recevable = $this->queries->get_today_recevable_loan($comp_id, $blanch_id, $empl_id);
+
+    // Load branch list for filter
+    $blanch = $this->queries->get_branches_by_company($comp_id);
+
+    $this->load->view('admin/today_recevable', [
+        'today_recevable' => $today_recevable,
+        'blanch' => $blanch
+    ]);
+}
+
+public function today_expiring_loans()
+
+{
+
+	    $this->load->model('queries');
+    $comp_id = $this->session->userdata('comp_id');
+
+    // Get filters from POST
+    $blanch_id = $this->input->post('blanch_id');
+    $empl_id = $this->input->post('empl_id');
+
+    $today_recevable = $this->queries->get_week_ending_loans($comp_id);
+
+	// echo "<pre>";
+	// print_r($today_recevable);
+	// echo "<pre>";
+	// exit();
+
+
+    // Load branch list for filter
+    $blanch = $this->queries->get_branches_by_company($comp_id);
+
+    $this->load->view('admin/today_endings', [
+        'today_recevable' => $today_recevable,
+        'blanch' => $blanch
+    ]);
+
+}
+
+
+
+	public function today_recevable_download(){
+	$this->load->model('queries');
+	$comp_id = $this->session->userdata('comp_id');
+    $today_recevable = $this->queries->get_today_recevable_loan($comp_id);
+	// echo "<pre>";
+	// print_r($today_recevable);
+	// echo "<pre>";
+    $rejesho = $this->queries->get_total_recevable($comp_id);	
+    $compdata = $this->queries->get_companyData($comp_id);
+	$mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8','format' => 'A4-L','orientation' => 'L']);
+    $html = $this->load->view('admin/today_receivable_report',['today_recevable'=>$today_recevable,'rejesho'=>$rejesho,'compdata'=>$compdata],true);
+    $mpdf->SetFooter('Generated By Brainsoft Technology');
+    $mpdf->WriteHTML($html);
+    $mpdf->Output(); 
 	}
-	
 
-	
-	
 
 
 
@@ -8000,18 +8055,35 @@ public function print_prev_expences($from,$to,$blanch_id){
     $mpdf->Output(); 	
 }
 
-public function get_outstand_loan(){
-	$this->load->model('queries');
-	$comp_id = $this->session->userdata('comp_id');
-	$outstand = $this->queries->outstand_loan($comp_id);
-	$total_remain = $this->queries->total_outstand_loan($comp_id);
-	$employee = $this->queries->get_Allemployee($comp_id);
-	$blanch = $this->queries->get_blanch($comp_id);
-	 //   echo "<pre>";
-	 // print_r($employee);
-	 //        exit();
-	$this->load->view('admin/out_stand_loan',['outstand'=>$outstand,'total_remain'=>$total_remain,'employee'=>$employee,'blanch'=>$blanch]);
+public function get_outstand_loan() {
+    $this->load->model('queries');
+    $comp_id = $this->session->userdata('comp_id');
+
+    // Get filter inputs (if any)
+    $blanch_id = $this->input->post('blanch_id');
+    $empl_id   = $this->input->post('empl_id');
+    $from      = $this->input->post('from_date');
+    $to        = $this->input->post('to_date');
+
+    // Fetch outstanding loans with filters
+    $outstand = $this->queries->outstand_loan($comp_id, $blanch_id, $empl_id, $from, $to);
+
+    // Totals
+    $total_remain = $this->queries->total_outstand_loan($comp_id, $blanch_id, $empl_id, $from, $to);
+
+    // Employees and branches for filters
+    $employee = $this->queries->get_Allemployee($comp_id);
+    $blanch   = $this->queries->get_blanch($comp_id);
+
+    // Load view
+    $this->load->view('admin/out_stand_loan', [
+        'outstand' => $outstand,
+        'total_remain' => $total_remain,
+        'employee' => $employee,
+        'blanch' => $blanch
+    ]);
 }
+
 
 public function filter_default_blanch(){
 	$this->load->model('queries');

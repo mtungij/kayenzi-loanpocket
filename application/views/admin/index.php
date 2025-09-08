@@ -15,6 +15,8 @@ include_once APPPATH . "views/partials/header.php";
                 <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
                 <?php echo htmlspecialchars($compdata ->comp_name ?? 'Your Company', ENT_QUOTES, 'UTF-8'); ?>
 
+          
+
                 </p>
             </div>
             <div>
@@ -31,55 +33,62 @@ include_once APPPATH . "views/partials/header.php";
 <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
 
   <!-- 1️⃣ Due Today (Within Agreement) -->
+<a href="<?= base_url('admin/today_recevable_loan'); ?>" class="block">
   <div class="flex flex-col bg-gradient-to-br from-cyan-400 via-cyan-500 to-cyan-600 text-white border border-transparent rounded-2xl shadow-xl p-5 transition-transform transform hover:scale-[1.02] hover:shadow-2xl mb-4">
-    <div class="flex items-center justify-between">
-      <p class="text-sm font-semibold uppercase tracking-wide flex items-center gap-2">
-        👥 Due Today
-      </p>
-      <div class="relative group cursor-pointer">
-        <svg class="size-4 text-white opacity-80" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <circle cx="12" cy="12" r="10" />
-          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
-          <path d="M12 17h.01" />
-        </svg>
-        <div class="absolute z-10 mt-2 right-0 w-56 text-xs text-white bg-black/80 rounded-lg shadow-lg px-3 py-2 opacity-0 group-hover:opacity-100 transition-opacity">
-          Malipo yanayotarajiwa leo kutoka kwa wateja wenye mikopo hai ndani ya muda wa makubaliano (sio yaliyochelewa).
+      <div class="flex items-center justify-between">
+        <p class="text-sm font-semibold uppercase tracking-wide flex items-center gap-2">
+          👥 Today Expected Collection
+        </p>
+        <div class="relative group cursor-pointer">
+          <svg class="size-4 text-white opacity-80" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10" />
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+            <path d="M12 17h.01" />
+          </svg>
+          <div class="absolute z-10 mt-2 right-0 w-56 text-xs text-white bg-black/80 rounded-lg shadow-lg px-3 py-2 opacity-0 group-hover:opacity-100 transition-opacity">
+            Malipo yanayotarajiwa leo kutoka kwa wateja wenye mikopo hai ndani ya muda wa makubaliano (sio yaliyochelewa).
+          </div>
         </div>
       </div>
-    </div>
-    <div class="mt-6 flex items-center justify-between">
-      <h3 class="text-3xl font-bold"><?php echo number_format($receivable_total->total_rejesho) ; ?></h3>
-      <span class="flex items-center gap-1 text-green-100 font-medium text-sm">⬆ 1.7%</span>
-    </div>
+      <div class="mt-6 flex items-center justify-between">
+        <h3 class="text-3xl font-bold"><?= number_format($receivable_total->total_rejesho); ?></h3>
+        <span class="flex items-center gap-1 text-green-100 font-medium text-sm">⬆ 1.7%</span>
+      </div>
   </div>
+</a>
+
 
   <!-- 2️⃣ Overdue (Out of Agreement) -->
+ <a href="<?= base_url('admin/get_outstand_loan'); ?>" class="block">
   <div class="flex flex-col bg-gradient-to-br from-cyan-400 via-cyan-500 to-cyan-600 text-white border border-transparent rounded-2xl shadow-xl p-5 transition-transform transform hover:scale-[1.02] hover:shadow-2xl mb-4">
-    <div class="flex items-center justify-between">
-      <p class="text-sm font-semibold uppercase tracking-wide flex items-center gap-2">
-        ⏰ Overdue
-      </p>
-      <div class="relative group cursor-pointer">
-        <svg class="size-4 text-white opacity-80" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <circle cx="12" cy="12" r="10" />
-          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
-          <path d="M12 17h.01" />
-        </svg>
-        <div class="absolute z-10 mt-2 right-0 w-56 text-xs text-white bg-black/80 rounded-lg shadow-lg px-3 py-2 opacity-0 group-hover:opacity-100 transition-opacity">
-          Malipo yaliyochelewa kutoka kwa wateja ambao wako nje ya muda wa makubaliano ya mikopo.
+      <div class="flex items-center justify-between">
+        <p class="text-sm font-semibold uppercase tracking-wide flex items-center gap-2">
+          ⏰ Overdue Loans
+        </p>
+        <div class="relative group cursor-pointer">
+          <svg class="size-4 text-white opacity-80" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10" />
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+            <path d="M12 17h.01" />
+          </svg>
+          <div class="absolute z-10 mt-2 right-0 w-56 text-xs text-white bg-black/80 rounded-lg shadow-lg px-3 py-2 opacity-0 group-hover:opacity-100 transition-opacity">
+            Malipo yaliyochelewa kutoka kwa wateja ambao wako nje ya muda wa makubaliano ya mikopo.
+          </div>
         </div>
       </div>
-    </div>
-    <div class="mt-6 flex items-center justify-between">
-      <h3 class="text-3xl font-bold"><?= number_format($total_overdue->total_out); ?></h3>
-      <span class="flex items-center gap-1 text-red-100 font-medium text-sm">⬇ -2.3%</span>
-    </div>
+      <div class="mt-6 flex items-center justify-between">
+        <h3 class="text-3xl font-bold"><?= number_format($total_overdue->total_out); ?></h3>
+        <span class="flex items-center gap-1 text-red-100 font-medium text-sm">⬇ -2.3%</span>
+      </div>
   </div>
+</a>
+
 
   <!-- 3️⃣ Expiring Today -->
-    <div class="flex flex-col bg-gradient-to-br from-cyan-400 via-cyan-500 to-cyan-600 text-white border border-transparent rounded-2xl shadow-xl p-5 transition-transform transform hover:scale-[1.02] hover:shadow-2xl mb-4">
+  <a href="<?= base_url('admin/today_expiring_loans') ?>" class="block">
+  <div class="flex flex-col bg-gradient-to-br from-cyan-400 via-cyan-500 to-cyan-600 text-white border border-transparent rounded-2xl shadow-xl p-5 transition-transform transform hover:scale-[1.02] hover:shadow-2xl mb-4">
     <div class="flex items-center justify-between">
-      <p class="text-sm font-semibold uppercase tracking-wide flex items-center gap-2">📅 Expiring Today</p>
+      <p class="text-sm font-semibold uppercase tracking-wide flex items-center gap-2">📅 Upcoming Loan Deadlines</p>
       <div class="relative group cursor-pointer">
         <svg class="size-4 text-white opacity-80" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <circle cx="12" cy="12" r="10" />
@@ -87,15 +96,17 @@ include_once APPPATH . "views/partials/header.php";
           <path d="M12 17h.01" />
         </svg>
         <div class="absolute z-10 mt-2 right-0 w-56 text-xs text-white bg-black/80 rounded-lg shadow-lg px-3 py-2 opacity-0 group-hover:opacity-100 transition-opacity">
-          Malipo yanayotarajiwa leo kutoka kwa wateja ambao makubaliano yao ya mikopo yanamalizika leo.
+          Malipo yanayotarajiwa leo kutoka kwa wateja ambao makubaliano yao ya mikopo yanamalizika wiki hii ndani ya siku 7.
         </div>
       </div>
     </div>
     <div class="mt-6 flex items-center justify-between">
-      <h3 class="text-3xl font-bold"><?= number_format($total_deni->total_out) ?></h3>
+      <h3 class="text-3xl font-bold"><?= number_format($today_enddate_collection) ?></h3>
       <span class="flex items-center gap-1 text-yellow-100 font-medium text-sm">⬆ 0.9%</span>
     </div>
   </div>
+</a>
+
 
   <!-- 4️⃣ Expired Agreements -->
 
@@ -108,31 +119,96 @@ include_once APPPATH . "views/partials/header.php";
 <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mt-6">
 
   <!-- 1️⃣ Paid Today (Within Agreement) -->
-   <div class="flex flex-col bg-gradient-to-br from-cyan-400 via-cyan-500 to-cyan-600 text-white border border-transparent rounded-2xl shadow-xl p-5 transition-transform transform hover:scale-[1.02] hover:shadow-2xl mb-4">
-    <p class="text-sm font-semibold uppercase tracking-wide flex items-center gap-2">💰 Paid Today</p>
+  <a href="<?= base_url('admin/today_receved_loan') ?>" class="block">
+  <div class="flex flex-col bg-gradient-to-br from-cyan-400 via-cyan-500 to-cyan-600 text-white border border-transparent rounded-2xl shadow-xl p-5 transition-transform transform hover:scale-[1.02] hover:shadow-2xl mb-4">
+    
+    <div class="flex items-center justify-between">
+      <p class="text-sm font-semibold uppercase tracking-wide flex items-center gap-2">💰 Paid Today</p>
+      
+      <div class="relative group cursor-pointer">
+        <svg class="size-4 text-white opacity-80" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10" />
+          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+          <path d="M12 17h.01" />
+        </svg>
+        <div class="absolute z-10 mt-2 right-0 w-56 text-xs text-white bg-black/80 rounded-lg shadow-lg px-3 py-2 opacity-0 group-hover:opacity-100 transition-opacity">
+          Jumla ya malipo yaliyofanywa leo kutoka kwa wateja waliolipa mikopo yao.
+        </div>
+      </div>
+    </div>
+
     <div class="mt-6 flex items-center justify-between">
-      <h3 class="text-3xl font-bold"><?=  number_format($total_active_paid) ?></h3>
+      <h3 class="text-3xl font-bold"><?php echo number_format($total_receved->total_depost); ?></h3>
       <span class="flex items-center gap-1 text-green-700 font-medium text-sm">✅</span>
     </div>
   </div>
+</a>
+
 
   <!-- 2️⃣ Paid Overdue -->
-   <div class="flex flex-col bg-gradient-to-br from-cyan-400 via-cyan-500 to-cyan-600 text-white border border-transparent rounded-2xl shadow-xl p-5 transition-transform transform hover:scale-[1.02] hover:shadow-2xl mb-4">
-    <p class="text-sm font-semibold uppercase tracking-wide flex items-center gap-2">💸 Paid Overdue</p>
+ <a href="<?= base_url('admin/disburse_loan') ?>" class="block">
+  <div class="flex flex-col bg-gradient-to-br from-cyan-400 via-cyan-500 to-cyan-600 
+              text-white border border-transparent rounded-2xl shadow-xl p-5 
+              transition-transform transform hover:scale-[1.02] hover:shadow-2xl mb-4">
+
+    <div class="flex items-center justify-between">
+      <p class="text-sm font-semibold uppercase tracking-wide flex items-center gap-2">
+        💸 Today Loan Approved
+      </p>
+
+      <!-- Tooltip Info Icon -->
+      <div class="relative group cursor-pointer">
+        <svg class="size-4 text-white opacity-80" xmlns="http://www.w3.org/2000/svg" 
+             fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10" />
+          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+          <path d="M12 17h.01" />
+        </svg>
+        <div class="absolute z-10 mt-2 right-0 w-56 text-xs text-white bg-black/80 
+                    rounded-lg shadow-lg px-3 py-2 opacity-0 group-hover:opacity-100 
+                    transition-opacity">
+          Jumla ya mikopo iliyopitishwa leo kwa wateja waliokopeshwa.inatakiwa kuwa 0 ikiwa mikopo
+          yote waliwithdraw
+        </div>
+      </div>
+    </div>
+
     <div class="mt-6 flex items-center justify-between">
-      <h3 class="text-3xl font-bold"><?= $total_default_paid->total_default ?></h3>
+      <h3 class="text-3xl font-bold"><?= number_format($total_loanDis) ?></h3>
       <span class="flex items-center gap-1 text-red-700 font-medium text-sm">✅</span>
     </div>
   </div>
+</a>
+
+
 
   <!-- 3️⃣ Paid Expiring Today -->
+<a href="<?= base_url('admin/loan_withdrawal') ?>" class="block">
   <div class="flex flex-col bg-gradient-to-br from-cyan-400 via-cyan-500 to-cyan-600 text-white border border-transparent rounded-2xl shadow-xl p-5 transition-transform transform hover:scale-[1.02] hover:shadow-2xl mb-4">
-    <p class="text-sm font-semibold uppercase tracking-wide flex items-center gap-2">📅 Paid Expiring Today</p>
+    
+    <div class="flex items-center justify-between">
+      <p class="text-sm font-semibold uppercase tracking-wide flex items-center gap-2">📅 Today Loan Withdraw</p>
+      
+      <!-- Tooltip -->
+      <div class="relative group cursor-pointer">
+        <svg class="size-4 text-white opacity-80" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10" />
+          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+          <path d="M12 17h.01" />
+        </svg>
+        <div class="absolute z-10 mt-2 right-0 w-56 text-xs text-white bg-black/80 rounded-lg shadow-lg px-3 py-2 opacity-0 group-hover:opacity-100 transition-opacity">
+          Jumla ya mikopo iliyotolewa leo kwa wateja waliochukua mikopo mipya.
+        </div>
+      </div>
+    </div>
+
     <div class="mt-6 flex items-center justify-between">
-      <h3 class="text-3xl font-bold"><?= $today_endactive_paid->total_default?></h3>
+      <h3 class="text-3xl font-bold"><?= number_format($total_loanWithdrawal->total_todayloan) ?></h3>
       <span class="flex items-center gap-1 text-yellow-700 font-medium text-sm">✅</span>
     </div>
   </div>
+</a>
+
 
 
 
@@ -536,31 +612,8 @@ echo htmlspecialchars($blanchs->blanch_name ?? '', ENT_QUOTES, 'UTF-8');
                         <p class="text-xs text-gray-500 dark:text-gray-400">New loan applications</p>
                     </a>
 
-                    <!-- Stat Card: Approved Loans -->
-                    <a href="<?php echo base_url("admin/disburse_loan"); ?>" class="bg-white dark:bg-gray-700 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow duration-300">
-                        <div class="flex items-center gap-x-3 mb-3">
-                        <?php
-							$ap = $this->db->query("SELECT * FROM tbl_loans WHERE comp_id = '$comp_id' AND loan_status = 'aproved'");
-							 ?>
-                            <!-- <img src="</?php echo base_url('assets/img/aproved.png'); ?>" class="size-10" alt="Approved Loans"> -->
-                            <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Approved Loans</h2>
-                        </div>
-                        <p class="text-2xl font-bold text-green-600 dark:text-green-400"><?php echo number_format($disbursed_loans->total_loan); ?></p>
-                        <p class="text-xs text-gray-500 dark:text-gray-400">Loans that has already disbursed </p>
-                    </a>
+         
 
-
-                        <a href="<?php echo base_url("admin/loan_withdrawal"); ?>" class="bg-white dark:bg-gray-700 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow duration-300">
-                        <div class="flex items-center gap-x-3 mb-3">
-                        <?php
-							$ap = $this->db->query("SELECT * FROM tbl_loans WHERE comp_id = '$comp_id' AND loan_status = 'aproved'");
-							 ?>
-                            <!-- <img src="</?php echo base_url('assets/img/aproved.png'); ?>" class="size-10" alt="Approved Loans"> -->
-                            <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Loan payout</h2>
-                        </div>
-                        <p class="text-2xl font-bold text-green-600 dark:text-green-400"><?php echo number_format($total_withdrawal_daily->total_loanWith_day); ?></p>
-                        <p class="text-xs text-gray-500 dark:text-gray-400">loans that have been given  to customers</p>
-                    </a>
 
                     <!-- Stat Card: Today Loan Pending -->
                      <a href="<?php echo base_url("admin/loan_pending_time"); ?>" class="bg-white dark:bg-gray-700 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow duration-300">

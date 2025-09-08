@@ -469,34 +469,53 @@ include_once APPPATH . "views/partials/header.php";
                 </button>
             </div>
             <!-- Modal body -->
-             <?php echo form_open("admin/samehe_faini/{$customer->customer_id}"); ?>
-                <div class="grid gap-4 mb-4 sm:grid-cols-2">
-                    <div>
-                        <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Jumla Ya Faini</label>
-                        <input type="text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-600 focus:border-gray-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500"
-                        
-                        value="<?php echo number_format($total_penart->total_penart); ?>" required="">
-                    </div>
-                    <div>
-                        <label for="brand" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Faini Aliyolipa</label>
-                        <input type="text" name="brand" id="brand" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-600 focus:border-gray-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500"     value="<?php echo number_format($total_deposit_penart->total_penart_paid); ?>.00" required>
-                    </div>
-                    <div>
-                        <label for="price" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Faini Iliyo Baki Kulipwa</label>
-                        <input type="number" name="price" id="price" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-600 focus:border-gray-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500" value="<?php echo number_format($total_penart->total_penart - $total_deposit_penart->total_penart_paid); ?>.00"
-                            required>
-                    </div>
-                   <input type="hidden" value="<?php echo $customer_loan->loan_id; ?>" name="loan_id">
-                    <input type="hidden" value="<?php echo $customer->customer_id; ?>" name="customer_id">
-                    <input type="hidden" value="<?php echo $customer->comp_id; ?>" name="comp_id">
-                    <input type="hidden" value="<?php echo $customer->blanch_id; ?>" name="blanch_id">
+            <?php 
+   $jumla_faini    = (float)($total_penart->total_penart ?? 0);
+   $faini_alilipa  = (float)($total_deposit_penart->total_penart_paid ?? 0);
+   $faini_baki     = $jumla_faini - $faini_alilipa;
+?>
 
-                </div>
-                <button type="submit" class="text-white inline-flex items-center bg-cyan-700 hover:bg-cyan-800 focus:ring-4 focus:outline-none focus:ring-cyan-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-cyan-600 dark:hover:bg-cyan-700 dark:focus:ring-cyan-800">
-                    <svg class="mr-1 -ml-1 w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
-                    Samehe Faini
-                </button>
-           <?php echo form_close(); ?>
+<?php echo form_open("admin/samehe_faini/{$customer->customer_id}"); ?>
+<div class="grid gap-4 mb-4 sm:grid-cols-2">
+    <div>
+        <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+            Jumla Ya Faini
+        </label>
+        <input type="text" name="name" id="name" 
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-600 focus:border-gray-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500"
+            value="<?php echo number_format($jumla_faini, 0, '', ','); ?>" required>
+    </div>
+    <div>
+        <label for="brand" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+            Faini Aliyolipa
+        </label>
+        <input type="text" name="brand" id="brand" 
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-600 focus:border-gray-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500"     
+            value="<?php echo number_format($faini_alilipa, 0, '', ','); ?>" required>
+    </div>
+    <div>
+        <label for="price" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+            Faini Iliyo Baki Kulipwa
+        </label>
+        <input type="text" name="price" id="price" 
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-600 focus:border-gray-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500" 
+            value="<?php echo number_format($faini_baki, 0, '', ','); ?>" required>
+    </div>
+
+    <input type="hidden" value="<?php echo $customer_loan->loan_id; ?>" name="loan_id">
+    <input type="hidden" value="<?php echo $customer->customer_id; ?>" name="customer_id">
+    <input type="hidden" value="<?php echo $customer->comp_id; ?>" name="comp_id">
+    <input type="hidden" value="<?php echo $customer->blanch_id; ?>" name="blanch_id">
+</div>
+
+<button type="submit" class="text-white inline-flex items-center bg-cyan-700 hover:bg-cyan-800 focus:ring-4 focus:outline-none focus:ring-cyan-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-cyan-600 dark:hover:bg-cyan-700 dark:focus:ring-cyan-800">
+    <svg class="mr-1 -ml-1 w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path>
+    </svg>
+    Samehe Faini
+</button>
+<?php echo form_close(); ?>
+
         </div>
     </div>
 </div>

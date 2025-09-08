@@ -1,10 +1,10 @@
 docker run -it -d \
-  --label traefik.http.routers.santiamamicrofinance.rule=Host\(\`santiamamicrofinance.phamasoft.com\`\) \
-  --label traefik.http.routers.santiamamicrofinance.tls.certresolver=lets-encrypt \
-  --label traefik.http.routers.santiamamicrofinance.tls=true \
-  --label traefik.http.routers.santiamamicrofinance.service=santiamamicrofinance-credit-http \
-  --label traefik.http.services.santiamamicrofinance-credit-http.loadbalancer.server.port=80 \
-  --name santiamamicrofinance \
+  --label traefik.http.routers.bamico.rule=Host\(\`bamico.phamasoft.com\`\) \
+  --label traefik.http.routers.bamico.tls.certresolver=lets-encrypt \
+  --label traefik.http.routers.bamico.tls=true \
+  --label traefik.http.routers.bamico.service=bamico-credit-http \
+  --label traefik.http.services.bamico-credit-http.loadbalancer.server.port=80 \
+  --name bamico \
   --network web \
   --restart always \
   --expose 80 \

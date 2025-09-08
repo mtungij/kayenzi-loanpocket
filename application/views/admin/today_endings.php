@@ -17,12 +17,27 @@ include_once APPPATH . "views/partials/header.php";
 <div class="w-full lg:ps-64">
   <div class="= overflow-x-auto">
 
+  
+
 
 <section class="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5">
+
+
     <div class="w-full">
         <!-- Start coding here -->
         <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
+              <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+            <div>
+                <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-gray-200">
+                     This week Expiring Loans
+                </h2>
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                    Mikopo inayoisha kuwa ndani ya mkataba kwa wiki hii
+                </p>
+            </div>
+        </div>
             <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
+                
                 <div class="w-full md:w-1/2">
                     <form class="flex items-center">
                         <label for="simple-search" class="sr-only">Search</label>
@@ -39,13 +54,13 @@ include_once APPPATH . "views/partials/header.php";
                     </form>
                 </div>
                 <div class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
-	<a href="<?php echo base_url('admin/today_recevable_download'); ?>" 
+	<!-- <a href="<?php echo base_url('admin/today_recevable_download'); ?>" 
    class="flex items-center justify-center text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
     <svg class="h-4 w-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
         <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V4z" clip-rule="evenodd" />
     </svg>
     Download Pdf
-</a>
+</a> -->
 
 
                   
@@ -103,7 +118,10 @@ include_once APPPATH . "views/partials/header.php";
                     <td class="px-4 py-3 dark:text-white"><?= number_format($today_recevables->total_deposit); ?></td>
                     <td class="px-4 py-3 dark:text-white"><?= number_format($remain_debt); ?></td>
                     <td class="px-4 py-3 dark:text-white"><?= $today_recevables->remain_days; ?></td>
-                    <td class="px-4 py-3 dark:text-white"><?= $today_recevables->loan_end_date; ?></td>
+                 <td class="px-4 py-3 dark:text-white">
+    <?= date('Y-m-d', strtotime($today_recevables->loan_end_date)); ?>
+</td>
+
                     <td class="px-4 py-3 dark:text-white"><?= $today_recevables->empl_name; ?></td>
                 </tr>
             <?php endforeach; ?>
