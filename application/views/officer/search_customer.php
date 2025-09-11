@@ -295,28 +295,32 @@ include_once APPPATH . "views/partials/officerheader.php";
 
         
    <!-- Cropper Modal -->
-<div id="cropperModal" class="hidden fixed z-50 inset-0 bg-black bg-opacity-50 flex items-center justify-center px-4 sm:px-6">
-    <div class="bg-white p-4 rounded-lg shadow-lg w-full max-w-md sm:max-w-lg md:max-w-xl overflow-y-auto max-h-[90vh]">
-        <h2 class="text-lg font-bold mb-4 text-gray-800 dark:text-white">Crop Passport</h2>
+<div id="cropperModal" class="hidden fixed z-50 inset-0 bg-black bg-opacity-50 flex items-center justify-center px-2 sm:px-4">
+  <div class="bg-white dark:bg-gray-900 flex flex-col p-4 rounded-lg shadow-lg w-full max-w-md sm:max-w-lg md:max-w-xl max-h-[90vh]">
 
-        <!-- Image to be cropped -->
-        <div class="w-full">
-            <img id="cropperImage" class="max-w-full object-contain max-h-[70vh] rounded border" alt="To crop">
-        </div>
+    <!-- Title -->
+    <h2 class="text-lg font-bold mb-4 text-gray-800 dark:text-white">Crop Passport</h2>
 
-        <!-- Action buttons -->
-        <div class="mt-6 flex justify-end gap-3">
-            <button id="cancelCrop" type="button"
-                class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium px-4 py-2 rounded transition">
-                Cancel
-            </button>
-            <button id="cropImage" type="button"
-                class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded transition">
-                Crop & Use
-            </button>
-        </div>
+    <!-- Scrollable Image Area -->
+    <div class="flex-1 overflow-y-auto">
+      <img id="cropperImage" class="max-w-full object-contain max-h-[70vh] rounded border mx-auto" alt="To crop">
     </div>
+
+    <!-- Sticky Action Buttons -->
+    <div class="mt-4 flex justify-end gap-3 sticky bottom-0 bg-white dark:bg-gray-900 pt-2">
+      <button id="cancelCrop" type="button"
+        class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium px-4 py-2 rounded transition">
+        Cancel
+      </button>
+      <button id="cropImage" type="button"
+        class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded transition">
+        Crop & Use
+      </button>
+    </div>
+
+  </div>
 </div>
+
 
 </div>
 </div>
