@@ -2307,7 +2307,7 @@ $comp_phone = $compdata->comp_number;
          $inc_history = $this->queries->get_loanIncomeHistory($loan_id);
  
     	    // echo "<pre>";
-    	    // print_r(   $customer_data);
+    	    // print_r(   $sponser_detail);
     	    // echo "</pre>";
     	    // exit();
     	$this->load->view('admin/view_loan_customer',['customer_data'=>$customer_data,'sponser_detail'=>$sponser_detail,'loan_form'=>$loan_form,'collateral'=>$collateral,'local_oficer'=>$local_oficer,'inc_history'=>$inc_history]);
