@@ -213,14 +213,14 @@
        					<span class="kt-menu__link-text">Register Expenses</span>
        				</a>
        			</li>
-       			<li class="kt-menu__item " aria-haspopup="true" >
+       			<!-- <li class="kt-menu__item " aria-haspopup="true" >
        				<a  href="<?php echo base_url("admin/expnses_requisition_form"); ?>" class="kt-menu__link ">
        					<i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
        						<span></span>
        					</i>
        					<span class="kt-menu__link-text">Expenses</span>
        				</a>
-       			</li>
+       			</li> -->
 
        			<li class="kt-menu__item " aria-haspopup="true" >
        				<a  href="<?php echo base_url("admin/get_recomended_request"); ?>" class="kt-menu__link ">
