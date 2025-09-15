@@ -223,7 +223,7 @@
        			</li> -->
 
        			<li class="kt-menu__item " aria-haspopup="true" >
-       				<a  href="<?php echo base_url("admin/get_recomended_request"); ?>" class="kt-menu__link ">
+       				<a  href="<?php echo base_url("admin/get_expences_notAcceptable"); ?>" class="kt-menu__link ">
        					<i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
        						<span></span>
        					</i>

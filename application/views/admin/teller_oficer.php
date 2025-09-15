@@ -133,7 +133,7 @@ include_once APPPATH . "views/partials/header.php";
 			<?php $no = 1; ?>
 								<?php foreach ($empl_oficer as $oficer_datas): ?>
 									 <tr>
-				  					<td>
+				  					<td  class="text-sm text-gray-200 dark:text-gray-200">
 				  						<b><?php echo $oficer_datas->empl_name; ?></b>	
 
               <tr>
@@ -308,21 +308,7 @@ include_once APPPATH . "views/partials/header.php";
 					<span class="text-sm text-gray-600 dark:text-gray-200"></span>
 				  </div>
 				</td>		
-				<td class="size-px whitespace-nowrap">
-				  <div class="px-6 py-2">
-					<span class="text-sm text-gray-600 dark:text-gray-200"><?php echo number_format($total_work_individuals->total_depost_individual); ?></span>
-				  </div>
-				</td>
-				<td class="size-px whitespace-nowrap">
-				  <div class="px-6 py-2">
-					<span class="text-sm text-gray-600 dark:text-gray-200"></span>
-				  </div>
-				</td>
-				<td class="size-px whitespace-nowrap">
-				  <div class="px-6 py-2">
-					<span class="text-sm text-gray-600 dark:text-gray-200"><?php echo number_format($total_work_individuals->total_withdrawal_individual); ?></span>
-				  </div>
-				</td>				
+				
               </tr>
 			  <?php endforeach; ?>
 
@@ -379,52 +365,7 @@ include_once APPPATH . "views/partials/header.php";
 					<span class="text-sm text-gray-600 dark:text-gray-200"></span>
 				  </div>
 
-				</td>
-				<td class="size-px whitespace-nowrap">
-				  <div class="px-6 py-2">
-					<span class="text-sm text-gray-600 dark:text-gray-200"><?php echo $group_empls->empl_name; ?></span>
-				  </div>
-				</td>
-				<td class="size-px whitespace-nowrap">
-				  <div class="px-6 py-2">
-					<span class="text-sm text-gray-600 dark:text-gray-200"><?php echo $group_empls->day; ?></span>
-				  </div>
-				</td>
-				<td class="size-px whitespace-nowrap">
-				  <div class="px-6 py-2">
-					<span class="text-sm text-gray-600 dark:text-gray-200"><?php echo $group_empls->day; ?></span>
-				  </div>
-				</td>
-
-				<td class="size-px whitespace-nowrap">
-				  <div class="px-6 py-2">
-					<span class="text-sm text-gray-600 dark:text-gray-200"><?php echo $group_empls->day; ?></span>
-				  </div>
-				</td>
-
-				<td class="size-px whitespace-nowrap">
-				  <div class="px-6 py-2">
-					<span class="text-sm text-gray-600 dark:text-gray-200"><?php echo $group_empls->day; ?></span>
-				  </div>
-				</td>
-
-				<td class="size-px whitespace-nowrap">
-				  <div class="px-6 py-2">
-					<span class="text-sm text-gray-600 dark:text-gray-200"><?php echo $group_empls->day; ?></span>
-				  </div>
-				</td>
-
-				<td class="size-px whitespace-nowrap">
-				  <div class="px-6 py-2">
-					<span class="text-sm text-gray-600 dark:text-gray-200"><?php echo $group_empls->day; ?></span>
-				  </div>
-				</td>
-
-				<td class="size-px whitespace-nowrap">
-				  <div class="px-6 py-2">
-					<span class="text-sm text-gray-600 dark:text-gray-200"><?php echo $group_empls->day; ?></span>
-				  </div>
-				</td>
+				
 				
               </tr>
 

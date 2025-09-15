@@ -1,14 +1,14 @@
 docker run -it -d \
-  --label traefik.http.routers.bamico.rule=Host\(\`bamico.phamasoft.com\`\) \
-  --label traefik.http.routers.bamico.tls.certresolver=lets-encrypt \
-  --label traefik.http.routers.bamico.tls=true \
-  --label traefik.http.routers.bamico.service=bamico-credit-http \
-  --label traefik.http.services.bamico-credit-http.loadbalancer.server.port=80 \
-  --name bamico \
+  --label traefik.http.routers.atgmicrofinance.rule=Host\(\`atgmicrofinance.phamasoft.com\`\) \
+  --label traefik.http.routers.atgmicrofinance.tls.certresolver=lets-encrypt \
+  --label traefik.http.routers.atgmicrofinance.tls=true \
+  --label traefik.http.routers.atgmicrofinance.service=atgmicrofinance-credit-http \
+  --label traefik.http.services.atgmicrofinance-credit-http.loadbalancer.server.port=80 \
+  --name atgmicrofinance \
   --network web \
   --restart always \
   --expose 80 \
- emasanga/mikoposoft:may13 
+mikoposoft/mikoposoft2025:cdc
 
 
 

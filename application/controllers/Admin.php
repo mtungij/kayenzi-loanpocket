@@ -6845,6 +6845,8 @@ public function create_requstion_form(){
 		$comp_id = $data['comp_id'];
 
 		$blanch_account = $this->queries->get_blanch_balance_expenses($blanch_id,$trans_id);
+		// print_r($blanch_account);
+		// exit();
 		$balance_blanch = $blanch_account->blanch_capital;
 		$remain_blanch_remain = $balance_blanch - $req_amount; 
 		if ($req_amount > $balance_blanch) {
@@ -6916,11 +6918,14 @@ public function create_requstion_form(){
     	$comp_id = $this->session->userdata('comp_id');
     	$data = $this->queries->get_expences_request($comp_id);
     	$blanch = $this->queries->get_blanch($comp_id);
+		
     	$tota_exp = $this->queries->get_sum_expences($comp_id);
     	$account = $this->queries->get_account_transaction($comp_id);
-    	  //    echo "<pre>";
-    	  // print_r($account);
-    	  //        exit();
+		
+		//   $blanc_capital_remain = $this->queries->get_blanch_capital_balance($blanch_id,$payment_method);
+    	//      echo "<pre>";
+    	//   print_r($account);
+    	//          exit();
     	$this->load->view('admin/recomended_request',['data'=>$data,'blanch'=>$blanch,'tota_exp'=>$tota_exp,'account'=>$account]);
     }
    
@@ -9465,9 +9470,9 @@ public function check_miamala($id){
 		$total_deposit = $this->queries->get_total_deposit($comp_id);
 		$total_withdrawal = $this->queries->get_total_withdrawal($comp_id);
 		$cash_account = $this->queries->get_totalaccount_transaction($comp_id);
-		// echo "<pre>";
-		//  print_r($cash_account);
-		//           exit();
+		echo "<pre>";
+		 print_r($empl_oficer);
+		          exit();
 		$this->load->view('admin/teller_oficer',['empl_oficer'=>$empl_oficer,'total_deposit'=>$total_deposit,'total_withdrawal'=>$total_withdrawal,'cash_account'=>$cash_account]);
 	}
 

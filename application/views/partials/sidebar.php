@@ -244,11 +244,15 @@ $communication_submenu_active = is_submenu_active(['send_email']); // Assuming S
                 <?php if (has_permission('Sajili Matumizi Ya Ofisi')): ?>
                   <li><a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg <?php echo is_active_link('admin/expenses') ? 'text-cyan-600 dark:text-cyan-500' : 'text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-900 dark:text-gray-400 dark:hover:text-gray-300'; ?>" href="<?php echo base_url("admin/expenses"); ?>">Register Expenses</a></li>
                   <?php endif; ?>
-                  <?php if (has_permission('Record Matumizi ')): ?>
+                  <!-- <?php if (has_permission('Record Matumizi ')): ?>
                   <li><a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg <?php echo is_active_link('admin/expnses_requisition_form') ? 'text-cyan-600 dark:text-cyan-500' : 'text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-900 dark:text-gray-400 dark:hover:text-gray-300'; ?>" href="<?php echo base_url("admin/expnses_requisition_form"); ?>">Expenses</a></li>
-                  <?php endif; ?>
-                  <?php if (has_permission('Pitisha Matumizi')): ?>
-                  <li><a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg <?php echo is_active_link('admin/get_recomended_request') ? 'text-cyan-600 dark:text-cyan-500' : 'text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-900 dark:text-gray-400 dark:hover:text-gray-300'; ?>" href="<?php echo base_url("admin/get_recomended_request"); ?>">Expenses Request</a></li>
+                  <?php endif; ?> -->
+                  <!-- <?php if (has_permission('Pitisha Matumizi')): ?>
+                  <li><a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg <?php echo is_active_link('admin/get_expences_notAcceptable') ? 'text-cyan-600 dark:text-cyan-500' : 'text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-900 dark:text-gray-400 dark:hover:text-gray-300'; ?>" href="<?php echo base_url("admin/get_expences_notAcceptable"); ?>">Expenses Request</a></li>
+                  <?php endif; ?> -->
+                 
+                  <?php if (has_permission('Matumizi yote')): ?>
+                  <li><a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg <?php echo is_active_link('admin/get_recomended_request') ? 'text-cyan-600 dark:text-cyan-500' : 'text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-900 dark:text-gray-400 dark:hover:text-gray-300'; ?>" href="<?php echo base_url("admin/get_recomended_request"); ?>">Accepted Expenses</a></li>
                   <?php endif; ?>
                 </ul>
               </div>
