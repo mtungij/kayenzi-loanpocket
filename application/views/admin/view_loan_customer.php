@@ -2,6 +2,24 @@
 include_once APPPATH . "views/partials/header.php";
 ?>
 
+<?php
+$principal = isset($loan_form->how_loan) ? (float)$loan_form->how_loan : 0;
+$interest_rate = isset($loan_form->interest_rate) ? (float)$loan_form->interest_rate : 0; // kwa %
+$sessions = isset($loan_form->session) ? (int)$loan_form->session : 0;
+$day_interval = isset($loan_form->day) ? (int)$loan_form->day : 30; // siku za kila kipindi
+
+// jumla ya riba
+$total_interest = ($principal * $interest_rate / 100) * $sessions;
+
+// jumla inayolipwa
+$total_payable = $principal + $total_interest;
+
+// tarehe ya mwisho (leo + idadi ya vipindi * siku za kila kipindi)
+$start_date = date('Y-m-d');
+$end_date = date('Y-m-d', strtotime("+".($sessions * $day_interval)." days"));
+?>
+
+
 <!-- ========== MAIN CONTENT BODY ========== -->
 <div class="w-full lg:ps-64">
     <div class="p-4 sm:p-6 space-y-6">
@@ -153,6 +171,9 @@ include_once APPPATH . "views/partials/header.php";
 
 
 </div>
+
+
+
 
 
 <!-- <div class="flex flex-col bg-white border shadow-sm rounded-xl dark:bg-gray-800 dark:border-gray-700">

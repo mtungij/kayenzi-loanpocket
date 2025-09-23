@@ -2305,12 +2305,20 @@ $comp_phone = $compdata->comp_number;
     	 $collateral = $this->queries->get_colateral_data($loan_id);
          $local_oficer = $this->queries->get_loacagovment_data($loan_id);
          $inc_history = $this->queries->get_loanIncomeHistory($loan_id);
- 
+
+	
     	    // echo "<pre>";
-    	    // print_r(   $sponser_detail);
+    	    // print_r(   $loan_form);
     	    // echo "</pre>";
     	    // exit();
-    	$this->load->view('admin/view_loan_customer',['customer_data'=>$customer_data,'sponser_detail'=>$sponser_detail,'loan_form'=>$loan_form,'collateral'=>$collateral,'local_oficer'=>$local_oficer,'inc_history'=>$inc_history]);
+    	$this->load->view('admin/view_loan_customer',[   'customer_data' => $customer_data,
+        'sponser_detail' => $sponser_detail,
+        'loan_form' => $loan_form,
+        'collateral' => $collateral,
+        'local_oficer' => $local_oficer,
+        'inc_history' => $inc_history,
+		]);
+       
     }
 
 	
@@ -2630,36 +2638,50 @@ public function disburse($loan_id){
 	  $role = $empl_data->empl_name;
 
       $interest_loan = $loan_data_interst->interest_formular;
+	//   echo "<pre>";
+	//   print_r($balance);
+	//     echo "<pre>";
+	//   exit();
 	  $interest = $interest_loan;
       $end_date = $day * $session;
-      if($loan_data_interst->rate == 'FLAT RATE') {
-      // $now = date("Y-m-d");
-      // $someDate = DateTime::createFromFormat("Y-m-d",$now);
-      // $someDate->add(new DateInterval('P'.$end_date.'D'));
-      // $return_data = $someDate->format("Y-m-d");
+	    $interest_loan = $loan_data_interst->interest_formular; // mfano 20
+    $interest_type = $loan_data_interst->rate; // mfano FLAT RATE / REDUCING BALANCE
+         if($interest_type == 'FLAT RATE') {
+        // tafsiri session kuwa miezi kulingana na aina ya mkopo
+        if ($day == 1) { 
+            // daily loan
+            $loan_interest = $balance * ($interest_loan / 100) * $session;
 
-      // $date1 = $now;
-      // $date2 = $return_data;
+        } elseif ($day == 7) { 
+              $weeks = $session;
+            $monthly_rate = $interest_loan / 100; // per month
+            $weekly_rate = $monthly_rate / 4; // rate per week
+            $loan_interest = $balance * $weekly_rate * $weeks;
+        } elseif (in_array($day, [28,29,30,31])) {
+              $months = $session;
+            $loan_interest = $balance * ($interest_loan / 100) * $months;
 
-      // $ts1 = strtotime($date1);
-      // $ts2 = strtotime($date2);
+        } else {
+               $loan_interest = 0; // default
+        }
 
-      // $year1 = date('Y', $ts1);
-      // $year2 = date('Y', $ts2);
-
-      // $month1 = date('m', $ts1);
-      // $month2 = date('m', $ts2);
-
-      // $diff = (($year2 - $year1) * 12) + ($month2 - $month1);
-
-      $day_data = $end_date;
-	  $months = floor($day_data / 30);
-      //$days = $day_data-($months*30);
-       
-      $loan_interest = $interest /100 * $balance * $months;
       $total_loan = $balance + $loan_interest;
 
-      }elseif($loan_data_interst->rate == 'SIMPLE'){
+	//     echo "<pre>";
+	//   print_r($total_loan);
+	//     echo "<pre>";
+	//   exit();
+
+        // kwa test tuone matokeo
+        // echo "<pre>";
+        // echo "Balance (Principal): " . $balance . "\n";
+        // echo "Total Months: " . $total_months . "\n";
+        // echo "Effective Interest %: " . $effective_interest_percent . "%\n";
+        // echo "Loan Interest: " . $loan_interest . "\n";
+        // echo "Total Loan: " . $total_loan . "\n";
+        // echo "</pre>";
+        // exit();
+    }elseif($loan_data_interst->rate == 'SIMPLE'){
       $loan_interest = $interest /100 * $balance;
       $total_loan = $balance + $loan_interest;
       }elseif($loan_data_interst->rate == 'REDUCING'){
@@ -2676,18 +2698,16 @@ public function disburse($loan_id){
       }
 
       // print_r($total_loan);
-      //      echo "<br>";
-      //   print_r($loan_interest);
-      //      echo "<br>";
+   
       //    print_r($res);
       //      exit();
       //data inorder to send sms
-      $sms_data = $total_loan_fee /100 * $balance;
+    //   $sms_data = $total_loan_fee /100 * $balance;
 
-      $remain_balance = $balance - $sms_data;
+    //   $remain_balance = $balance - $sms_data;
         
      
-       $massage = 'Taasisi ya '.$comp_name.' Imeingiza Mkopo Kiasi cha Tsh.'.$remain_balance.' kwenye Acc Yako ' . $loan_codeID .' Namba yasiri ya kutolea mkopo ni '.$code;
+       $massage = 'Taasisi ya '.$comp_name.' Imeingiza Mkopo Kiasi cha Tsh.'.$balance.' kwenye Acc Yako ' . $loan_codeID .' Namba yasiri ya kutolea mkopo ni '.$code;
 
 	  
 
@@ -2739,6 +2759,10 @@ public function disburse($loan_id){
            $this->insert_loan_lecord($comp_id,$customer_id,$loan_id,$blanch_id,$total_loan,$loan_interest,$group_id);
            $this->update_loaninterest($pay_id,$total_loan);
            //$this->sendsms($phone,$massage);
+		//            echo "<br>";
+        // print_r( $total_loan );
+        //    echo "<br>";
+		//    exit();
            $this->aprove_disbas_status($loan_id);
            
           return redirect('admin/get_loan_aproved');      
@@ -2799,46 +2823,41 @@ public function disburse($loan_id){
 	      @$smscount = $this->queries->get_smsCountDate($comp_id);
 	      $sms_number = @$smscount->sms_number;
 	      $sms_id = @$smscount->sms_id;
-      	   //echo "<pre>";
-      	// print_r($loan_data);
-      	//             exit();
+      	
 
       	$interest_loan = $loan_data->interest_formular;
       	$loan_aproved = $loan_data->loan_aprove;
       	$session_loan = $loan_data->session;
       	$day = $loan_data->day;
       	$end_date = $day * $session_loan;
-      if ($loan_data->rate == 'FLAT RATE') {
-      // $now = date("Y-m-d");
-      // $someDate = DateTime::createFromFormat("Y-m-d",$now);
-      // $someDate->add(new DateInterval('P'.$end_date.'D'));
-      // $return_data = $someDate->format("Y-m-d");
+		//    echo "<pre>";
+      	// print_r($loan_data);
+      	//             exit();
 
+       if($loan_data->rate === 'FLAT RATE') {
+        // tafsiri session kuwa miezi kulingana na aina ya mkopo
+        if ($day == 1) { 
+            // daily loan
+            $loan_interest = $loan_aproved * ($interest_loan / 100) * $session_loan;
 
-      // $date1 = $now;
-      // $date2 = $return_data;
+        } elseif ($day == 7) { 
+              $weeks = $session_loan;
+            $monthly_rate = $interest_loan / 100; // per month
+            $weekly_rate = $monthly_rate / 4; // rate per week
+            $loan_interest = $loan_aproved * $weekly_rate * $weeks;
+        } elseif (in_array($day, [28,29,30,31])) {
+              $months = $session_loan;
+            $loan_interest = $loan_aproved * ($interest_loan / 100) * $months;
 
-      // $ts1 = strtotime($date1);
-      // $ts2 = strtotime($date2);
+        } else {
+               $loan_interest = 0; // default
+        }
 
-      // $year1 = date('Y', $ts1);
-      // $year2 = date('Y', $ts2);
-
-      // $month1 = date('m', $ts1);
-      // $month2 = date('m', $ts2);
-
-      // $diff = (($year2 - $year1) * 12) + ($month2 - $month1);
-      $day_data = $end_date;
-	  $months = floor($day_data / 30);
-
-      $interest = $interest_loan;
-      $loan_interest = $interest /100 * $loan_aproved * $months;
-
-      $total_loan = $loan_aproved + $loan_interest; 
-
-      $restoration = ($loan_interest + $loan_aproved) / ($session_loan);
-      $res = $restoration;
-   }elseif ($loan_data->rate == 'SIMPLE') {
+      $total_loan = $loan_aproved + $loan_interest;
+        $restoration= $total_loan/$session_loan;
+		$res = round($restoration, 2);
+	
+	}elseif ($loan_data->rate == 'SIMPLE') {
   	  $interest = $interest_loan;
       $loan_interest = $interest /100 * $loan_aproved;
       $total_loan = $loan_aproved + $loan_interest; 
@@ -2928,6 +2947,14 @@ public function disburse($loan_id){
 	}
 
 
+	public function loan_calculator()
+	{
+         	$this->load->model('queries');
+      	$comp_id = $this->session->userdata('comp_id');
+		$loan_category = $this->queries->get_loancategory($comp_id);
+
+ $this->load->view('admin/loan_calculator',['loan_category'=>$loan_category]);
+	}
 	
 	
 

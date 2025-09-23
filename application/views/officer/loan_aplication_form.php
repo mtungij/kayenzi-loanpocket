@@ -70,7 +70,7 @@ echo form_open($form_action, ['novalidate' => true]);
                     <!-- Loan Product -->
                     <div class="sm:col-span-4">
                         <label for="branchSelect" class="block text-sm font-medium mb-2 dark:text-gray-300">* Loan Product Name:</label>
-                        <select id="branchSelect" name="category_id" class="py-3 px-4 pe-9 block w-full bg-cyan-600 border-gray-200 rounded-lg text-sm select2">
+                        <select id="branchSelect" name="category_id" class="py-3 px-4 pe-9 block w-full  border-gray-200 rounded-lg text-sm select2">
                             <option value="">Select Loan Product</option>
                             <?php foreach ($loan_category as $loan_categorys): ?>
                                 <option value="<?= $loan_categorys->category_id; ?>"
@@ -131,7 +131,7 @@ echo form_open($form_action, ['novalidate' => true]);
                     <!-- Loan Duration -->
                     <div class="sm:col-span-4">
                         <label for="durationselect" class="block text-sm font-medium mb-2 dark:text-gray-300">* Loan Duration:</label>
-                        <select id="durationselect" name="day" class="py-3 px-4 pe-9 block w-full bg-cyan-600 border-gray-200 rounded-lg text-sm select2">
+                        <select id="durationselect" name="day" class="py-3 px-4 pe-9 block w-full border-gray-200 rounded-lg text-sm select2">
                             <option value="">Loan Duration</option>
                             <option value="1" <?= (isset($existing_loan) && $existing_loan->day == 1) ? 'selected' : set_select('day', '1'); ?>>Siku</option>
                             <option value="7" <?= (isset($existing_loan) && $existing_loan->day == 7) ? 'selected' : set_select('day', '7'); ?>>Wiki</option>
@@ -161,7 +161,25 @@ echo form_open($form_action, ['novalidate' => true]);
                     </div>
 
                     <!-- Interest Formula -->
-                    <input type="hidden" name="rate" value="SIMPLE">
+                        <div class="sm:col-span-4">
+										<label class="block text-sm font-medium mb-2 dark:text-gray-300"><b>*Interest Formular:</b></label>
+										<select type="number" name="rate" class="py-3 px-4 pe-9 block w-full  border-gray-200 rounded-lg text-sm select2" required>
+											<option value="">Select interest Formular</option>
+											<?php foreach ($formular as $formulars): ?>	
+											<option value="<?php echo $formulars->formular_name; ?>"><?php if ($formulars->formular_name == 'SIMPLE') {
+												 ?>
+												 SIMPLE FORMULAR
+												<?php }elseif($formulars->formular_name == 'FLAT RATE'){ ?>
+                                                 FLAT RATE FORMULAR
+													<?php }elseif ($formulars->formular_name == 'REDUCING') {
+													 ?>
+													 REDUCING FORMULAR
+													 <?php } ?>
+													 	
+													 </option>
+											<?php endforeach; ?>
+										</select>
+									</div>
 
                 </div>
 

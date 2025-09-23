@@ -2110,12 +2110,49 @@ public function get_today_disbursed_loans($comp_id)
 		 return $sum->row();
 	}
 
+public function get_cash_transactionBlanch($blanch_id){
+    $date = date("Y-m-d");
 
-	public function get_cash_transactionBlanch($blanch_id){
-		$date = date("Y-m-d");
-		$data = $this->db->query("SELECT * FROM tbl_prev_lecod pr JOIN tbl_customer c ON c.customer_id = pr.customer_id JOIN tbl_blanch b ON b.blanch_id = pr.blanch_id  WHERE pr.blanch_id = '$blanch_id' AND lecod_day >= '$date' ORDER BY prev_id DESC");
-		 return $data->result();
-	}
+    $sql = "
+        SELECT c.*, b.*, l.*, 
+               IFNULL(SUM(d.depost), 0) AS total_deposit,
+               p.wakala,
+               at.account_name
+        FROM tbl_customer c
+        JOIN tbl_blanch b ON b.blanch_id = ?
+        JOIN tbl_loans l ON l.customer_id = c.customer_id 
+                         AND l.blanch_id = b.blanch_id
+        LEFT JOIN tbl_depost d ON d.loan_id = l.loan_id
+        LEFT JOIN tbl_pay p ON p.loan_id = l.loan_id
+        LEFT JOIN tbl_blanch_account ba ON ba.blanch_id = b.blanch_id
+        LEFT JOIN tbl_account_transaction at ON at.trans_id = ba.receive_trans_id
+        WHERE l.blanch_id = ?
+        AND (d.depost_day >= ? OR d.depost_day IS NULL)
+        GROUP BY l.loan_id, p.wakala, at.account_name
+        ORDER BY l.loan_id DESC
+    ";
+
+    $data = $this->db->query($sql, [$blanch_id, $blanch_id, $date]);
+    return $data->result();
+}
+
+
+
+
+
+public function get_account_by_transid($trans_id) {
+    return $this->db
+        ->select('at.account_name, ba.receive_trans_id, ba.blanch_id')
+        ->from('tbl_blanch_account ba')
+        ->join('tbl_account_transaction at', 'at.trans_id = ba.receive_trans_id')
+        ->where('at.trans_id', $trans_id)  // <-- filter on the correct table
+        ->get()
+        ->row();
+}
+
+
+
+
 
 	// public function get_today_recevable_loanBlanch($blanch_id){
 	// 	$today = date("Y-m-d");

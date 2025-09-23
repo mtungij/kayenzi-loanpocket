@@ -1,14 +1,11 @@
 docker run -it -d \
-  --label traefik.http.routers.atgmicrofinance.rule=Host\(\`atgmicrofinance.phamasoft.com\`\) \
-  --label traefik.http.routers.atgmicrofinance.tls.certresolver=lets-encrypt \
-  --label traefik.http.routers.atgmicrofinance.tls=true \
-  --label traefik.http.routers.atgmicrofinance.service=atgmicrofinance-credit-http \
-  --label traefik.http.services.atgmicrofinance-credit-http.loadbalancer.server.port=80 \
-  --name atgmicrofinance \
+  --label traefik.http.routers.lonri.rule=Host\(\`lonri.phamasoft.com\`\) \
+  --label traefik.http.routers.lonri.tls.certresolver=lets-encrypt \
+  --label traefik.http.routers.lonri.tls=true \
+  --label traefik.http.routers.lonri.service=lonri-credit-http \
+  --label traefik.http.services.lonri-credit-http.loadbalancer.server.port=80 \
+  --name lonri \
   --network web \
   --restart always \
   --expose 80 \
-mikoposoft/mikoposoft2025:cdc
-
-
-
+ubuntu:latest

@@ -35,6 +35,7 @@ $dashboard_active = is_active_link('admin/index'); // Example: assuming admin/in
 $branch_active = is_active_link('admin/blanch');
 $groups_active = is_active_link('admin/group');
 $notification_active = is_active_link('admin/create_notifications');
+$loan_calculator =is_active_link('admin/loan_calculator');
 
 $setting_submenu_active = is_submenu_active(['loan_category', 'loan_fee', 'penart_setting', 'formular_setting', 'transaction_account']);
 $capital_submenu_active = is_submenu_active(['shareHolder', 'capital', 'transfar_amount']);
@@ -107,6 +108,28 @@ $communication_submenu_active = is_submenu_active(['send_email']); // Assuming S
         <?php endif; ?>
       </li>
 
+        <li>
+     
+        <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg
+                  <?php echo $loan_calculator ? 'bg-cyan-100 text-cyan-700 dark:bg-cyan-900/50 dark:text-white' : 'text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-900 dark:text-gray-400 dark:hover:text-gray-300'; ?>"
+           href="<?php echo base_url("admin/loan_calculator"); ?>">
+<svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+  <title>Calculator</title>
+  <rect x="6" y="2" width="12" height="20" rx="2" ry="2" stroke-width="1.5"></rect>
+  <rect x="9" y="6" width="6" height="3" rx="0.5" ry="0.5" stroke-width="1.5"></rect>
+  <g stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="9.5" cy="13" r="0.7" fill="currentColor"></circle>
+    <circle cx="13.5" cy="13" r="0.7" fill="currentColor"></circle>
+    <circle cx="9.5" cy="16" r="0.7" fill="currentColor"></circle>
+    <circle cx="13.5" cy="16" r="0.7" fill="currentColor"></circle>
+    <rect x="9" y="9.5" width="6" height="0.5" fill="currentColor"></rect>
+  </g>
+</svg>
+
+          Loan Calculator
+        </a>
+       
+      </li>
 
       <li>
       <?php if (has_permission('Sajili Tawi Jipya')): ?>

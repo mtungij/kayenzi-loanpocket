@@ -43,76 +43,133 @@ include_once APPPATH . "views/partials/officerheader.php";
 
                   
                 </div>
+
+                          <div class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
+				<a href="<?php echo base_url('oficer/today_received_pdf') ?>" class="flex items-center justify-center text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-green-600 dark:hover:bg-green-700 focus:outline-none dark:focus:ring-green-800">
+    <svg class="h-4 w-4 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V4z" clip-rule="evenodd" />
+    </svg>
+    Tuma Report
+</a>
+
+                  
+                </div>
 	
 
             </div>
             <div class="overflow-x-auto">
                 <table id="shareholder_table"  class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-cyan-500 dark:text-gray-400">
-                        <tr>
-                            <th scope="col" class="px-4 py-3 dark:text-white">S/No</th>
-							<th scope="col" class="px-4 py-3 dark:text-white">JINA LA MTEJA</th>
-                            <th scope="col" class="px-4 py-3 dark:text-white">TAWI</th>
-                            <th scope="col" class="px-4 py-3 dark:text-white">NAMBA YA SIMU</th>
-                            <th scope="col" class="px-4 py-3 dark:text-white">AINA YA MAREJESHO</th>
-                            <th scope="col" class="px-4 py-3 dark:text-white">MKOPO</th>
-							<th scope="col" class="px-4 py-3 dark:text-white">KUSANYO</th>
-							<th scope="col" class="px-4 py-3 dark:text-white">LIPWA</th>
-							<th scope="col" class="px-4 py-3 dark:text-white">Pay Method</th>
-                            <th scope="col" class="px-4 py-3 dark:text-white">Depositor</th>
-							<th scope="col" class="px-4 py-3 dark:text-white">TAREHE</th>
-
-
-
-							
-                           
-                         
-						
-							  
-                        </tr>
-                    </thead>
-					<tbody>
-    <?php 
-    $no = 1; 
-    $total_loan = 0;
-    $total_received = 0;
-    ?>
-    <?php foreach($received as $today_recevables): 
-        $total_loan += $today_recevables->loan_int;
-        $total_received += $today_recevables->depost;
-    ?>
-        <tr class="border-b dark:border-gray-700">
-            <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"><?= $no++ ?></th>
-            <td class="px-4 py-3 dark:text-white"><?= $today_recevables->f_name . ' ' . $today_recevables->m_name . ' ' . $today_recevables->l_name; ?></td>
-            <td class="px-4 py-3 dark:text-white"><?= $today_recevables->blanch_name; ?></td>
-            <td class="px-4 py-3 dark:text-white"><?= $today_recevables->phone_no; ?></td>
-            <td class="px-4 py-3 dark:text-white">
-                <?php 
-                    if ($today_recevables->day == 1) echo "Daily";
-                    elseif ($today_recevables->day == 7) echo "Weekly";
-                    elseif (in_array($today_recevables->day, [28, 29, 30, 31])) echo "Monthly";
-                ?>
-            </td>
-            <td class="px-4 py-3 dark:text-white"><?= number_format($today_recevables->loan_int); ?></td>
-			<td class="px-4 py-3 dark:text-white"><?= number_format($today_recevables->restration); ?></td>
-            <td class="px-4 py-3 dark:text-white"><?= number_format($today_recevables->depost); ?></td>
-            <td class="px-4 py-3 dark:text-white"><?= $today_recevables->account_name; ?></td>
-            <td class="px-4 py-3 dark:text-white"><?= $today_recevables->empl_username; ?></td>
-            <td class="px-4 py-3 dark:text-white"><?= $today_recevables->depost_day; ?></td>
-        </tr>
-    <?php endforeach; ?>
-
-    <!-- Totals Row -->
-    <tr class="bg-gray-100 dark:bg-gray-700 font-bold">
-        
-        <td colspan="4" class="px-4 py-3 dark:text-white text-right">Total</td>
-        <td></td>
-        <td class="px-4 py-3 dark:text-white"><?= number_format($total_loan); ?></td>
-        <td></td>
-        <td class="px-4 py-3 dark:text-white"><?= number_format($total_received); ?></td>
-        
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-cyan-500 dark:text-gray-400">
+    <tr>
+        <th scope="col" class="px-4 py-3 dark:text-white">S/No</th>
+        <th scope="col" class="px-4 py-3 dark:text-white">JINA LA MTEJA</th>
+        <th scope="col" class="px-4 py-3 dark:text-white">STATUS YA MKOPO</th> 
+        <th scope="col" class="px-4 py-3 dark:text-white">NAMBA YA SIMU</th>
+        <th scope="col" class="px-4 py-3 dark:text-white">MKOPO</th>
+        <th scope="col" class="px-4 py-3 dark:text-white">KUSANYO</th>
+        <th scope="col" class="px-4 py-3 dark:text-white">LIPWA</th>
+        <th scope="col" class="px-4 py-3 dark:text-white">LAZO</th>
+        <th scope="col" class="px-4 py-3 dark:text-white">DABO</th>
+        <th scope="col" class="px-4 py-3 dark:text-white">Method</th>
+        <th scope="col" class="px-4 py-3 dark:text-white">Wakala</th>
+        <th scope="col" class="px-4 py-3 dark:text-white">Depositor</th>
+        <th scope="col" class="px-4 py-3 dark:text-white">TAREHE</th>
     </tr>
+</thead>
+<tbody>
+<?php 
+$no = 1; 
+$total_loan = 0;
+$total_received = 0;
+$total_lazo = 0;
+$total_dabo = 0;
+
+$summary = [
+    'withdrawal' => ['count' => 0, 'sum' => 0],
+    'out'        => ['count' => 0, 'sum' => 0],
+    'done'       => ['count' => 0, 'sum' => 0],
+];
+?>
+<?php foreach($received as $today_recevables): 
+    $total_loan += $today_recevables->loan_int;
+    $total_received += $today_recevables->depost;
+
+    // hesabu lazo na dabo
+    $lazo = 0;
+    $dabo = 0;
+    if ($today_recevables->restration > $today_recevables->depost) {
+        $lazo = $today_recevables->restration - $today_recevables->depost;
+    } elseif ($today_recevables->depost > $today_recevables->restration) {
+        $dabo = $today_recevables->depost - $today_recevables->restration;
+    }
+
+    $total_lazo += $lazo;
+    $total_dabo += $dabo;
+
+    if (isset($summary[$today_recevables->loan_status])) {
+        $summary[$today_recevables->loan_status]['count']++;
+        $summary[$today_recevables->loan_status]['sum'] += $today_recevables->depost;
+    }
+?>
+    <tr class="border-b dark:border-gray-700">
+        <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"><?= $no++ ?></th>
+        <td class="px-4 py-3 dark:text-white"><?= $today_recevables->f_name . ' ' . $today_recevables->m_name . ' ' . $today_recevables->l_name; ?></td>
+        <td class="px-4 py-3">
+            <?php
+                if ($today_recevables->loan_status == 'withdrawal') {
+                    echo '<span class="text-green-600 font-semibold">Ndani ya mkataba</span>';
+                } elseif ($today_recevables->loan_status == 'out') {
+                    echo '<span class="text-red-600 font-semibold">Nje ya mkataba</span>';
+                } elseif ($today_recevables->loan_status == 'done') {
+                    echo '<span class="text-yellow-500 font-semibold">Kamaliza mkopo</span>';
+                } else {
+                    echo '<span class="text-gray-600">'. $today_recevables->loan_status .'</span>';
+                }
+            ?>
+        </td>
+        <td class="px-4 py-3 dark:text-white"><?= $today_recevables->phone_no; ?></td>
+        <td class="px-4 py-3 dark:text-white"><?= number_format($today_recevables->loan_int); ?></td>
+        <td class="px-4 py-3 dark:text-white"><?= number_format($today_recevables->restration); ?></td>
+        <td class="px-4 py-3 dark:text-white"><?= number_format($today_recevables->depost); ?></td>
+        <td class="px-4 py-3 dark:text-white"><?= number_format($lazo); ?></td>
+        <td class="px-4 py-3 dark:text-white"><?= number_format($dabo); ?></td>
+        <td class="px-4 py-3 dark:text-white"><?= $today_recevables->account_name; ?></td>
+        <td class="px-4 py-3 dark:text-white"><?= $today_recevables->wakala; ?></td>
+        <td class="px-4 py-3 dark:text-white"><?= $today_recevables->empl_username; ?></td>
+        <td class="px-4 py-3 dark:text-white"><?= $today_recevables->depost_day; ?></td>
+    </tr>
+<?php endforeach; ?>
+
+<!-- Totals Row -->
+<tr class="bg-gray-100 dark:bg-gray-700 font-bold">
+    <td colspan="4" class="px-4 py-3 dark:text-white text-right">TOTAL</td>
+    <td class="px-4 py-3 dark:text-white"><?= number_format($total_loan); ?></td>
+    <td></td>
+    <td class="px-4 py-3 dark:text-white"><?= number_format($total_received); ?></td>
+    <td class="px-4 py-3 dark:text-white"><?= number_format($total_lazo); ?></td>
+    <td class="px-4 py-3 dark:text-white"><?= number_format($total_dabo); ?></td>
+    <td colspan="4"></td>
+</tr>
+
+<!-- Summary Row -->
+<tr class="bg-gray-50 dark:bg-gray-800 font-bold">
+    <td colspan="13" class="px-4 py-3 dark:text-white">
+        <div class="flex flex-col gap-1">
+            <span class="text-green-600">
+                Ndani ya mkataba: <?= $summary['withdrawal']['count']; ?> mikopo, Jumla <?= number_format($summary['withdrawal']['sum']); ?>
+            </span>
+            <span class="text-red-600">
+                Nje ya mkataba: <?= $summary['out']['count']; ?> mikopo, Jumla <?= number_format($summary['out']['sum']); ?>
+            </span>
+            <span class="text-yellow-500">
+                Kamaliza mkopo: <?= $summary['done']['count']; ?> mikopo, Jumla <?= number_format($summary['done']['sum']); ?>
+            </span>
+        </div>
+    </td>
+</tr>
 </tbody>
+
+
 
                 </table>
 				<div id="hs-basic-modal" class="hs-overlay hs-overlay-open:opacity-100 hs-overlay-open:duration-500 hidden size-full fixed top-0 start-0 z-80 opacity-0 overflow-x-hidden transition-all overflow-y-auto pointer-events-none" role="dialog" tabindex="-1" aria-labelledby="hs-basic-modal-label">

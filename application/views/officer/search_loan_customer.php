@@ -463,15 +463,7 @@ if (!empty($customer_loan_status)) {
         </button>
       </div>
 
-      <?php
-if (!isset($_SESSION)) {
-    session_start();
-}
 
-if (!isset($_SESSION['form_token'])) {
-    $_SESSION['form_token'] = bin2hex(random_bytes(32));
-}
-?>
 
 
       <?php echo form_open("oficer/deposit_loan/{$customer->customer_id}"); ?>
@@ -510,27 +502,39 @@ if (!isset($_SESSION['form_token'])) {
       </select>
     </div>
 
+    <div class="sm:col-span-6" id="wakala-field" style="display:none;">
+  <label for="wakala" class="block text-sm font-medium mb-2 dark:text-gray-300">
+    * Wakala:
+        </label>
+  <input type="text" id="wakala" name="wakala" 
+    class="py-2.5 px-4 block w-full border-gray-200 rounded-lg text-sm 
+           focus:border-cyan-500 focus:ring-cyan-500 dark:bg-gray-700 
+           dark:border-gray-600 dark:text-gray-300 dark:placeholder-gray-500 
+           dark:focus:ring-gray-600">
+</div>
 
-    <!-- <div class="sm:col-span-6">
-    </?php if ($customer_loan->loan_status == 'withdrawal') { ?>
+
+
+    <div class="sm:col-span-6">
+    <?php if ($customer_loan->loan_status == 'withdrawal') { ?>
         <label for="pending" class="block text-sm font-medium mb-2 dark:text-gray-300">Recovery Amount</label>
         <input type="text" class="py-2.5 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-cyan-500 focus:ring-cyan-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 dark:placeholder-gray-500 dark:focus:ring-gray-600"
-               value="</?php echo number_format($total_recovery->total_pending, 2); ?>" 
+               value="<?php echo number_format($total_recovery->total_pending, 2); ?>" 
                readonly style="color:red"> 
 
-    </?php } elseif ($customer_loan->loan_status == 'out') { ?>
-        <span style="color:red;">Default Amount</span>
+    <?php } elseif ($customer_loan->loan_status == 'out') { ?>
+        <span style="color:red;">Deni</span>
         <input type="text" class="py-2.5 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-cyan-500 focus:ring-cyan-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 dark:placeholder-gray-500 dark:focus:ring-gray-600"
-               value="</?php echo number_format($out_stand->total_out, 2); ?>" 
+               value="<?php echo number_format($out_stand->total_out, 2); ?>" 
                readonly style="color:red"> 
 
-    </?php } else { ?>
+    <?php } else { ?>
         <label for="pending" class="block text-sm font-medium mb-2 dark:text-gray-300">Recovery Amount</label>
         <input type="text" class="py-2.5 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-cyan-500 focus:ring-cyan-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 dark:placeholder-gray-500 dark:focus:ring-gray-600"
-                value="</?php echo number_format($total_recovery->pending, 2); ?>"
+                value="<?php echo number_format($total_recovery->pending, 2); ?>"
                readonly style="color:red"> 
-    </?php } ?>
-</div> -->
+    <?php } ?>
+</div>
 
 
 
@@ -554,7 +558,7 @@ if (!isset($_SESSION['form_token'])) {
   </div>
 
   
-                       <input type="hidden" name="form_token" value="<?php echo $_SESSION['form_token']; ?>">
+                   
 
   <!-- Hidden Inputs -->
                    <input type="hidden" value="<?php echo $customer->customer_id; ?>" name="customer_id">
@@ -603,6 +607,28 @@ include_once APPPATH . "views/partials/footer.php";
     btn.innerText = 'Processing...';
   });
 </script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const methodSelect = document.getElementById("p_method");
+    const wakalaField = document.getElementById("wakala-field");
+    const wakalaInput = document.getElementById("wakala");
+
+    methodSelect.addEventListener("change", function () {
+        let selectedText = methodSelect.options[methodSelect.selectedIndex].text.toLowerCase();
+
+        if (selectedText !== "cash") {
+            wakalaField.style.display = "block";
+            wakalaInput.setAttribute("required", "required");
+        } else {
+            wakalaField.style.display = "none";
+            wakalaInput.removeAttribute("required");
+            wakalaInput.value = ""; // clear old value
+        }
+    });
+});
+</script>
+
 
 <style>
 .select2-container--default .select2-selection--single {
