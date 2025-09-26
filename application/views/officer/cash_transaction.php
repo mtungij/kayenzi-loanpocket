@@ -82,11 +82,10 @@ include_once APPPATH . "views/partials/officerheader.php";
 </button> -->
 
 
-<?php 
-$position = strtoupper($this->session->userdata('position_name'));
 
-if ($position === 'LOAN OFFICER'): ?>
-  <a
+
+
+  <!-- <a
     href="<?php echo base_url('oficer/print_officer_cash_transaction'); ?>"
     class="w-full md:w-auto flex items-center justify-center px-3 py-2 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-lg focus:outline-none focus:ring-4 focus:ring-green-300 dark:focus:ring-green-800"
     target="_blank"
@@ -99,9 +98,8 @@ if ($position === 'LOAN OFFICER'): ?>
       </svg>
     </span>
     Print Officer PDF
-  </a>
+  </a> -->
 
-<?php elseif ($position === 'BRANCH MANAGER'): ?>
   <a
     href="<?php echo base_url('oficer/print_manager_cash_transaction'); ?>"
     class="w-full md:w-auto flex items-center justify-center px-3 py-2 text-sm font-medium text-white bg-cyan-600 hover:bg-cyan-700 rounded-lg focus:outline-none focus:ring-4 focus:ring-cyan-300 dark:focus:ring-cyan-800"
@@ -116,7 +114,7 @@ if ($position === 'LOAN OFFICER'): ?>
     </span>
     Print Manager PDF
   </a>
-<?php endif; ?>
+
 
     </div>
   </div>
@@ -137,13 +135,15 @@ if ($position === 'LOAN OFFICER'): ?>
     <thead class="text-xs text-cyan-500 uppercase bg-gray-50 dark:bg-cyan-500 dark:text-gray-50">
         <tr>
             <th scope="col" class="px-4 py-3">S/No</th>
-            <th scope="col" class="px-4 py-3">Customer Name</th>
-            <th>Status</th>
-            <th scope="col" class="px-4 py-3">Collection</th>
-            <th scope="col" class="px-4 py-3">Received</th>
-            <th scope="col" class="px-4 py-3">Missed</th>
-            <th scope="col" class="px-4 py-3">Overpaid</th>
-            <th scope="col" class="px-4 py-3">Dtae</th>
+            <th scope="col" class="px-4 py-3">JINA LA MTEJA</th>
+            <th>STATUS</th>
+            <th scope="col" class="px-4 py-3">REJESHO</th>
+            <th scope="col" class="px-4 py-3">LIPWA</th>
+            <!-- <th scope="col" class="px-4 py-3">Method</th> -->
+            <!-- <th scope="col" class="px-4 py-3">Wakala</th> -->
+            <th scope="col" class="px-4 py-3">Lazo</th>
+            <th scope="col" class="px-4 py-3">Dabo</th>
+            <th scope="col" class="px-4 py-3">Tarehe</th>
         </tr>
     </thead>
     <tbody>
@@ -193,8 +193,11 @@ if ($position === 'LOAN OFFICER'): ?>
                       </td>
                     <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white"><?= number_format($item->restration) ?></td>
                     <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white"><?= number_format($item->depost) ?></td>
+                     <!-- <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white"><?= $item->account_name ?></td> -->
+                     <!-- <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white"><?= $item->wakala ?></td> -->
                     <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white"><?= $laza > 0 ? number_format($laza) : '-' ?></td>
                     <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white"><?= $zidi > 0 ? number_format($zidi) : '-' ?></td>
+                   
                     <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white"><?= htmlspecialchars($item->expected_date) ?></td>
                    
                 </tr>

@@ -5870,7 +5870,7 @@ $this->db->query("INSERT INTO tbl_outstand (`comp_id`,`loan_id`,`blanch_id`,`loa
     
      
       // echo "<pre>";
-      // print_r($cash );
+      // print_r($lazo  );
       // exit();
   
       $this->load->view('officer/cash_transaction', [
@@ -6136,11 +6136,11 @@ $this->db->query("INSERT INTO tbl_outstand (`comp_id`,`loan_id`,`blanch_id`,`loa
       $lazo =$this->queries->managerexpected_collections( $blanch_id);
   
         // echo "<pre>";
-        //    print_r($blanch_data );
+        //    print_r($lazo );
         //          exit();
     
       $company_name = $company_data->comp_name;
-      $company_name = preg_replace('/[^a-zA-Z0-9_-]/', '_', $company_name);
+     
     
       // ✅ Set landscape mode: 'A4-L' for A4 Landscape
       $mpdf = new \Mpdf\Mpdf([
@@ -7470,6 +7470,15 @@ public function oficer_profile(){
         return redirect("oficer/oficer_profile");
     }
 
+
+    	public function loan_calculator()
+	{
+         	$this->load->model('queries');
+      	$comp_id = $this->session->userdata('comp_id');
+		$loan_category = $this->queries->get_loancategory($comp_id);
+
+ $this->load->view('officer/loan_calculator',['loan_category'=>$loan_category]);
+	}
 
     public function get_outstand_loan(){
     $this->load->model('queries');

@@ -2114,18 +2114,27 @@ public function get_cash_transactionBlanch($blanch_id){
     $date = date("Y-m-d");
 
     $sql = "
-        SELECT c.*, b.*, l.*, 
-               IFNULL(SUM(d.depost), 0) AS total_deposit,
-               p.wakala,
-               at.account_name
+        SELECT 
+            c.*, 
+            b.*, 
+            l.*, 
+            IFNULL(SUM(d.depost), 0) AS total_deposit,
+            p.wakala,
+            IFNULL(at.account_name, '') AS account_name
         FROM tbl_customer c
-        JOIN tbl_blanch b ON b.blanch_id = ?
-        JOIN tbl_loans l ON l.customer_id = c.customer_id 
-                         AND l.blanch_id = b.blanch_id
-        LEFT JOIN tbl_depost d ON d.loan_id = l.loan_id
-        LEFT JOIN tbl_pay p ON p.loan_id = l.loan_id
-        LEFT JOIN tbl_blanch_account ba ON ba.blanch_id = b.blanch_id
-        LEFT JOIN tbl_account_transaction at ON at.trans_id = ba.receive_trans_id
+        JOIN tbl_blanch b 
+            ON b.blanch_id = ?
+        JOIN tbl_loans l 
+            ON l.customer_id = c.customer_id 
+            AND l.blanch_id = b.blanch_id
+        LEFT JOIN tbl_depost d 
+            ON d.loan_id = l.loan_id
+        LEFT JOIN tbl_pay p 
+            ON p.loan_id = l.loan_id
+        LEFT JOIN tbl_blanch_account ba 
+            ON ba.blanch_id = b.blanch_id
+        LEFT JOIN tbl_account_transaction at 
+            ON at.trans_id = ba.receive_trans_id
         WHERE l.blanch_id = ?
         AND (d.depost_day >= ? OR d.depost_day IS NULL)
         GROUP BY l.loan_id, p.wakala, at.account_name
@@ -7782,7 +7791,6 @@ public function get_today_expected_collections($comp_id)
 		return $data->result();
 	}
 
-
 public function managerexpected_collections($blanch_id)
 {
     $today = date('Y-m-d');
@@ -7790,7 +7798,7 @@ public function managerexpected_collections($blanch_id)
     // Get detailed loan and payment info with one row per loan
     $this->db->select("
         l.loan_id,
-		l.loan_status,
+        l.loan_status,
         l.customer_id,
         l.day,
         l.session,
@@ -7802,11 +7810,14 @@ public function managerexpected_collections($blanch_id)
         l.restration,
         l.date_show AS expected_date,
         COALESCE(p.total_depost, 0) AS depost,
+        p.wakala,
+        p.p_method,
         COALESCE(d.empl_username, '') AS depositor_username,
         cat.loan_name,
         o.loan_stat_date,
         o.loan_end_date,
-        b.blanch_name
+        b.blanch_name,
+        at.account_name
     ");
     $this->db->from('tbl_loans l');
     $this->db->join('tbl_customer c', 'c.customer_id = l.customer_id', 'left');
@@ -7815,14 +7826,26 @@ public function managerexpected_collections($blanch_id)
     // Filter by branch using employee from loan
     $this->db->where('e.blanch_id', $blanch_id);
 
-    // Subquery for total deposit per loan
+    // Subquery for total deposit + wakala + pay_method (last entry per loan today)
     $this->db->join("
         (
-            SELECT loan_id, SUM(depost) AS total_depost
-            FROM tbl_pay
-            WHERE description = 'CASH DEPOSIT' AND date_data = '{$today}'
-            GROUP BY loan_id
+            SELECT t1.loan_id, 
+                   SUM(t1.depost) AS total_depost,
+                   t1.wakala,
+                   t1.p_method
+            FROM tbl_pay t1
+            INNER JOIN (
+                SELECT loan_id, MAX(pay_id) AS max_id
+                FROM tbl_pay
+                WHERE description = 'CASH DEPOSIT' AND date_data = '{$today}'
+                GROUP BY loan_id
+            ) t2 ON t1.pay_id = t2.max_id
+            WHERE t1.description = 'CASH DEPOSIT' AND t1.date_data = '{$today}'
+            GROUP BY t1.loan_id
         ) p", "l.loan_id = p.loan_id", 'left');
+
+    // ✅ Join to tbl_account_transaction to get account_name based on p.p_method = trans_id
+    $this->db->join('tbl_account_transaction at', 'at.trans_id = p.p_method', 'left');
 
     // Subquery to get last depositor username per loan for today
     $this->db->join("
@@ -7886,6 +7909,8 @@ public function managerexpected_collections($blanch_id)
         'no_deposit_customers' => $no_deposit_customers
     ];
 }
+
+
 
 
 public function get_today_offficerexpected_collections($blanch_id, $empl_id)

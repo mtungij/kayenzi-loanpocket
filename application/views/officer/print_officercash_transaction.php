@@ -69,8 +69,8 @@ $logo_url = 'file://' . $logo_path;
     </div>
 
     <!-- Report Title -->
-    <h3 style="text-align: center; margin-top: 20px;">CASH TRANSANCTION REPORT-<?= $blanch_data->blanch_name; ?></h3>
-    <h3 style="text-align: center; margin-top: 20px;">AFISA-<?= $manager_data->empl_name; ?></h3>
+    <h3 style="text-align: center; margin-top: 20px;">MALIPO YA LEO REPORT</h3>
+    <h3 style="text-align: center; margin-top: 20px;">TAWI CODE:<?= $blanch_data->branch_code; ?></h3>
 
     <!-- Table -->
     <table>
@@ -79,7 +79,7 @@ $logo_url = 'file://' . $logo_path;
             <th>S/No</th>
             <th>Jina La Mteja</th>
             <th>Loan Status</th>
-            <th>Afisa</th>
+            <!-- <th>Afisa</th> -->
             <th>Namba Ya Simu</th>
             <th>Mkopo</th>
             <th>Product</th>
@@ -134,7 +134,7 @@ $logo_url = 'file://' . $logo_path;
     ?>
 </td>
 
-                <td><?= strtoupper(htmlspecialchars($item->empl_name)) ?></td>
+                <!-- <td><?= strtoupper(htmlspecialchars($item->empl_name)) ?></td> -->
                 <td>
                     <?php 
                         $phone = $item->phone_no;

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Required Meta Tags Always Come First -->
+
   <meta charset="utf-8">
   <meta name="robots" content="max-snippet:-1, max-image-preview:large, max-video-preview:-1">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -9,15 +9,12 @@
 
   <title>Loan-Pocket</title>
 
-  <!-- Favicon -->
+
   <link rel="shortcut icon" href="../../favicon.ico">
  
  
 
-<!-- Select2 CSS -->
 
-
-  <!-- Theme Check and Update -->
   <script>
     const html = document.querySelector('html');
     const isLightOrAuto = localStorage.getItem('hs_theme') === 'light' || (localStorage.getItem('hs_theme') === 'auto' && !window.matchMedia('(prefers-color-scheme: dark)').matches);
@@ -30,7 +27,7 @@
   </script>
  
 
-  <!-- Apexcharts -->
+
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts/dist/apexcharts.css">
   <style type="text/css">
     .apexcharts-tooltip.apexcharts-theme-light
@@ -50,13 +47,12 @@
 <body class="bg-gray-50 dark:bg-gray-900 font-poppins">
 <script src="https://cdn.jsdelivr.net/npm/preline/dist/preline.js"></script>
   
-  <!-- <?php include_once APPPATH . 'views/partials/navbarofficer.php'; ?> -->
+  <?php include_once APPPATH . 'views/partials/navbarofficer.php'; ?> 
 
-  <!-- ========== MAIN CONTENT ========== -->
-  <!-- Breadcrumb -->
+
   <div class="sticky top-0 inset-x-0 z-20 bg-white border-y border-gray-200 px-4 sm:px-6 lg:px-8 lg:hidden dark:bg-gray-800 dark:border-gray-700">
     <div class="flex items-center py-2">
-      <!-- Navigation Toggle -->
+   
       <button type="button" class="size-8 flex justify-center items-center gap-x-2 border border-gray-200 text-gray-800 hover:text-gray-500 rounded-lg focus:outline-hidden focus:text-gray-500 disabled:opacity-50 disabled:pointer-events-none dark:border-gray-700 dark:text-gray-200 dark:hover:text-gray-500 dark:focus:text-gray-500" aria-haspopup="dialog" aria-expanded="false" aria-controls="hs-application-sidebar" aria-label="Toggle navigation" data-hs-overlay="#hs-application-sidebar">
         <span class="sr-only">Toggle Navigation</span>
         <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -65,9 +61,7 @@
           <path d="m8 9 3 3-3 3" />
         </svg>
       </button>
-      <!-- End Navigation Toggle -->
-
-      <!-- Breadcrumb -->
+    
       <ol class="ms-3 flex items-center whitespace-nowrap">
         <li class="flex items-center text-sm text-gray-800 dark:text-gray-400">
           Application Layout
@@ -79,9 +73,9 @@
           Dashboard
         </li>
       </ol>
-      <!-- End Breadcrumb -->
+   
     </div>
   </div>
-  <!-- End Breadcrumb -->
+
 
  <?php include_once APPPATH . 'views/partials/sideofficer.php'; ?>
