@@ -5488,7 +5488,7 @@ public function create_withdrow_balance($customer_id){
     $this->form_validation->set_rules('method','method','required');
     $this->form_validation->set_rules('withdrow','withdrow','required');
     $this->form_validation->set_rules('loan_status','loan status','required');
-    //  $this->form_validation->set_rules('code','Code','required');
+     $this->form_validation->set_rules('code','Code','required');
     $this->form_validation->set_rules('with_date','with date','required');
     $this->form_validation->set_rules('description','description','required');
     if ($this->form_validation->run() ) {
@@ -5501,7 +5501,7 @@ public function create_withdrow_balance($customer_id){
           $comp_id = $data['comp_id'];
           $description = $data['description'];
           $method = $data['method'];
-          // $new_code = $data['code'];
+          $new_code = $data['code'];
           $with_date = $data['with_date'];
           $loan_status = 'withdrawal';
           $new_balance = $withdrow_newbalance;
@@ -5626,7 +5626,7 @@ public function create_withdrow_balance($customer_id){
            
             $new_deducted = $deducted + $sum_total_loanFee;
 
-               if($new_code === $code){
+               if($new_code != $code){
                  $this->session->set_flashdata('error','Pin ya mteja Uliyojaza Haipo Sahihi!!');
                }else
                if($blanch_capital < $withdrow_newbalance){
@@ -6134,9 +6134,10 @@ $this->db->query("INSERT INTO tbl_outstand (`comp_id`,`loan_id`,`blanch_id`,`loa
 
 
       $lazo =$this->queries->managerexpected_collections( $blanch_id);
-  
+      $faini = $this->queries->get_income_detailBlanchData($blanch_id);
+  $gawa =$this->queries->get_DisbarsedLoanBlanch_today($blanch_id);
         // echo "<pre>";
-        //    print_r($lazo );
+        //    print_r($gawa );
         //          exit();
     
       $company_name = $company_data->comp_name;
@@ -6152,6 +6153,8 @@ $this->db->query("INSERT INTO tbl_outstand (`comp_id`,`loan_id`,`blanch_id`,`loa
       $html = $this->load->view('officer/print_managercash_transaction', [
         'company_name' => $company_name,
         'blanch_data'=>$blanch_data,
+        'faini'=>$faini,
+        'gawa'=>$gawa ,
         'lazo' => $lazo,
       ], true);
     

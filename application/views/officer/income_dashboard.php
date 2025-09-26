@@ -210,12 +210,12 @@ Print PDF
 </thead>
 
 <tbody>
-<?php if (!empty($detail_income)): ?>
+<?php if (!empty($faini)): ?>
     <?php 
     $sno = 1; 
     $total_receve = 0; 
     ?>
-    <?php foreach ($detail_income as $detail_incomes): ?>
+    <?php foreach ($faini as $detail_incomes): ?>
         <?php $total_receve += $detail_incomes->receve_amount; ?>
         <tr class="border-b dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700">
             <td class="px-4 py-2">

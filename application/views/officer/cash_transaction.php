@@ -188,7 +188,7 @@ include_once APPPATH . "views/partials/officerheader.php";
                             <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-medium border border-red-500 text-red-500">Default</span>
 
                         <?php else: ?>
-                            <span class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2 py-0.5 rounded dark:bg-yellow-900 dark:text-white">Unknown</span>
+                            <span class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2 py-0.5 rounded dark:bg-yellow-900 dark:text-white">Dabo</span>
                         <?php endif; ?>
                       </td>
                     <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white"><?= number_format($item->restration) ?></td>

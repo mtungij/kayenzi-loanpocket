@@ -1557,6 +1557,30 @@ public function get_grouped_withdrawal_officertodayBlanch($blanch_id, $empl_id =
        	   return $loan->result();
        }
 
+
+public function get_DisbarsedLoanBlanch_today($blanch_id) {
+    $today = date('Y-m-d'); // today's date
+
+    $loan = $this->db->query("
+        SELECT l.*, c.*, lt.*, b.*, s.*, df.deducted_balance
+        FROM tbl_loans l
+        LEFT JOIN tbl_customer c ON c.customer_id = l.customer_id
+        LEFT JOIN tbl_loan_category lt ON lt.category_id = l.category_id
+        LEFT JOIN tbl_blanch b ON b.blanch_id = l.blanch_id
+        LEFT JOIN tbl_sub_customer s ON s.customer_id = l.customer_id
+        LEFT JOIN tbl_deducted_fee df ON df.loan_id = l.loan_id
+        WHERE l.blanch_id = ?
+        AND l.loan_status IN ('disbarsed','withdrawal')
+        AND DATE(l.disburse_day) = ?
+        ORDER BY l.loan_id DESC
+    ", [$blanch_id, $today]);
+
+    return $loan->result();
+}
+
+
+
+
 	   public function get_DisbarsedLoanByOfficer($empl_id) {
 		$loan = $this->db->query("
 			SELECT *
@@ -7804,6 +7828,7 @@ public function managerexpected_collections($blanch_id)
         l.session,
         CONCAT_WS(' ', c.f_name, c.m_name, c.l_name) AS full_name,
         c.phone_no,
+        c.customer_code,
         e.empl_id,  
         e.empl_name AS empl_name,
         l.how_loan AS loan_amount,
@@ -7823,31 +7848,25 @@ public function managerexpected_collections($blanch_id)
     $this->db->join('tbl_customer c', 'c.customer_id = l.customer_id', 'left');
     $this->db->join('tbl_employee e', 'e.empl_id = l.empl_id', 'left');
 
-    // Filter by branch using employee from loan
+    // Filter by branch
     $this->db->where('e.blanch_id', $blanch_id);
 
-    // Subquery for total deposit + wakala + pay_method (last entry per loan today)
+    // Subquery: total deposit + wakala + pay_method (last entry per loan today)
     $this->db->join("
         (
             SELECT t1.loan_id, 
                    SUM(t1.depost) AS total_depost,
-                   t1.wakala,
-                   t1.p_method
+                   MAX(t1.wakala) AS wakala,
+                   MAX(t1.p_method) AS p_method
             FROM tbl_pay t1
-            INNER JOIN (
-                SELECT loan_id, MAX(pay_id) AS max_id
-                FROM tbl_pay
-                WHERE description = 'CASH DEPOSIT' AND date_data = '{$today}'
-                GROUP BY loan_id
-            ) t2 ON t1.pay_id = t2.max_id
             WHERE t1.description = 'CASH DEPOSIT' AND t1.date_data = '{$today}'
             GROUP BY t1.loan_id
         ) p", "l.loan_id = p.loan_id", 'left');
 
-    // ✅ Join to tbl_account_transaction to get account_name based on p.p_method = trans_id
+    // Join account name based on p.p_method
     $this->db->join('tbl_account_transaction at', 'at.trans_id = p.p_method', 'left');
 
-    // Subquery to get last depositor username per loan for today
+    // Subquery: last depositor username per loan today
     $this->db->join("
         (
             SELECT loan_id, MAX(empl_username) AS empl_username
@@ -7900,15 +7919,32 @@ public function managerexpected_collections($blanch_id)
 
     $no_deposit_customers = ($total_customers->total_customers ?? 0) - ($deposited_customers->deposited_customers ?? 0);
 
+    // 🔹 Extra: Total deposit per loan from tbl_pay
+    $this->db->select('loan_id, SUM(depost) AS total_depost');
+    $this->db->from('tbl_pay');
+    $this->db->where('date_data', $today);
+    $this->db->where('description', 'CASH DEPOSIT');
+    $this->db->group_by('loan_id');
+    $deposit_per_loan = $this->db->get()->result();
+
+    // 🔹 Extra: Total deposit per loan from tbl_depost
+    $this->db->select('loan_id, SUM(depost) AS total_depost');
+    $this->db->from('tbl_depost');
+    $this->db->group_by('loan_id');
+    $deposit_from_depost = $this->db->get()->result();
+
     return [
         'details' => $details,
         'total_restration' => $sum_restration->total_restration ?? 0,
         'total_depost' => $sum_depost->total_depost ?? 0,
         'total_customers' => $total_customers->total_customers ?? 0,
         'deposited_customers' => $deposited_customers->deposited_customers ?? 0,
-        'no_deposit_customers' => $no_deposit_customers
+        'no_deposit_customers' => $no_deposit_customers,
+        'deposit_per_loan' => $deposit_per_loan,          // kutoka tbl_pay
+        'deposit_from_depost' => $deposit_from_depost     // kutoka tbl_depost
     ];
 }
+
 
 
 

@@ -219,6 +219,119 @@ $no = 1;
     </tbody>
 </table>
 
+<h1>MALIPO YA FAINI</h1>
+<table>
+    <thead>
+        <tr>
+            <th>S/No</th>
+            <th>Jina la Mteja</th>
+            <th>Namba ya Simu</th>
+            <th>Aina ya Mapato</th>
+            <th>Kiasi</th>
+            <th>Afisa</th>
+            <th>Tarehe</th>
+        </tr>
+    </thead>
+    <tbody>
+    <?php if(!empty($faini)): ?>
+        <?php $sno = 1; $total_receve = 0; ?>
+        <?php foreach($faini as $detail): ?>
+            <?php $total_receve += $detail->receve_amount ?? 0; ?>
+            <tr>
+                <td><?= $sno++ ?></td>
+                <td><?= htmlspecialchars($detail->f_name ?? '') . ' ' . htmlspecialchars($detail->m_name ?? '') . ' ' . htmlspecialchars($detail->l_name ?? '') ?></td>
+                <td><?= htmlspecialchars($detail->phone_no ?? '') ?></td>
+                <td><?= htmlspecialchars($detail->inc_name ?? '') ?></td>
+                <td><?= number_format($detail->receve_amount ?? 0) ?></td>
+                <td><?= htmlspecialchars($detail->empl ?? '') ?></td>
+                <td><?= htmlspecialchars($detail->receve_day ?? '') ?></td>
+            </tr>
+        <?php endforeach; ?>
+        <!-- Totals Row -->
+        <tr style="font-weight:bold; background-color:#ddd;">
+            <td colspan="4" style="text-align:right;"><b>Jumla ya Malipo:</b></td>
+            <td><b><?= number_format($total_receve) ?></b></td>
+            <td colspan="2"></td>
+        </tr>
+    <?php else: ?>
+        <tr>
+            <td colspan="7" style="text-align:center;">Hakuna taarifa za leo.</td>
+        </tr>
+    <?php endif; ?>
+    </tbody>
+</table>
+
+
+<h1>GAWA</h1>
+
+<table border="1" cellpadding="8" cellspacing="0">
+    <thead>
+        <tr>
+            <th>S/No</th>
+            <th>Jina la Mteja</th>
+            <th>Namba ya Simu</th>
+            <!-- <th>Aina ya Mkopo</th> -->
+            <th>Kiasi cha Mkopo</th>
+            <th>Fomu</th>
+            <th>Loan Status</th>
+            <th>Status ya Mkopo</th> <!-- ✅ mpya -->
+            <th>Tarehe ya Kutolewa</th>
+            <th>Aliyepitisha</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (!empty($gawa)): ?>
+            <?php 
+                $sno = 1;
+                $total_loan = 0;
+                $total_form = 0;
+            ?>
+            <?php foreach ($gawa as $item): ?>
+                <?php
+                    // 🔹 Accumulate totals
+                    $total_loan += $item->loan_aprove;
+                    $total_form += $item->deducted_balance ?: 0;
+
+                    // 🔹 Determine badge / tick
+                    $status_badge = '';
+                    if ($item->loan_status == 'disbursed' && empty($item->deducted_balance)) {
+                        $status_badge = '<span style="color:orange; font-weight:bold;">Mkopo umepitishwa ila hujagawiwa</span>';
+                    } elseif ($item->loan_status == 'withdrawal') {
+                        $status_badge = '<span style="color:green; font-weight:bold;">&#10004; Mkopo umepitishwa na kugawiwa</span>';
+                    } else {
+                        $status_badge = htmlspecialchars($item->loan_status);
+                    }
+                ?>
+                <tr>
+                    <td><?= $sno++; ?></td>
+                    <td><?= htmlspecialchars($item->f_name . ' ' . $item->m_name . ' ' . $item->l_name) ?></td>
+                    <td><?= htmlspecialchars($item->phone_no) ?></td>
+                    <!-- <td><?= htmlspecialchars($item->loan_name) ?></td> -->
+                    <td><?= number_format($item->loan_aprove, 2) ?></td>
+                    <td><?= $item->deducted_balance ? number_format($item->deducted_balance, 2) : '0.00' ?></td>
+                    <td><?= htmlspecialchars($item->loan_status) ?></td>
+                    <td><?= $status_badge ?></td> <!-- ✅ mpya -->
+                    <td><?= !empty($item->disburse_day) ? date('d-m-Y', strtotime($item->disburse_day)) : '-' ?></td>
+                    <td><?= htmlspecialchars($item->approved_by ?: 'N/A') ?></td>
+                </tr>
+            <?php endforeach; ?>
+
+            <!-- 🔹 Totals row -->
+            <tr style="font-weight:bold; background:#f0f0f0;">
+                <td colspan="3" style="text-align:right;"><b>JUMLA</b></td>
+                <td><b><?= number_format($total_loan, 2) ?></b></td>
+                <td><b><?= number_format($total_form, 2) ?></b></td>
+                <td colspan="4"></td>
+            </tr>
+
+        <?php else: ?>
+            <tr>
+                <td colspan="9" style="text-align:center;">Hakuna mikopo iliyotolewa leo.</td>
+            </tr>
+        <?php endif; ?>
+    </tbody>
+</table>
+
 
 
 
