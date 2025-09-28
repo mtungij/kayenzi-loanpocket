@@ -6138,6 +6138,17 @@ public function print_kitini_transaction()
     	$this->load->view('admin/account_statement',['customer'=>$customer]);
     }
 
+
+
+    function fetch_data_loanActive()
+{
+$this->load->model('queries');
+if($this->input->post('customer_id'))
+{
+echo $this->queries->fetch_loan_list($this->input->post('customer_id'));
+}
+}
+
     public function search_acount_statement(){
     $this->load->model('queries');
     $comp_id = $this->session->userdata('comp_id');

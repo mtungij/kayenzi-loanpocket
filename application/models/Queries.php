@@ -755,6 +755,31 @@ public function get_loan_by_id($loan_id)
 	  return $customer->result(); 
 	}
 
+
+	   function fetch_loan_list($customer_id)
+ {
+  $this->db->where('customer_id', $customer_id);
+  $this->db->order_by('loan_code', 'DESC');
+  $query = $this->db->query("SELECT * FROM tbl_loans l LEFT JOIN tbl_outstand ot ON ot.loan_id = l.loan_id WHERE l.customer_id = '$customer_id' ORDER BY l.loan_id DESC");
+  //$output = '<option value="">Select Active Loan</option>';
+  foreach($query->result() as $row)
+  {
+   $output .= '<option value="'.$row->loan_id.'">'.$row->loan_code. "-" ."(Tsh.".number_format($row->loan_aprove).")"."/"."Date " .$row->loan_stat_date.'</option>';
+   
+  }
+  return $output;
+ }
+
+
+
+
+  public function get_total_pay_description_acount_statement($loan_id){
+     $data = $this->db->query("SELECT * FROM tbl_pay p LEFT JOIN tbl_loans l ON l.loan_id = p.loan_id LEFT JOIN tbl_account_transaction at ON at.trans_id = p.p_method WHERE p.loan_id = '$loan_id' ORDER BY p.pay_id DESC");
+     return $data->result(
+     );
+     }
+	
+
 		public function get_allcustomerDatagroup($comp_id) {
     $customer = $this->db->query("
         SELECT 

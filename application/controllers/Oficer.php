@@ -6908,6 +6908,38 @@ $this->db->query("INSERT INTO tbl_outstand (`comp_id`,`loan_id`,`blanch_id`,`loa
       $this->load->view('officer/account_statement',['customer'=>$customer,'empl_data'=>$empl_data,'privillage'=>$privillage,'manager'=>$manager]);
     }
 
+
+        function fetch_data_loanActive()
+{
+$this->load->model('queries');
+if($this->input->post('customer_id'))
+{
+echo $this->queries->fetch_loan_list($this->input->post('customer_id'));
+}
+}
+
+public function customer_report(){
+    $this->load->model('queries');
+    $blanch_id = $this->session->userdata('blanch_id');
+    $empl_id = $this->session->userdata('empl_id');
+    $manager_data = $this->queries->get_manager_data($empl_id);
+    $comp_id = $manager_data->comp_id;
+    $company_data = $this->queries->get_companyData($comp_id);
+    $blanch_data = $this->queries->get_blanchData($blanch_id);
+    $empl_data = $this->queries->get_employee_data($empl_id);
+    $customer_id = $this->input->post('customer_id');
+    $loan_id = $this->input->post('loan_id');
+
+    $customer = $this->queries->search_CustomerLoan($customer_id);
+     $customery = $this->queries->get_allcutomerblanchData($blanch_id);
+    //     echo"<pre>";
+    // print_r($loan_id);
+    // echo"<pre>";
+    // exit();
+   
+    $this->load->view('officer/customer_account_report',['empl_data'=>$empl_data,'customery'=>$customery,'customer'=>$customer,'loan_id'=>$loan_id,'customer_id'=>$customer_id]);
+}
+
      public function manager_customer_account_statement(){
       $this->load->model('queries');
       $blanch_id = $this->session->userdata('blanch_id');
