@@ -2411,6 +2411,113 @@ $this->load->model('queries');
     $this->load->view('officer/loan_application',['customer'=>$customer,'empl_data'=>$empl_data,'privillage'=>$privillage,'manager'=>$manager]);
 }
 
+// public function search_customer()
+// {
+//     $this->load->model('queries');
+//     $blanch_id = $this->session->userdata('blanch_id');
+//     $empl_id = $this->session->userdata('empl_id');
+//     $manager_data = $this->queries->get_manager_data($empl_id);
+//     $comp_id = $manager_data->comp_id;
+//     $company_data = $this->queries->get_companyData($comp_id);
+//     $blanch_data = $this->queries->get_blanchData($blanch_id);
+//     $empl_data = $this->queries->get_employee_data($empl_id);
+
+//     $customer_id = $this->input->post('customer_id');
+
+//     $customer = $this->queries->search_CustomerID($customer_id, $comp_id);
+    
+//     if (!$customer) {
+//         $this->session->set_flashdata('error', 'Mteja hakupatikana.');
+//         redirect('oficer/loan_application');
+//     }
+
+//     // ✅ Check if the customer has an open loan
+//     $open_loan = $this->db
+//         ->where('customer_id', $customer_id)
+//         ->where('loan_status', 'open')
+//         ->get('tbl_loans')
+//         ->row();
+
+//     if ($open_loan) {
+//         $sponser = $this->queries->get_sponser($customer_id);
+//         @$sponsers_data = $this->queries->get_sponserCustomer($customer_id);
+//         @$region = $this->queries->get_region();
+//         $privillage = $this->queries->get_position_empl($empl_id);
+//         $manager = $this->queries->get_position_manager($empl_id);
+
+//         $this->load->view('officer/search_customer', [
+//             'customer' => $customer,
+//             'sponser' => $sponser,
+//             'sponsers_data' => $sponsers_data,
+//             'region' => $region,
+//             'empl_data' => $empl_data,
+//             'privillage' => $privillage,
+//             'manager' => $manager
+//         ]);
+//         return;
+//     }
+
+//     // ⚠️ If the customer has a pending loan (not done and not open)
+//     if ($this->queries->has_pending_loans($customer_id)) {
+//         $data = [
+//             'message' => 'Mteja bado hajamaliza mkopo wake. Tafadhali maliza mkopo kabla ya kuomba tena.',
+//             'type' => 'loan'
+//         ];
+//         $this->load->view('officer/toast_message_view', $data);
+//         return;
+//     }
+
+//     // ✅ Check latest done loan penalties
+//     $latestLoan = $this->db->select('*')
+//         ->from('tbl_loans')
+//         ->where('customer_id', $customer_id)
+//         ->where('loan_status', 'done')
+//         ->order_by('loan_id', 'DESC')
+//         ->limit(1)
+//         ->get()
+//         ->row();
+
+//     if ($latestLoan) {
+//         $total_penart = $this->queries->get_total_penart_loan($latestLoan->loan_id);
+//         $total_penart = @$total_penart->Total_Penart ?: 0;
+
+//         $paid_penart = $this->queries->get_total_penart_paid_loan($latestLoan->loan_id);
+//         $paid = @$paid_penart->total_PaidPenart ?: 0;
+
+//         $msamaha = $this->queries->get_penart_check($latestLoan->loan_id);
+
+//         if ($total_penart > $paid && !$msamaha) {
+//             $data = [
+//                 'message' => "Habari, Mteja anadaiwa faini Jumla ya TZS " . number_format($total_penart - $paid) . 
+//                              ". Tafadhali alipe deni la faini ili uweze kuendelea kumuombea mkopo",
+//                 'type' => 'penalty'
+//             ];
+//             $this->load->view('officer/toast_message_view', $data);
+//             return;
+//         }
+//     }
+
+//     // ✅ If no penalties and no pending loan, proceed normally
+//     $sponser = $this->queries->get_sponser($customer_id);
+//     @$sponsers_data = $this->queries->get_sponserCustomer($customer_id);
+//     @$region = $this->queries->get_region();
+//     $privillage = $this->queries->get_position_empl($empl_id);
+//     $manager = $this->queries->get_position_manager($empl_id);
+
+//     $this->load->view('officer/search_customer', [
+//         'customer' => $customer,
+//         'sponser' => $sponser,
+//         'sponsers_data' => $sponsers_data,
+//         'region' => $region,
+//         'empl_data' => $empl_data,
+//         'privillage' => $privillage,
+//         'manager' => $manager
+//     ]);
+// }
+
+
+
+
 public function search_customer()
 {
     $this->load->model('queries');
@@ -2465,36 +2572,6 @@ public function search_customer()
         ];
         $this->load->view('officer/toast_message_view', $data);
         return;
-    }
-
-    // ✅ Check latest done loan penalties
-    $latestLoan = $this->db->select('*')
-        ->from('tbl_loans')
-        ->where('customer_id', $customer_id)
-        ->where('loan_status', 'done')
-        ->order_by('loan_id', 'DESC')
-        ->limit(1)
-        ->get()
-        ->row();
-
-    if ($latestLoan) {
-        $total_penart = $this->queries->get_total_penart_loan($latestLoan->loan_id);
-        $total_penart = @$total_penart->Total_Penart ?: 0;
-
-        $paid_penart = $this->queries->get_total_penart_paid_loan($latestLoan->loan_id);
-        $paid = @$paid_penart->total_PaidPenart ?: 0;
-
-        $msamaha = $this->queries->get_penart_check($latestLoan->loan_id);
-
-        if ($total_penart > $paid && !$msamaha) {
-            $data = [
-                'message' => "Habari, Mteja anadaiwa faini Jumla ya TZS " . number_format($total_penart - $paid) . 
-                             ". Tafadhali alipe deni la faini ili uweze kuendelea kumuombea mkopo",
-                'type' => 'penalty'
-            ];
-            $this->load->view('officer/toast_message_view', $data);
-            return;
-        }
     }
 
     // ✅ If no penalties and no pending loan, proceed normally
@@ -5488,7 +5565,7 @@ public function create_withdrow_balance($customer_id){
     $this->form_validation->set_rules('method','method','required');
     $this->form_validation->set_rules('withdrow','withdrow','required');
     $this->form_validation->set_rules('loan_status','loan status','required');
-     $this->form_validation->set_rules('code','Code','required');
+    //  $this->form_validation->set_rules('code','Code','required');
     $this->form_validation->set_rules('with_date','with date','required');
     $this->form_validation->set_rules('description','description','required');
     if ($this->form_validation->run() ) {
@@ -5501,7 +5578,7 @@ public function create_withdrow_balance($customer_id){
           $comp_id = $data['comp_id'];
           $description = $data['description'];
           $method = $data['method'];
-          $new_code = $data['code'];
+          // $new_code = $data['code'];
           $with_date = $data['with_date'];
           $loan_status = 'withdrawal';
           $new_balance = $withdrow_newbalance;
@@ -5626,7 +5703,7 @@ public function create_withdrow_balance($customer_id){
            
             $new_deducted = $deducted + $sum_total_loanFee;
 
-               if($new_code != $code){
+               if($new_code === $code){
                  $this->session->set_flashdata('error','Pin ya mteja Uliyojaza Haipo Sahihi!!');
                }else
                if($blanch_capital < $withdrow_newbalance){
